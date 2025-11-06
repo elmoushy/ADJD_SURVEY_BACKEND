@@ -1,0 +1,51 @@
+# Core Django packages
+Django==5.2.4
+djangorestframework==3.16.0
+
+# Timezone handling
+pytz==2024.1
+
+# API documentation
+coreapi>=2.3.3
+
+# CORS handling
+django-cors-headers==4.7.0
+
+# JWT and cryptography
+PyJWT==2.10.1
+cryptography==45.0.5
+idna==3.7
+djangorestframework-simplejwt==5.3.0
+
+# HTTP requests
+requests==2.32.4
+
+# Environment variables
+python-dotenv==1.1.1
+
+# Date utilities
+python-dateutil
+hijri-converter>=2.3.1  # Hijri to Gregorian date conversion
+
+# Image processing
+Pillow>=10.0.0
+
+
+# Database drivers
+oracledb==3.3.0  # Oracle database driver
+
+# Real-time notifications - COMMENTED OUT FOR PRODUCTION
+# channels==4.0.0
+# channels-redis==3.4.1  # Temporarily disabled due to Redis 3.2 compatibility
+# daphne==4.1.0
+
+# New packages for news service
+django-filter>=24.0.0  # For advanced filtering
+pillow-heif>=0.10.0  # For HEIF image support
+pillow-simd>=9.0.0  # Faster image processing (optional)
+
+# Security packages
+bleach==6.2.0  # HTML sanitization to prevent XSS
+django-ratelimit==4.1.0  # Rate limiting for brute force protection
+django-csp==4.0b1  # Content Security Policy headers
+webencodings==0.5.1  # Required by bleach
