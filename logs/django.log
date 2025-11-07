@@ -4672,3 +4672,15 @@ INFO 2025-11-06 23:09:54,291 views 22180 16484 JWT tokens refreshed with rotatio
 INFO 2025-11-06 23:09:54,508 dual_auth 22180 16484 User mayman@lightidea.org authenticated with regular JWT (universal)
 INFO 2025-11-06 23:09:54,509 views 22180 16484 User profile accessed: mayman@lightidea.org
 INFO 2025-11-06 23:09:54,710 dual_auth 22180 16484 User mayman@lightidea.org authenticated with regular JWT (universal)
+INFO 2025-11-07 08:21:25,255 azure_auth 20032 4108 Fetching JWKS keys from Azure AD
+INFO 2025-11-07 08:21:25,803 azure_auth 20032 4108 Successfully cached JWKS keys
+INFO 2025-11-07 08:21:25,827 azure_auth 20032 4108 Successfully authenticated user: selmoushy@lightidea.org
+INFO 2025-11-07 08:21:25,836 views 20032 4108 Azure AD user logged in: selmoushy@lightidea.org
+INFO 2025-11-07 08:21:27,852 views 20032 4108 JWT tokens refreshed with rotation for user: selmoushy@lightidea.org
+INFO 2025-11-07 08:21:27,884 dual_auth 20032 4108 User selmoushy@lightidea.org authenticated with regular JWT (universal)
+INFO 2025-11-07 08:21:27,885 views 20032 4108 User profile accessed: selmoushy@lightidea.org
+INFO 2025-11-07 08:21:27,896 dual_auth 20032 4108 User selmoushy@lightidea.org authenticated with regular JWT (universal)
+INFO 2025-11-07 08:21:27,896 views 20032 4108 User profile accessed: selmoushy@lightidea.org
+INFO 2025-11-07 08:21:28,711 dual_auth 20032 4108 User selmoushy@lightidea.org authenticated with regular JWT (universal)
+INFO 2025-11-07 08:21:28,713 views 20032 4108 Building queryset for user selmoushy@lightidea.org
+INFO 2025-11-07 08:21:28,720 views 20032 4108 Successfully built queryset for user selmoushy@lightidea.org

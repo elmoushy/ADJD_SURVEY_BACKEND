@@ -503,31 +503,17 @@ if not EMAIL_BACKEND:
 # from environment so we can send real mail (Ethereal or other SMTP servers).
 if 'smtp' in EMAIL_BACKEND.lower():
     # ===================================================================
-    # DEVELOPMENT EMAIL SETTINGS (Ethereal - Currently Active)
+    # PRODUCTION EMAIL SETTINGS (ADJD Internal SMTP - ACTIVE)
     # ===================================================================
-    EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.ethereal.email')
-    EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
-    EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() == 'true'
+    EMAIL_HOST = os.getenv('EMAIL_HOST', 'adsmtp.adjd.local')
+    EMAIL_PORT = int(os.getenv('EMAIL_PORT', '25'))
+    EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'False').lower() == 'true'
     EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'False').lower() == 'true'
-    EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
-    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
-    DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@lightidea.org')
-    SERVER_EMAIL = os.getenv('SERVER_EMAIL', DEFAULT_FROM_EMAIL)
+    EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')  # No authentication required
+    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')  # No authentication required
+    DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'hyperion@adjd.gov.ae')
+    SERVER_EMAIL = os.getenv('SERVER_EMAIL', 'hyperion@adjd.gov.ae')
     EMAIL_TIMEOUT = int(os.getenv('EMAIL_TIMEOUT', '30'))
-    
-    # ===================================================================
-    # PRODUCTION EMAIL SETTINGS (ADJD Internal SMTP - Commented for Development)
-    # ===================================================================
-    # Uncomment the following lines when deploying to production:
-    # EMAIL_HOST = os.getenv('EMAIL_HOST', 'adsmtp.adjd.local')
-    # EMAIL_PORT = int(os.getenv('EMAIL_PORT', '25'))
-    # EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'False').lower() == 'true'
-    # EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'False').lower() == 'true'
-    # EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')  # No authentication required
-    # EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')  # No authentication required
-    # DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'hyperion@adjd.gov.ae')
-    # SERVER_EMAIL = os.getenv('SERVER_EMAIL', 'hyperion@adjd.gov.ae')
-    # EMAIL_TIMEOUT = int(os.getenv('EMAIL_TIMEOUT', '30'))
 else:
     # Non-SMTP backends (console, file, etc.) - still allow overriding defaults
     DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@lightidea.org')
