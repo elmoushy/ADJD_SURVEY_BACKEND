@@ -1844,3 +1844,202 @@ class ResetUserPasswordView(APIView):
             return Response({
                 'detail': 'An unexpected error occurred during password reset'
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class BulkCreateAzureUsersView(APIView):
+    """
+    API endpoint for bulk creation of Azure AD users.
+    
+    This endpoint allows admins to create multiple Azure AD users at once.
+    Users that already exist (by email) are automatically skipped.
+    Object IDs are auto-generated from email addresses.
+    
+    Only super admins can create users with super_admin role.
+    """
+    
+    authentication_classes = [UniversalAuthentication]
+    permission_classes = [IsAdminOrSuperAdmin]
+    
+    def _generate_object_id(self, email):
+        """
+        Generate a unique Object ID from email address.
+        
+        Uses SHA256 hash of email to create a UUID-like identifier.
+        This simulates an Azure AD Object ID for users created through this endpoint.
+        
+        Args:
+            email: User's email address
+            
+        Returns:
+            String in UUID format (e.g., "12345678-1234-5678-9abc-123456789abc")
+        """
+        import hashlib
+        import uuid
+        
+        # Create SHA256 hash of email
+        email_hash = hashlib.sha256(email.lower().encode()).hexdigest()
+        
+        # Convert first 32 hex characters to UUID format
+        uuid_str = f"{email_hash[:8]}-{email_hash[8:12]}-{email_hash[12:16]}-{email_hash[16:20]}-{email_hash[20:32]}"
+        
+        return uuid_str
+    
+    def post(self, request):
+        """
+        Create multiple Azure AD users in bulk.
+        
+        Request body:
+            {
+                "users": [
+                    {
+                        "email": "user1@example.com",
+                        "first_name": "John",
+                        "last_name": "Doe",
+                        "role": "user"
+                    },
+                    {
+                        "email": "user2@example.com",
+                        "first_name": "Jane",
+                        "last_name": "Smith",
+                        "role": "admin"
+                    }
+                ]
+            }
+        
+        Returns:
+            Summary of created and skipped users
+        """
+        try:
+            from .serializers import BulkCreateAzureUsersSerializer
+            
+            serializer = BulkCreateAzureUsersSerializer(data=request.data)
+            
+            if not serializer.is_valid():
+                return Response({
+                    'detail': 'Invalid data provided',
+                    'errors': serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            users_data = serializer.validated_data['users']
+            
+            # Track results
+            created_users = []
+            skipped_users = []
+            failed_users = []
+            
+            with transaction.atomic():
+                for user_data in users_data:
+                    try:
+                        email = user_data['email']
+                        first_name = user_data.get('first_name', '')
+                        last_name = user_data.get('last_name', '')
+                        role = user_data.get('role', 'user')
+                        
+                        # Auto-generate Object ID from email
+                        object_id = self._generate_object_id(email)
+                        
+                        # Check if user is trying to create super_admin
+                        if role == 'super_admin' and request.user.role != 'super_admin':
+                            failed_users.append({
+                                'email': email,
+                                'error': 'Only super admins can create super_admin users'
+                            })
+                            continue
+                        
+                        # Check if user already exists by email
+                        if User.objects.email_exists(email):
+                            existing_user = User.objects.get_by_email(email)
+                            skipped_users.append({
+                                'email': email,
+                                'reason': 'User already exists with this email',
+                                'existing_user': {
+                                    'id': existing_user.id,
+                                    'email': existing_user.email,
+                                    'username': existing_user.username,
+                                    'role': existing_user.role
+                                }
+                            })
+                            continue
+                        
+                        # Create the new Azure AD user
+                        user = User.objects.create_user(
+                            username=object_id,       # Use auto-generated Object ID
+                            email=email,              # User's email
+                            first_name=first_name,    # Optional: for better UX
+                            last_name=last_name,      # Optional: for better UX
+                            role=role,                # User role
+                            auth_type='azure',        # Mark as Azure AD user
+                            is_active=True,           # Active by default
+                        )
+                        
+                        created_users.append({
+                            'id': user.id,
+                            'object_id': object_id,
+                            'email': email,
+                            'full_name': user.full_name,
+                            'role': role
+                        })
+                        
+                        # Log the creation
+                        logger.info(
+                            f"Azure AD user created by {request.user.email}: "
+                            f"{email} (Object ID: {object_id}, Role: {role})"
+                        )
+                        
+                    except Exception as e:
+                        logger.error(f"Error creating Azure AD user {user_data.get('email')}: {str(e)}")
+                        failed_users.append({
+                            'email': user_data.get('email', 'unknown'),
+                            'error': str(e)
+                        })
+            
+            # Prepare response
+            response_data = {
+                'message': 'Bulk Azure AD user creation completed',
+                'summary': {
+                    'total_requested': len(users_data),
+                    'created': len(created_users),
+                    'skipped': len(skipped_users),
+                    'failed': len(failed_users)
+                },
+                'results': {
+                    'created': created_users,
+                    'skipped': skipped_users,
+                    'failed': failed_users
+                }
+            }
+            
+            # Determine response status
+            if len(created_users) > 0 and len(failed_users) == 0:
+                response_status = status.HTTP_201_CREATED
+                response_data['message'] = f"Successfully created {len(created_users)} Azure AD user(s)"
+            elif len(created_users) > 0 and len(failed_users) > 0:
+                response_status = status.HTTP_207_MULTI_STATUS
+                response_data['message'] = f"Partially successful: {len(created_users)} created, {len(failed_users)} failed"
+            elif len(created_users) == 0 and len(skipped_users) > 0:
+                response_status = status.HTTP_200_OK
+                response_data['message'] = "All users already exist - no new users created"
+            else:
+                response_status = status.HTTP_400_BAD_REQUEST
+                response_data['message'] = "No users were created"
+            
+            # Log security event
+            log_security_event(
+                event_type='bulk_azure_user_creation',
+                user=request.user,
+                request=request,
+                details={
+                    'total_requested': len(users_data),
+                    'created': len(created_users),
+                    'skipped': len(skipped_users),
+                    'failed': len(failed_users)
+                }
+            )
+            
+            return Response(response_data, status=response_status)
+            
+        except Exception as e:
+            logger.error(f"Error in bulk Azure AD user creation: {str(e)}")
+            return Response({
+                'detail': 'An unexpected error occurred during bulk user creation'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

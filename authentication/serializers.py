@@ -548,3 +548,80 @@ class ResetUserPasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError("Password reset not allowed for Azure AD users.")
         
         return value
+
+
+class AzureUserDataSerializer(serializers.Serializer):
+    """
+    Serializer for individual Azure AD user data in bulk creation.
+    
+    Note: Object ID is auto-generated from email to create a unique identifier.
+    """
+    email = serializers.EmailField(
+        required=True,
+        help_text='User email address (will be used to generate Object ID)'
+    )
+    first_name = serializers.CharField(
+        max_length=30,
+        required=False,
+        allow_blank=True,
+        default='',
+        help_text='First name'
+    )
+    last_name = serializers.CharField(
+        max_length=30,
+        required=False,
+        allow_blank=True,
+        default='',
+        help_text='Last name'
+    )
+    role = serializers.ChoiceField(
+        choices=['user', 'admin', 'super_admin'],
+        default='user',
+        help_text='User role in the system'
+    )
+    
+    def validate_email(self, value):
+        """Validate and sanitize email."""
+        cleaned_email = sanitize_html_input(value, allow_tags=False)
+        if cleaned_email != value:
+            raise serializers.ValidationError("Invalid characters detected in email address.")
+        return cleaned_email
+    
+    def validate_first_name(self, value):
+        """Validate and sanitize first name."""
+        if not value:
+            return value
+        return validate_and_sanitize_text_input(value, max_length=30, field_name="First name")
+    
+    def validate_last_name(self, value):
+        """Validate and sanitize last name."""
+        if not value:
+            return value
+        return validate_and_sanitize_text_input(value, max_length=30, field_name="Last name")
+
+
+class BulkCreateAzureUsersSerializer(serializers.Serializer):
+    """
+    Serializer for bulk creation of Azure AD users.
+    
+    This serializer accepts a list of Azure AD user data and creates
+    users in the system. Users that already exist (by email) are 
+    automatically skipped. Object IDs are auto-generated from email.
+    """
+    users = serializers.ListField(
+        child=AzureUserDataSerializer(),
+        min_length=1,
+        help_text='List of Azure AD users to create'
+    )
+    
+    def validate_users(self, value):
+        """Validate user data and check for duplicates in the request."""
+        if not value:
+            raise serializers.ValidationError("At least one user must be provided.")
+        
+        # Check for duplicate emails in the request
+        emails = [user['email'] for user in value]
+        if len(emails) != len(set(emails)):
+            raise serializers.ValidationError("Duplicate emails found in the request.")
+        
+        return value

@@ -30,6 +30,7 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('azure-login/', views.AzureADLoginView.as_view(), name='azure-login'),
     path('add-user/', views.AddUserView.as_view(), name='add-user'),
+    path('azure-users/bulk-create/', views.BulkCreateAzureUsersView.as_view(), name='bulk-create-azure-users'),
     path('change-password/', views.ChangePasswordView.as_view(), name='change-password'),
     
     # Current user endpoints
