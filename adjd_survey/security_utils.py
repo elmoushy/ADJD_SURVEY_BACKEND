@@ -1,5 +1,5 @@
 """
-Security utility functions for the WeaponPowerCloud backend.
+Security utility functions for the ADJD Survey backend.
 
 This module provides common security functions including:
 - HTML/JS sanitization

@@ -4684,3 +4684,502 @@ INFO 2025-11-07 08:21:27,896 views 20032 4108 User profile accessed: selmoushy@l
 INFO 2025-11-07 08:21:28,711 dual_auth 20032 4108 User selmoushy@lightidea.org authenticated with regular JWT (universal)
 INFO 2025-11-07 08:21:28,713 views 20032 4108 Building queryset for user selmoushy@lightidea.org
 INFO 2025-11-07 08:21:28,720 views 20032 4108 Successfully built queryset for user selmoushy@lightidea.org
+INFO 2025-11-07 08:39:03,665 dual_auth 13132 2308 User selmoushy@lightidea.org authenticated with regular JWT (universal)
+INFO 2025-11-07 08:39:03,666 views 13132 2308 User logged out without token blacklisting: selmoushy@lightidea.org
+INFO 2025-11-07 08:48:50,224 serializers 13132 11596 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 08:48:50,224 managers 13132 11596 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 08:48:50,236 serializers 13132 11596 User found: seif778811@gmail.com
+INFO 2025-11-07 08:48:50,236 serializers 13132 11596 Authenticating with username: seif778811@gmail.com
+INFO 2025-11-07 08:48:51,377 serializers 13132 11596 Authentication result: Success
+INFO 2025-11-07 08:48:51,378 serializers 13132 11596 Validation successful
+INFO 2025-11-07 08:48:51,385 views 13132 11596 User logged in: seif778811@gmail.com
+INFO 2025-11-07 08:49:19,852 views 13132 11596 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 08:49:19,917 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:49:19,918 views 13132 11596 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 08:49:19,926 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:49:19,926 views 13132 11596 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 08:49:20,020 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:49:20,021 views 13132 11596 Building queryset for user seif778811@gmail.com
+INFO 2025-11-07 08:49:20,023 views 13132 11596 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-07 08:50:03,822 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:50:03,823 views 13132 11596 User logged out without token blacklisting: seif778811@gmail.com
+INFO 2025-11-07 08:50:38,204 serializers 13132 11596 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 08:50:38,205 managers 13132 11596 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 08:50:38,209 serializers 13132 11596 User found: seif778811@gmail.com
+INFO 2025-11-07 08:50:38,209 serializers 13132 11596 Authenticating with username: seif778811@gmail.com
+INFO 2025-11-07 08:50:39,277 serializers 13132 11596 Authentication result: Success
+INFO 2025-11-07 08:50:39,277 serializers 13132 11596 Validation successful
+INFO 2025-11-07 08:50:39,304 views 13132 11596 User logged in: seif778811@gmail.com
+INFO 2025-11-07 08:51:21,064 views 13132 11596 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 08:51:21,103 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:51:21,105 views 13132 11596 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 08:51:22,865 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:51:22,866 views 13132 11596 Building queryset for user seif778811@gmail.com
+INFO 2025-11-07 08:51:22,870 views 13132 11596 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-07 08:51:26,390 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:51:26,391 views 13132 11596 User logged out without token blacklisting: seif778811@gmail.com
+INFO 2025-11-07 08:52:17,410 serializers 13132 11596 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 08:52:17,411 managers 13132 11596 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 08:52:17,414 serializers 13132 11596 User found: seif778811@gmail.com
+INFO 2025-11-07 08:52:17,415 serializers 13132 11596 Authenticating with username: seif778811@gmail.com
+INFO 2025-11-07 08:52:18,933 serializers 13132 11596 Authentication result: Success
+INFO 2025-11-07 08:52:18,933 serializers 13132 11596 Validation successful
+INFO 2025-11-07 08:52:18,959 views 13132 11596 User logged in: seif778811@gmail.com
+INFO 2025-11-07 08:53:32,484 views 13132 11596 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 08:53:32,525 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:53:32,526 views 13132 11596 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 08:53:32,644 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:53:32,644 views 13132 11596 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 08:53:32,924 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:53:32,924 views 13132 11596 Building queryset for user seif778811@gmail.com
+INFO 2025-11-07 08:53:32,929 views 13132 11596 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-07 08:53:35,186 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:53:35,187 views 13132 11596 User logged out without token blacklisting: seif778811@gmail.com
+INFO 2025-11-07 08:53:37,126 serializers 13132 11596 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 08:53:37,126 managers 13132 11596 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 08:53:37,131 serializers 13132 11596 User found: seif778811@gmail.com
+INFO 2025-11-07 08:53:37,131 serializers 13132 11596 Authenticating with username: seif778811@gmail.com
+INFO 2025-11-07 08:53:39,604 serializers 13132 11596 Authentication result: Success
+INFO 2025-11-07 08:53:39,604 serializers 13132 11596 Validation successful
+INFO 2025-11-07 08:53:39,615 views 13132 11596 User logged in: seif778811@gmail.com
+INFO 2025-11-07 08:53:44,506 views 13132 11596 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 08:53:44,531 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:53:44,544 views 13132 11596 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 08:53:44,568 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:53:44,571 views 13132 11596 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 08:53:44,719 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:53:44,719 views 13132 11596 Building queryset for user seif778811@gmail.com
+INFO 2025-11-07 08:53:44,723 views 13132 11596 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-07 08:54:36,214 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:54:36,215 views 13132 11596 User logged out without token blacklisting: seif778811@gmail.com
+INFO 2025-11-07 08:54:37,987 serializers 13132 11596 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 08:54:37,988 managers 13132 11596 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 08:54:37,992 serializers 13132 11596 User found: seif778811@gmail.com
+INFO 2025-11-07 08:54:37,993 serializers 13132 11596 Authenticating with username: seif778811@gmail.com
+INFO 2025-11-07 08:54:38,939 serializers 13132 11596 Authentication result: Success
+INFO 2025-11-07 08:54:38,940 serializers 13132 11596 Validation successful
+INFO 2025-11-07 08:54:38,964 views 13132 11596 User logged in: seif778811@gmail.com
+INFO 2025-11-07 08:56:12,199 views 13132 11596 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 08:56:12,266 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:56:12,284 views 13132 11596 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 08:56:12,424 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:56:12,432 views 13132 11596 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 08:56:12,645 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:56:12,646 views 13132 11596 Building queryset for user seif778811@gmail.com
+INFO 2025-11-07 08:56:12,650 views 13132 11596 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-07 08:56:14,790 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 08:56:14,790 views 13132 11596 User logged out without token blacklisting: seif778811@gmail.com
+INFO 2025-11-07 08:57:27,457 serializers 13132 11596 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 08:57:27,457 managers 13132 11596 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 08:57:27,460 serializers 13132 11596 User found: seif778811@gmail.com
+INFO 2025-11-07 08:57:27,460 serializers 13132 11596 Authenticating with username: seif778811@gmail.com
+INFO 2025-11-07 08:57:29,877 serializers 13132 11596 Authentication result: Success
+INFO 2025-11-07 08:57:29,877 serializers 13132 11596 Validation successful
+INFO 2025-11-07 08:57:29,888 views 13132 11596 User logged in: seif778811@gmail.com
+INFO 2025-11-07 09:00:18,986 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:00:18,987 serializers 13132 11596 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 09:00:18,988 managers 13132 11596 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 09:00:18,991 serializers 13132 11596 User found: seif778811@gmail.com
+INFO 2025-11-07 09:00:18,991 serializers 13132 11596 Authenticating with username: seif778811@gmail.com
+INFO 2025-11-07 09:00:19,937 serializers 13132 11596 Authentication result: Success
+INFO 2025-11-07 09:00:19,937 serializers 13132 11596 Validation successful
+INFO 2025-11-07 09:00:19,963 views 13132 11596 User logged in: seif778811@gmail.com
+INFO 2025-11-07 09:00:20,416 views 13132 11596 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 09:00:20,511 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:00:20,516 views 13132 11596 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 09:00:20,525 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:00:20,532 views 13132 11596 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 09:00:20,702 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:00:20,702 views 13132 11596 Building queryset for user seif778811@gmail.com
+INFO 2025-11-07 09:00:20,705 views 13132 11596 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-07 09:00:25,606 dual_auth 13132 11596 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:00:25,606 views 13132 11596 User logged out without token blacklisting: seif778811@gmail.com
+INFO 2025-11-07 09:00:32,617 azure_auth 13132 11596 Fetching JWKS keys from Azure AD
+INFO 2025-11-07 09:00:33,228 azure_auth 13132 11596 Successfully cached JWKS keys
+INFO 2025-11-07 09:00:33,248 azure_auth 13132 11596 Successfully authenticated user: selmoushy@lightidea.org
+INFO 2025-11-07 09:00:33,258 views 13132 11596 Azure AD user logged in: selmoushy@lightidea.org
+INFO 2025-11-07 09:00:35,180 views 13132 11596 JWT tokens refreshed with rotation for user: selmoushy@lightidea.org
+INFO 2025-11-07 09:00:35,207 dual_auth 13132 11596 User selmoushy@lightidea.org authenticated with regular JWT (universal)
+INFO 2025-11-07 09:00:35,210 views 13132 11596 User profile accessed: selmoushy@lightidea.org
+INFO 2025-11-07 09:00:35,233 dual_auth 13132 11596 User selmoushy@lightidea.org authenticated with regular JWT (universal)
+INFO 2025-11-07 09:00:35,236 views 13132 11596 User profile accessed: selmoushy@lightidea.org
+INFO 2025-11-07 09:00:35,445 dual_auth 13132 11596 User selmoushy@lightidea.org authenticated with regular JWT (universal)
+INFO 2025-11-07 09:00:35,445 views 13132 11596 Building queryset for user selmoushy@lightidea.org
+INFO 2025-11-07 09:00:35,449 views 13132 11596 Successfully built queryset for user selmoushy@lightidea.org
+INFO 2025-11-07 09:00:41,129 views 13132 11596 JWT tokens refreshed with rotation for user: selmoushy@lightidea.org
+INFO 2025-11-07 09:00:41,146 dual_auth 13132 11596 User selmoushy@lightidea.org authenticated with regular JWT (universal)
+INFO 2025-11-07 09:00:41,169 views 13132 11596 User profile accessed: selmoushy@lightidea.org
+INFO 2025-11-07 09:00:41,383 dual_auth 13132 11596 User selmoushy@lightidea.org authenticated with regular JWT (universal)
+INFO 2025-11-07 09:00:41,412 views 13132 11596 Building queryset for user selmoushy@lightidea.org
+INFO 2025-11-07 09:00:41,417 views 13132 11596 Successfully built queryset for user selmoushy@lightidea.org
+INFO 2025-11-07 09:00:46,309 dual_auth 13132 11596 User selmoushy@lightidea.org authenticated with regular JWT (universal)
+INFO 2025-11-07 09:00:46,310 views 13132 11596 User logged out without token blacklisting: selmoushy@lightidea.org
+INFO 2025-11-07 09:04:18,232 serializers 13132 9792 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 09:04:18,259 managers 13132 9792 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 09:04:18,271 serializers 13132 9792 User found: seif778811@gmail.com
+INFO 2025-11-07 09:04:18,273 serializers 13132 9792 Authenticating with username: seif778811@gmail.com
+INFO 2025-11-07 09:04:20,322 serializers 13132 9792 Authentication result: Success
+INFO 2025-11-07 09:04:20,323 serializers 13132 9792 Validation successful
+INFO 2025-11-07 09:04:20,352 views 13132 9792 User logged in: seif778811@gmail.com
+INFO 2025-11-07 09:04:20,891 views 13132 9792 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 09:04:20,943 dual_auth 13132 9792 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:04:20,944 views 13132 9792 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 09:04:20,956 dual_auth 13132 9792 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:04:20,962 views 13132 9792 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 09:04:21,220 dual_auth 13132 9792 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:04:21,224 views 13132 9792 Building queryset for user seif778811@gmail.com
+INFO 2025-11-07 09:04:21,228 views 13132 9792 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-07 09:04:23,226 dual_auth 13132 9792 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:04:23,227 views 13132 9792 User logged out without token blacklisting: seif778811@gmail.com
+INFO 2025-11-07 09:09:23,457 serializers 13132 20884 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 09:09:23,458 managers 13132 20884 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 09:09:23,463 serializers 13132 20884 User found: seif778811@gmail.com
+INFO 2025-11-07 09:09:23,463 serializers 13132 20884 Authenticating with username: seif778811@gmail.com
+INFO 2025-11-07 09:09:25,217 serializers 13132 20884 Authentication result: Success
+INFO 2025-11-07 09:09:25,218 serializers 13132 20884 Validation successful
+INFO 2025-11-07 09:09:25,244 views 13132 20884 User logged in: seif778811@gmail.com
+INFO 2025-11-07 09:09:25,943 views 13132 20884 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 09:09:26,001 dual_auth 13132 20884 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:09:26,011 views 13132 20884 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 09:09:26,031 dual_auth 13132 20884 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:09:26,035 views 13132 20884 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 09:09:26,735 dual_auth 13132 20884 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:09:26,736 views 13132 20884 Building queryset for user seif778811@gmail.com
+INFO 2025-11-07 09:09:26,742 views 13132 20884 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-07 09:09:30,043 dual_auth 13132 20884 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:09:30,044 views 13132 20884 User logged out without token blacklisting: seif778811@gmail.com
+INFO 2025-11-07 09:51:00,973 serializers 13132 8888 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 09:51:00,973 managers 13132 8888 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 09:51:00,978 serializers 13132 8888 User found: seif778811@gmail.com
+INFO 2025-11-07 09:51:00,979 serializers 13132 8888 Authenticating with username: seif778811@gmail.com
+INFO 2025-11-07 09:51:03,653 serializers 13132 8888 Authentication result: Success
+INFO 2025-11-07 09:51:03,654 serializers 13132 8888 Validation successful
+INFO 2025-11-07 09:51:03,685 views 13132 8888 User logged in: seif778811@gmail.com
+INFO 2025-11-07 09:51:04,525 views 13132 8888 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 09:51:04,583 dual_auth 13132 8888 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:51:04,602 views 13132 8888 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 09:51:04,623 dual_auth 13132 8888 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:51:04,639 views 13132 8888 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 09:51:04,782 dual_auth 13132 8888 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:51:04,786 views 13132 8888 Building queryset for user seif778811@gmail.com
+INFO 2025-11-07 09:51:04,790 views 13132 8888 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-07 09:51:14,900 dual_auth 13132 8888 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:51:14,906 views 13132 8888 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 09:51:14,912 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:51:14,918 dual_auth 13132 6416 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:51:14,919 dual_auth 13132 17240 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:51:14,975 dual_auth 13132 6416 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:51:14,976 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:52:00,039 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:52:00,039 dual_auth 13132 6416 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:52:46,897 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:52:46,898 views 13132 21904 Building queryset for user seif778811@gmail.com
+INFO 2025-11-07 09:52:46,901 views 13132 21904 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-07 09:52:49,676 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:52:51,354 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:54:19,555 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:54:47,595 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:54:47,634 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:54:52,665 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:54:53,922 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:54:57,931 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:59:42,658 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:59:44,009 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:59:45,283 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:59:46,304 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:59:47,959 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:59:50,312 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:59:52,726 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 09:59:54,182 dual_auth 13132 21904 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:27:35,948 views 13132 3780 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 10:27:36,016 dual_auth 13132 3780 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:27:36,054 views 13132 3780 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 10:27:36,165 dual_auth 13132 3780 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:27:57,308 views 13132 3780 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 10:27:57,327 dual_auth 13132 3780 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:27:57,330 views 13132 3780 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 10:27:57,380 dual_auth 13132 3780 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:28:14,243 views 13132 3780 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 10:28:14,280 dual_auth 13132 3780 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:28:14,281 views 13132 3780 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 10:28:14,352 dual_auth 13132 3780 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:28:19,860 views 13132 3780 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 10:28:19,899 dual_auth 13132 3780 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:28:19,935 views 13132 3780 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 10:28:20,010 dual_auth 13132 6344 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:28:37,220 views 13132 6344 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 10:28:37,237 dual_auth 13132 6344 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:28:37,239 views 13132 6344 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 10:28:37,283 dual_auth 13132 6344 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:28:37,596 views 13132 6344 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 10:28:37,630 dual_auth 13132 6344 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:28:37,632 views 13132 6344 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 10:28:37,659 dual_auth 13132 6344 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:35:13,088 views 13132 21356 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 10:35:13,243 dual_auth 13132 21356 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:35:13,243 views 13132 21356 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 10:35:13,594 dual_auth 13132 21356 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:35:28,430 views 13132 21356 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 10:35:28,569 dual_auth 13132 21356 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:35:28,569 views 13132 21356 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 10:35:28,996 dual_auth 13132 21356 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:45:48,619 serializers 13132 23948 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 10:45:48,619 managers 13132 23948 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-07 10:45:48,623 serializers 13132 23948 User found: seif778811@gmail.com
+INFO 2025-11-07 10:45:48,623 serializers 13132 23948 Authenticating with username: seif778811@gmail.com
+INFO 2025-11-07 10:45:50,053 serializers 13132 23948 Authentication result: Success
+INFO 2025-11-07 10:45:50,053 serializers 13132 23948 Validation successful
+INFO 2025-11-07 10:45:50,073 views 13132 23948 User logged in: seif778811@gmail.com
+INFO 2025-11-07 10:45:50,281 views 13132 23948 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 10:45:50,336 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:45:50,337 views 13132 23948 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 10:45:50,352 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:45:50,386 views 13132 23948 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 10:45:50,813 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:45:50,813 views 13132 23948 Building queryset for user seif778811@gmail.com
+INFO 2025-11-07 10:45:50,817 views 13132 23948 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-07 10:45:55,031 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:46:00,773 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:46:00,816 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:46:01,473 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:46:01,517 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:46:01,999 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:46:02,015 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:46:09,237 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:46:10,759 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:46:16,638 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:46:33,397 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:46:48,568 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:46:55,548 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:46:56,989 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:46:57,007 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:47:08,077 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:47:09,700 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:47:10,602 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:47:12,257 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:47:12,272 dual_auth 13132 8304 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:47:24,309 dual_auth 13132 8304 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:47:48,761 dual_auth 13132 8304 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:47:51,049 dual_auth 13132 8304 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:47:52,312 dual_auth 13132 8304 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:47:52,337 dual_auth 13132 8304 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:47:54,397 dual_auth 13132 8304 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:47:55,650 dual_auth 13132 8304 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:47:56,381 dual_auth 13132 8304 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:48:00,707 dual_auth 13132 8304 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:49:17,942 dual_auth 13132 8304 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:49:17,943 views 13132 8304 Building queryset for user seif778811@gmail.com
+INFO 2025-11-07 10:49:17,945 views 13132 8304 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-07 10:49:28,214 views 13132 8304 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-07 10:49:28,240 dual_auth 13132 8304 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:49:28,240 views 13132 8304 User profile accessed: seif778811@gmail.com
+INFO 2025-11-07 10:49:28,519 dual_auth 13132 8304 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:49:28,520 views 13132 8304 Building queryset for user seif778811@gmail.com
+INFO 2025-11-07 10:49:28,523 views 13132 8304 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-07 10:49:31,151 dual_auth 13132 8304 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-07 10:49:31,153 dual_auth 13132 23948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:17:14,327 azure_auth 21556 7380 Fetching JWKS keys from Azure AD
+INFO 2025-11-09 16:17:15,010 azure_auth 21556 7380 Successfully cached JWKS keys
+INFO 2025-11-09 16:17:16,269 azure_auth 21556 7380 Creating new user for: selmoushy@lightidea.org (username: selmoushy@lightidea.org)
+INFO 2025-11-09 16:17:17,024 signals 21556 7380 Sent welcome notification to new user selmoushy@lightidea.org
+INFO 2025-11-09 16:17:17,138 azure_auth 21556 7380 Successfully created user: selmoushy@lightidea.org, Object ID: 71b81c26-d34c-48f4-992a-61df5dcd5e75, Username claim: selmoushy@lightidea.org, Role: user
+INFO 2025-11-09 16:17:17,139 azure_auth 21556 7380 Successfully created user: selmoushy@lightidea.org
+INFO 2025-11-09 16:17:17,139 azure_auth 21556 7380 Successfully authenticated user: selmoushy@lightidea.org
+INFO 2025-11-09 16:17:17,235 views 21556 7380 Azure AD user logged in: selmoushy@lightidea.org
+INFO 2025-11-09 16:17:20,008 views 21556 7380 JWT tokens refreshed with rotation for user: selmoushy@lightidea.org
+INFO 2025-11-09 16:17:21,257 dual_auth 21556 7380 User selmoushy@lightidea.org authenticated with regular JWT (universal)
+INFO 2025-11-09 16:17:21,257 views 21556 7380 User profile accessed: selmoushy@lightidea.org
+INFO 2025-11-09 16:17:22,496 dual_auth 21556 7380 User selmoushy@lightidea.org authenticated with regular JWT (universal)
+INFO 2025-11-09 16:17:22,496 views 21556 7380 User profile accessed: selmoushy@lightidea.org
+INFO 2025-11-09 16:17:23,975 dual_auth 21556 7380 User selmoushy@lightidea.org authenticated with regular JWT (universal)
+INFO 2025-11-09 16:17:23,975 views 21556 7380 Building queryset for user selmoushy@lightidea.org
+INFO 2025-11-09 16:17:24,093 views 21556 7380 Successfully built queryset for user selmoushy@lightidea.org
+INFO 2025-11-09 16:17:38,145 dual_auth 21556 7380 User selmoushy@lightidea.org authenticated with regular JWT (universal)
+INFO 2025-11-09 16:17:38,145 views 21556 7380 User logged out without token blacklisting: selmoushy@lightidea.org
+INFO 2025-11-09 16:18:14,805 serializers 10348 9788 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-09 16:18:14,806 managers 10348 9788 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-09 16:18:14,811 serializers 10348 9788 User found: seif778811@gmail.com
+INFO 2025-11-09 16:18:14,812 serializers 10348 9788 Authenticating with username: seif778811@gmail.com
+INFO 2025-11-09 16:18:15,997 serializers 10348 9788 Authentication result: Success
+INFO 2025-11-09 16:18:15,997 serializers 10348 9788 Validation successful
+INFO 2025-11-09 16:18:16,013 views 10348 9788 User logged in: seif778811@gmail.com
+INFO 2025-11-09 16:18:16,212 views 10348 9788 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-09 16:18:16,224 dual_auth 10348 9788 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:18:16,225 views 10348 9788 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:18:16,248 dual_auth 10348 9788 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:18:16,278 views 10348 9788 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:18:16,403 dual_auth 10348 9788 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:18:16,403 views 10348 9788 Building queryset for user seif778811@gmail.com
+INFO 2025-11-09 16:18:16,407 views 10348 9788 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-09 16:18:19,634 dual_auth 10348 9788 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:18:21,649 dual_auth 10348 9788 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:18:21,652 views 10348 9788 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:18:21,662 dual_auth 10348 13308 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:18:21,664 dual_auth 10348 4012 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:18:21,665 dual_auth 10348 20592 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:18:21,689 dual_auth 10348 13308 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:18:21,690 dual_auth 10348 20592 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:18:31,816 dual_auth 10348 20592 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:28:42,621 signals 4056 14332 Sent welcome notification to new user test_admin@example.com
+INFO 2025-11-09 16:28:43,883 signals 4056 14332 Sent welcome notification to new user azure.user1@example.com
+INFO 2025-11-09 16:28:43,883 views 4056 14332 Azure AD user created by test_admin@example.com: azure.user1@example.com (Object ID: test-azure-id-001, Role: user)
+INFO 2025-11-09 16:28:43,886 signals 4056 14332 Sent welcome notification to new user azure.user2@example.com
+INFO 2025-11-09 16:28:43,886 views 4056 14332 Azure AD user created by test_admin@example.com: azure.user2@example.com (Object ID: test-azure-id-002, Role: user)
+INFO 2025-11-09 16:28:43,891 signals 4056 14332 Sent welcome notification to new user azure.admin@example.com
+INFO 2025-11-09 16:28:43,891 views 4056 14332 Azure AD user created by test_admin@example.com: azure.admin@example.com (Object ID: test-azure-id-003, Role: admin)
+INFO 2025-11-09 16:28:43,918 signals 4056 14332 Sent welcome notification to new user azure.user4@example.com
+INFO 2025-11-09 16:28:43,918 views 4056 14332 Azure AD user created by test_admin@example.com: azure.user4@example.com (Object ID: test-azure-id-004, Role: user)
+INFO 2025-11-09 16:28:43,933 signals 4056 14332 Sent welcome notification to new user test_regular@example.com
+INFO 2025-11-09 16:36:37,981 dual_auth 15420 1324 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:36:37,982 dual_auth 15420 13136 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:36:37,982 dual_auth 15420 5816 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:36:37,985 dual_auth 15420 8552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:36:37,988 views 15420 5816 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:36:38,024 dual_auth 15420 5816 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:36:38,032 dual_auth 15420 1324 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:36:39,937 dual_auth 15420 8552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:36:39,937 dual_auth 15420 1324 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:36:39,939 dual_auth 15420 13136 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:36:39,939 dual_auth 15420 5816 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:36:39,939 views 15420 1324 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:36:39,963 dual_auth 15420 5816 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:36:39,964 dual_auth 15420 13136 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:36:42,246 dual_auth 15420 5816 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:36:42,246 dual_auth 15420 13136 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:36:42,247 views 15420 13136 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:36:42,250 dual_auth 15420 8552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:36:42,262 dual_auth 15420 1324 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:36:42,287 dual_auth 15420 1324 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:36:42,287 dual_auth 15420 5816 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:05,365 dual_auth 15420 5816 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:05,365 dual_auth 15420 1324 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:05,366 views 15420 1324 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:39:05,366 dual_auth 15420 8552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:05,369 dual_auth 15420 13136 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:05,384 dual_auth 15420 8552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:05,384 dual_auth 15420 14552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:05,386 views 15420 14552 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:39:05,388 dual_auth 15420 13136 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:05,396 dual_auth 15420 5816 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:05,405 dual_auth 15420 13136 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:05,416 dual_auth 15420 13136 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:05,419 dual_auth 15420 14552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:05,426 dual_auth 15420 14552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:39,280 dual_auth 15420 5816 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:39,281 dual_auth 15420 13136 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:39,289 dual_auth 15420 5816 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:39,292 dual_auth 15420 14552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:39,292 dual_auth 15420 8552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:39,295 views 15420 14552 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:39:39,302 dual_auth 15420 13136 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:39,305 dual_auth 15420 5816 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:39,310 views 15420 5816 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:39:39,315 dual_auth 15420 8552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:39,318 dual_auth 15420 1324 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:39,320 dual_auth 15420 14552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:39,338 dual_auth 15420 14552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:39:39,339 dual_auth 15420 13136 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:40:07,542 dual_auth 15420 14552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:40:07,544 dual_auth 15420 13136 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:40:07,544 dual_auth 15420 8552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:40:07,545 dual_auth 15420 1324 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:40:07,546 views 15420 13136 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:40:07,577 dual_auth 15420 14552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:40:07,580 dual_auth 15420 13136 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:41:29,702 views 15420 13136 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-09 16:41:29,765 dual_auth 15420 13136 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:41:29,766 views 15420 13136 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:43:05,450 views 15420 13136 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-09 16:43:05,502 dual_auth 15420 13136 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:43:05,506 views 15420 13136 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:43:06,483 dual_auth 15420 13136 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:43:06,483 dual_auth 15420 1324 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:43:06,483 views 15420 13136 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:43:06,483 dual_auth 15420 14552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:43:06,484 dual_auth 15420 8552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:43:06,533 dual_auth 15420 14552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:43:06,547 dual_auth 15420 14552 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:30,822 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:30,824 dual_auth 4224 11360 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:30,826 dual_auth 4224 18716 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:30,826 dual_auth 4224 20000 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:30,826 views 4224 18716 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:49:30,840 dual_auth 4224 11360 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:30,845 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:30,850 dual_auth 4224 18716 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:30,851 views 4224 18716 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:49:30,854 dual_auth 4224 20000 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:30,863 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:30,863 dual_auth 4224 18716 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:30,892 dual_auth 4224 20000 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:30,893 dual_auth 4224 18716 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:39,471 dual_auth 4224 20000 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:39,471 dual_auth 4224 18716 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:39,472 views 4224 18716 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:49:39,474 dual_auth 4224 11360 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:39,474 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:39,488 dual_auth 4224 23356 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:39,489 views 4224 23356 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:49:39,491 dual_auth 4224 18716 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:39,496 dual_auth 4224 11360 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:39,499 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:39,506 dual_auth 4224 20000 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:39,506 dual_auth 4224 18716 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:39,525 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:49:39,527 dual_auth 4224 20000 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:50:24,080 views 4224 20000 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-09 16:50:24,155 dual_auth 4224 20000 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:50:24,159 views 4224 20000 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:50:25,342 dual_auth 4224 18716 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:50:25,342 dual_auth 4224 20000 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:50:25,343 dual_auth 4224 11360 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:50:25,343 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:50:25,344 views 4224 20000 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:50:25,404 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:50:25,405 dual_auth 4224 11360 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:51:24,348 dual_auth 4224 11360 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:51:24,432 signals 4224 11360 Sent welcome notification to new user user@example.com
+INFO 2025-11-09 16:51:24,433 views 4224 11360 Azure AD user created by seif778811@gmail.com: user@example.com (Object ID: b4c9a289-323b-21a0-1c3e-940f150eb9b8, Role: user)
+INFO 2025-11-09 16:51:24,436 signals 4224 11360 Sent welcome notification to new user admin@example.com
+INFO 2025-11-09 16:51:24,436 views 4224 11360 Azure AD user created by seif778811@gmail.com: admin@example.com (Object ID: 258d8dc9-16db-8cea-2caf-b6c3cd0cb024, Role: admin)
+INFO 2025-11-09 16:51:34,526 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:51:34,527 dual_auth 4224 18716 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:51:34,528 dual_auth 4224 20000 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:51:34,528 dual_auth 4224 11360 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:51:34,532 views 4224 11360 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:51:34,550 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:51:34,552 dual_auth 4224 11360 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:11,276 dual_auth 4224 11360 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:11,276 views 4224 11360 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:53:11,277 dual_auth 4224 18716 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:11,277 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:11,277 dual_auth 4224 20000 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:11,292 dual_auth 4224 23356 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:11,293 views 4224 23356 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:53:11,296 dual_auth 4224 18716 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:11,296 dual_auth 4224 20000 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:11,303 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:11,325 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:11,330 dual_auth 4224 20000 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:11,348 dual_auth 4224 20000 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:11,348 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:28,042 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:28,043 dual_auth 4224 23356 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:28,043 dual_auth 4224 20000 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:28,043 dual_auth 4224 18716 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:28,045 views 4224 20000 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:53:28,057 dual_auth 4224 11360 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:28,063 dual_auth 4224 20000 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:28,063 dual_auth 4224 18716 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:28,066 views 4224 20000 User profile accessed: seif778811@gmail.com
+INFO 2025-11-09 16:53:28,074 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:28,077 dual_auth 4224 23356 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:28,080 dual_auth 4224 11360 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:28,097 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:53:28,097 dual_auth 4224 11360 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:55:30,725 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:55:33,750 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:56:03,496 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:56:03,518 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:56:04,054 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-09 16:56:04,075 dual_auth 4224 5808 User seif778811@gmail.com authenticated with regular JWT (universal)

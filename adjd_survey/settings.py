@@ -76,6 +76,7 @@ INSTALLED_APPS = [
     # Third party apps
     'rest_framework',
     'rest_framework_simplejwt',
+    # 'rest_framework_simplejwt.token_blacklist',  # Disabled for Oracle compatibility
     'corsheaders',
     'django_extensions',
     "django_filters",
@@ -83,8 +84,8 @@ INSTALLED_APPS = [
     # Local apps
     'authentication',
     'surveys',
-    'notifications',  
-    'email_communication',  
+    'notifications',  # New app for real-time notifications
+    'email_communication',  # Email Communication System
 ]
 
 # Custom User Model Configuration

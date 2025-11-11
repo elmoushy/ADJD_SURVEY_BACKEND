@@ -199,7 +199,7 @@ class AzureADAuthentication(authentication.BaseAuthentication):
             response = requests.get(
                 settings.AZURE_JWKS_URI,
                 timeout=10,
-                headers={'User-Agent': 'WeaponPowerCloud-Backend/1.0'}
+                headers={'User-Agent': 'ADJD-Survey-Backend/1.0'}
             )
             response.raise_for_status()
             

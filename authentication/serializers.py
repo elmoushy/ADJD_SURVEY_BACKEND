@@ -10,7 +10,7 @@ from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from .models import Group, UserGroup
-from weaponpowercloud_backend.security_utils import validate_and_sanitize_text_input, sanitize_html_input
+from adjd_survey.security_utils import validate_and_sanitize_text_input, sanitize_html_input
 
 
 User = get_user_model()

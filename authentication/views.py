@@ -31,8 +31,8 @@ from .permissions import (
     CanViewGroup, CanManageGroupUsers, CanAccessUserData
 )
 from .dual_auth import UniversalAuthentication
-from weaponpowercloud_backend.security_utils import log_security_event
-from weaponpowercloud_backend.middleware.brute_force_protection import (
+from adjd_survey.security_utils import log_security_event
+from adjd_survey.middleware.brute_force_protection import (
     clear_login_attempts, get_remaining_attempts
 )
 

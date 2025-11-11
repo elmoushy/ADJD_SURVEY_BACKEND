@@ -30,8 +30,8 @@ def user_created_notification(sender, instance, created, **kwargs):
         
         try:
             # Create welcome notification
-            welcome_title_en = "Welcome to WeaponPowerCloud!"
-            welcome_title_ar = "مرحباً بك في WeaponPowerCloud!"
+            welcome_title_en = "Welcome to ADJD Survey!"
+            welcome_title_ar = "مرحباً بك في نظام استبيانات دائرة القضاء!"
             
             welcome_message_en = (
                 f"Welcome {user.full_name or user.username}! "

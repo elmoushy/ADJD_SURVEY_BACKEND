@@ -25,7 +25,7 @@ def api_root(request):
     API root endpoint providing information about available endpoints.
     """
     return JsonResponse({
-        'message': 'WeaponPowerCloud Backend API',
+        'message': 'ADJD Survey Backend API',
         'version': '1.0.0',
         'authentication': 'Azure AD JWT',
         'endpoints': {

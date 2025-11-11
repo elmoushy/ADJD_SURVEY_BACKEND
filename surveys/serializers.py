@@ -12,7 +12,7 @@ from .timezone_utils import (
     serialize_datetime_uae, get_status_uae, is_currently_active_uae,
     ensure_gregorian_from_hijri, convert_hijri_string_to_gregorian
 )
-from weaponpowercloud_backend.security_utils import validate_and_sanitize_text_input, sanitize_html_input
+from adjd_survey.security_utils import validate_and_sanitize_text_input, sanitize_html_input
 import json
 import logging
 
