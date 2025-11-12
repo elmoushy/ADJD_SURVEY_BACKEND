@@ -38,10 +38,16 @@ def wrap_html_with_rtl(body_html: str) -> str:
         # Content already has HTML structure, just ensure it has proper attributes
         return body_html
     
-    # Wrap content in full RTL HTML structure
-    rtl_html = f'''<html>
-<body text="#404040" lang="EN-US" link="blue" vlink="purple" style="word-wrap:break-word">
-<div class="WordSection1">
+    # Wrap content in full RTL HTML structure with dir="rtl" for Outlook
+    rtl_html = f'''<html dir="rtl">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+body {{ direction: rtl; }}
+</style>
+</head>
+<body text="#404040" lang="EN-US" link="blue" vlink="purple" style="word-wrap:break-word; direction:rtl;">
+<div class="WordSection1" dir="rtl">
 {body_html}
 </div>
 </body>
