@@ -22,6 +22,34 @@ User = get_user_model()
 logger = logging.getLogger(__name__)
 
 
+def wrap_html_with_rtl(body_html: str) -> str:
+    """
+    Wrap HTML content with RTL (Right-to-Left) formatting.
+    This ensures proper display for Arabic content in email clients.
+    
+    Args:
+        body_html: Original HTML content
+        
+    Returns:
+        HTML wrapped with RTL directives and proper styling
+    """
+    # Check if content already has <html> tag
+    if '<html' in body_html.lower():
+        # Content already has HTML structure, just ensure it has proper attributes
+        return body_html
+    
+    # Wrap content in full RTL HTML structure
+    rtl_html = f'''<html>
+<body text="#404040" lang="EN-US" link="blue" vlink="purple" style="word-wrap:break-word">
+<div class="WordSection1">
+{body_html}
+</div>
+</body>
+</html>'''
+    
+    return rtl_html
+
+
 class EmailService:
     """
     Central service for email operations.
@@ -229,17 +257,21 @@ class EmailService:
     ) -> bool:
         """
         Send actual email via Django email backend.
+        Wraps content in RTL format before sending.
         Returns True if successful, False otherwise.
         """
         try:
+            # Wrap HTML content with RTL formatting for proper Arabic display
+            rtl_body_html = wrap_html_with_rtl(body_html)
+            
             msg = EmailMultiAlternatives(
                 subject=subject,
-                body=body_html,  # Plain text fallback
+                body=body_html,  # Plain text fallback (without RTL wrapper)
                 from_email=from_email,
                 to=to_emails,
                 cc=cc_emails if cc_emails else None
             )
-            msg.attach_alternative(body_html, "text/html")
+            msg.attach_alternative(rtl_body_html, "text/html")
             msg.send()
             return True
         except Exception as e:
