@@ -44,6 +44,10 @@ def wrap_html_with_rtl(body_html: str) -> str:
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <style type="text/css">
 body {{ direction: rtl; }}
+.ql-align-right {{ text-align: right !important; }}
+.ql-align-center {{ text-align: center !important; }}
+.ql-align-left {{ text-align: left !important; }}
+.ql-align-justify {{ text-align: justify !important; }}
 </style>
 </head>
 <body text="#404040" lang="EN-US" link="blue" vlink="purple" style="word-wrap:break-word; direction:rtl;">
