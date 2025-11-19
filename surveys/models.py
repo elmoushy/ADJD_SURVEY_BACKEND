@@ -613,6 +613,133 @@ class Question(models.Model):
         return (True, None)
 
 
+class QuestionCondition(models.Model):
+    """
+    Defines conditional logic for questions to appear based on previous answers.
+    
+    This model creates a trigger-action relationship where:
+    - trigger_question: The question whose answer determines visibility
+    - trigger_answer_value: The specific answer that triggers the conditional question
+    - dependent_question: The question that should appear when condition is met
+    
+    Example:
+    Q1: "Do you own a car?" (Yes/No)
+    Q2: "What is your car's brand?" (Text) - Only shows if Q1 = "Yes"
+    
+    Rules:
+    - trigger_question must appear before dependent_question (order validation)
+    - Only yes_no and single_choice questions can be triggers
+    - Multiple conditions can trigger the same dependent_question (OR logic)
+    - Circular dependencies are not allowed
+    """
+    
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    
+    trigger_question = models.ForeignKey(
+        'Question',
+        on_delete=models.CASCADE,
+        related_name='triggers_for',
+        help_text='The question whose answer triggers this condition'
+    )
+    
+    trigger_answer_value = models.CharField(
+        max_length=255,
+        help_text='The exact answer value that triggers the condition (not encrypted for efficient matching)'
+    )
+    
+    dependent_question = models.ForeignKey(
+        'Question',
+        on_delete=models.CASCADE,
+        related_name='conditional_on',
+        help_text='The question that appears when the condition is met'
+    )
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'surveys_question_condition'
+        verbose_name = 'Question Condition'
+        verbose_name_plural = 'Question Conditions'
+        # Ensure no duplicate conditions
+        unique_together = ['trigger_question', 'trigger_answer_value', 'dependent_question']
+        indexes = [
+            models.Index(fields=['trigger_question'], name='qcond_trigger_q_idx'),
+            models.Index(fields=['dependent_question'], name='qcond_dependent_q_idx'),
+            models.Index(fields=['trigger_question', 'trigger_answer_value'], name='qcond_trigger_ans_idx'),
+        ]
+    
+    def __str__(self):
+        return f"If Q{self.trigger_question.order} = '{self.trigger_answer_value}' → Show Q{self.dependent_question.order}"
+    
+    def clean(self):
+        """Validate conditional question rules"""
+        from django.core.exceptions import ValidationError
+        super().clean()
+        
+        # Rule 1: Questions must be in the same survey
+        if self.trigger_question.survey != self.dependent_question.survey:
+            raise ValidationError(
+                "Trigger and dependent questions must be in the same survey."
+            )
+        
+        # Rule 2: Trigger question must come before dependent question
+        if self.trigger_question.order >= self.dependent_question.order:
+            raise ValidationError(
+                "Trigger question must appear before the dependent question (lower order number)."
+            )
+        
+        # Rule 3: Only yes_no and single_choice can be triggers
+        valid_trigger_types = ['yes_no', 'single_choice', 'نعم/لا', 'اختيار واحد']
+        if self.trigger_question.question_type not in valid_trigger_types:
+            raise ValidationError(
+                f"Only yes/no and single choice questions can be triggers. Got: {self.trigger_question.question_type}"
+            )
+        
+        # Rule 4: No circular dependencies 
+        # Check if dependent_question (directly or indirectly) triggers the trigger_question
+        # This requires checking the full dependency chain
+        def creates_cycle(current_q, target_q, visited=None):
+            """Check if current_q eventually triggers target_q"""
+            if visited is None:
+                visited = set()
+            
+            if current_q.id in visited:
+                return False  # Already checked this branch
+            
+            visited.add(current_q.id)
+            
+            # Get all questions that current_q triggers
+            triggered_by_current = QuestionCondition.objects.filter(
+                trigger_question=current_q
+            ).select_related('dependent_question')
+            
+            for condition in triggered_by_current:
+                if condition.dependent_question.id == target_q.id:
+                    return True  # Direct cycle found
+                
+                # Check transitive dependencies
+                if creates_cycle(condition.dependent_question, target_q, visited):
+                    return True
+            
+            return False
+        
+        # Check if this new condition would create a cycle
+        if creates_cycle(self.dependent_question, self.trigger_question):
+            raise ValidationError(
+                "Circular dependency detected: dependent question cannot trigger its own trigger question."
+            )
+    
+    def save(self, *args, **kwargs):
+        """Override save to call clean validation"""
+        self.clean()
+        super().save(*args, **kwargs)
+
+
 class QuestionOption(models.Model):
     """
     Individual option for single_choice/multiple_choice/yes_no questions with CSAT satisfaction mapping.

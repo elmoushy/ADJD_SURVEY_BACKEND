@@ -118,6 +118,23 @@ class QuestionSerializer(serializers.ModelSerializer):
         help_text="List of satisfaction values (0=Dissatisfied, 1=Neutral, 2=Satisfied) for each option in order"
     )
     
+    # Conditional question fields
+    conditional_on = serializers.SerializerMethodField(
+        help_text="Conditions that must be met for this question to appear"
+    )
+    triggers = serializers.SerializerMethodField(
+        help_text="Questions that this question triggers (if any answer is selected)"
+    )
+    
+    # Write field for setting conditional logic during create/update
+    set_conditional_on = serializers.ListField(
+        child=serializers.DictField(),
+        required=False,
+        allow_null=True,
+        write_only=True,
+        help_text="List of conditions: [{'trigger_question_id': 'uuid', 'trigger_answer_value': 'Yes'}]"
+    )
+    
     class Meta:
         model = Question
         fields = [
@@ -125,18 +142,75 @@ class QuestionSerializer(serializers.ModelSerializer):
             'is_required', 'order', 'validation_type',
             'NPS_Calculate', 'CSAT_Calculate', 'min_scale', 'max_scale', 'semantic_tag',
             'options_satisfaction_values', 'set_satisfaction_values',
+            'conditional_on', 'triggers', 'set_conditional_on',
             'created_at', 'updated_at'
         ]
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']  # Allow 'id' to be writable for updates
         extra_kwargs = {
-            'survey': {'required': False}  # Survey is set automatically when creating through SurveySerializer
+            'survey': {'required': False},  # Survey is set automatically when creating through SurveySerializer
+            'id': {'required': False}  # ID is optional - omit for create, include for update
         }
     
     def to_representation(self, instance):
-        """Exclude set_satisfaction_values from output"""
+        """Exclude write-only fields from output"""
         ret = super().to_representation(instance)
         ret.pop('set_satisfaction_values', None)
+        ret.pop('set_conditional_on', None)
         return ret
+    
+    def get_conditional_on(self, obj):
+        """
+        Return conditions that must be met for this question to appear.
+        Returns list of condition objects with trigger question info.
+        """
+        from .models import QuestionCondition
+        
+        conditions = QuestionCondition.objects.filter(
+            dependent_question=obj
+        ).select_related('trigger_question')
+        
+        if not conditions.exists():
+            return None
+        
+        return [
+            {
+                'trigger_question_id': str(condition.trigger_question.id),
+                'trigger_question_order': condition.trigger_question.order,
+                'trigger_question_text': condition.trigger_question.text,
+                'trigger_answer_value': condition.trigger_answer_value,
+                'condition_id': str(condition.id)
+            }
+            for condition in conditions
+        ]
+    
+    def get_triggers(self, obj):
+        """
+        Return questions that this question triggers.
+        Useful for UI to show relationships.
+        """
+        from .models import QuestionCondition
+        
+        triggers = QuestionCondition.objects.filter(
+            trigger_question=obj
+        ).select_related('dependent_question')
+        
+        if not triggers.exists():
+            return None
+        
+        # Group by dependent question to show all trigger values
+        trigger_map = {}
+        for trigger in triggers:
+            dep_id = str(trigger.dependent_question.id)
+            if dep_id not in trigger_map:
+                trigger_map[dep_id] = {
+                    'dependent_question_id': dep_id,
+                    'dependent_question_order': trigger.dependent_question.order,
+                    'dependent_question_text': trigger.dependent_question.text,
+                    'trigger_values': []
+                }
+            trigger_map[dep_id]['trigger_values'].append(trigger.trigger_answer_value)
+        
+        return list(trigger_map.values())
     
     def get_options_satisfaction_values(self, obj):
         """
@@ -200,6 +274,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         csat_calculate = data.get('CSAT_Calculate', False)
         nps_calculate = data.get('NPS_Calculate', False)
         options_satisfaction_values = data.get('options_satisfaction_values')
+        set_conditional_on = data.get('set_conditional_on')
         
         # Validate NPS_Calculate flag
         if nps_calculate and question_type not in ['rating', 'تقييم']:
@@ -262,15 +337,54 @@ class QuestionSerializer(serializers.ModelSerializer):
                         'options_satisfaction_values': 'Yes/No questions require exactly 2 satisfaction values [yes_value, no_value]'
                     })
         
+        # Validate conditional logic
+        if set_conditional_on:
+            self._validate_conditional_logic(data, set_conditional_on)
+        
         return data
     
+    def _validate_conditional_logic(self, data, set_conditional_on):
+        """
+        Validate conditional question logic.
+        
+        Rules:
+        1. Conditions must be a list of dicts with trigger_question_id and trigger_answer_value
+        2. Trigger questions must exist in the same survey
+        3. Trigger questions must be yes_no or single_choice type
+        4. Trigger answer values must be valid for the trigger question
+        """
+        if not isinstance(set_conditional_on, list):
+            raise serializers.ValidationError({
+                'set_conditional_on': 'Must be a list of condition objects'
+            })
+        
+        for i, condition in enumerate(set_conditional_on):
+            if not isinstance(condition, dict):
+                raise serializers.ValidationError({
+                    'set_conditional_on': f'Condition {i} must be a dictionary'
+                })
+            
+            if 'trigger_question_id' not in condition or 'trigger_answer_value' not in condition:
+                raise serializers.ValidationError({
+                    'set_conditional_on': f'Condition {i} must have trigger_question_id and trigger_answer_value'
+                })
+            
+            # Validate trigger_answer_value is not empty
+            if not condition['trigger_answer_value']:
+                raise serializers.ValidationError({
+                    'set_conditional_on': f'Condition {i}: trigger_answer_value cannot be empty'
+                })
+            
+            # Additional validation will be done in create/update when we have access to the survey
+    
     def create(self, validated_data):
-        """Create question and QuestionOption records for satisfaction values"""
-        from .models import QuestionOption
+        """Create question and QuestionOption records for satisfaction values, plus conditional logic"""
+        from .models import QuestionOption, QuestionCondition
         import hashlib
         
-        # Extract set_satisfaction_values and options_satisfaction_values before creating the question
+        # Extract write-only fields before creating the question
         satisfaction_values = validated_data.pop('set_satisfaction_values', None) or validated_data.pop('options_satisfaction_values', None)
+        set_conditional_on = validated_data.pop('set_conditional_on', None)
         
         # Create the question
         question = Question.objects.create(**validated_data)
@@ -292,15 +406,63 @@ class QuestionSerializer(serializers.ModelSerializer):
             except Exception as e:
                 logger.error(f"Error creating QuestionOption records: {e}")
         
+        # Create conditional logic if provided
+        if set_conditional_on:
+            self._create_conditional_logic(question, set_conditional_on)
+        
         return question
     
+    def _create_conditional_logic(self, question, conditions):
+        """Create QuestionCondition records for conditional logic"""
+        from .models import QuestionCondition
+        from django.core.exceptions import ValidationError
+        
+        for condition in conditions:
+            try:
+                trigger_question_id = condition['trigger_question_id']
+                trigger_answer_value = condition['trigger_answer_value']
+                
+                # Get trigger question
+                try:
+                    trigger_question = Question.objects.get(
+                        id=trigger_question_id,
+                        survey=question.survey
+                    )
+                except Question.DoesNotExist:
+                    logger.error(f"Trigger question {trigger_question_id} not found in survey {question.survey.id}")
+                    continue
+                
+                # Validate trigger question type
+                valid_trigger_types = ['yes_no', 'single_choice', 'نعم/لا', 'اختيار واحد']
+                if trigger_question.question_type not in valid_trigger_types:
+                    logger.error(f"Invalid trigger question type: {trigger_question.question_type}")
+                    continue
+                
+                # Validate order (trigger must come before dependent)
+                if trigger_question.order >= question.order:
+                    logger.error(f"Trigger question order {trigger_question.order} must be less than dependent question order {question.order}")
+                    continue
+                
+                # Create the condition
+                QuestionCondition.objects.create(
+                    trigger_question=trigger_question,
+                    trigger_answer_value=trigger_answer_value,
+                    dependent_question=question
+                )
+                logger.info(f"Created conditional logic: Q{trigger_question.order} = '{trigger_answer_value}' -> Q{question.order}")
+                
+            except Exception as e:
+                logger.error(f"Error creating QuestionCondition: {e}")
+                continue
+    
     def update(self, instance, validated_data):
-        """Update question and QuestionOption records for satisfaction values"""
-        from .models import QuestionOption
+        """Update question and QuestionOption records for satisfaction values, plus conditional logic"""
+        from .models import QuestionOption, QuestionCondition
         import hashlib
         
-        # Extract set_satisfaction_values and options_satisfaction_values before updating
+        # Extract write-only fields before updating
         satisfaction_values = validated_data.pop('set_satisfaction_values', None) or validated_data.pop('options_satisfaction_values', None)
+        set_conditional_on = validated_data.pop('set_conditional_on', None)
         
         # Update the question fields
         for attr, value in validated_data.items():
@@ -326,6 +488,15 @@ class QuestionSerializer(serializers.ModelSerializer):
                         )
             except Exception as e:
                 logger.error(f"Error updating QuestionOption records: {e}")
+        
+        # Update conditional logic if provided
+        if set_conditional_on is not None:  # Allow empty list to clear conditions
+            # Delete existing conditions
+            QuestionCondition.objects.filter(dependent_question=instance).delete()
+            
+            # Create new conditions
+            if set_conditional_on:  # Only if not empty
+                self._create_conditional_logic(instance, set_conditional_on)
         
         return instance
 
@@ -549,17 +720,18 @@ class SurveySerializer(serializers.ModelSerializer):
         return {}
     
     def to_internal_value(self, data):
-        """Ensure per_device_access always has a value and preserve satisfaction values in nested questions"""
+        """Ensure per_device_access always has a value and preserve satisfaction values + temp IDs in nested questions"""
         # Ensure per_device_access is never None and defaults to False
         if 'per_device_access' not in data:
             data['per_device_access'] = False
         elif data.get('per_device_access') is None:
             data['per_device_access'] = False
         
-        # Preserve and convert options_satisfaction_values in nested questions data
+        # Preserve and convert options_satisfaction_values + temp IDs in nested questions data
         # Convert from JSON string to list if needed
         if 'questions' in data and isinstance(data['questions'], list):
             for question_data in data['questions']:
+                # Preserve satisfaction values
                 if 'options_satisfaction_values' in question_data:
                     value = question_data['options_satisfaction_values']
                     # Convert from JSON string to list if needed
@@ -570,16 +742,38 @@ class SurveySerializer(serializers.ModelSerializer):
                             pass
                     # Store it temporarily to preserve through validation
                     question_data['_temp_satisfaction_values'] = question_data['options_satisfaction_values']
+                
+                # Preserve ANY id field (temp ID or real UUID) before validation
+                # DRF strips the id during nested validation, so we preserve it as _saved_id
+                if 'id' in question_data:
+                    question_id = question_data['id']
+                    if isinstance(question_id, str) and question_id.startswith('temp-'):
+                        # Temp ID - preserve as _temp_id and remove from validation
+                        question_data['_temp_id'] = question_id
+                        del question_data['id']
+                    else:
+                        # Real UUID - preserve as _saved_id for update logic
+                        question_data['_saved_id'] = question_id
+                        # Keep id in data for validation, but we'll restore _saved_id after
         
         result = super().to_internal_value(data)
         
-        # Restore satisfaction values after validation
+        # Restore satisfaction values and temp IDs after validation
         if 'questions' in result:
             questions_list = result['questions']
             if 'questions' in data and isinstance(data['questions'], list):
                 for idx, question_data in enumerate(data['questions']):
-                    if '_temp_satisfaction_values' in question_data and idx < len(questions_list):
-                        questions_list[idx]['options_satisfaction_values'] = question_data['_temp_satisfaction_values']
+                    if idx < len(questions_list):
+                        # Restore satisfaction values
+                        if '_temp_satisfaction_values' in question_data:
+                            questions_list[idx]['options_satisfaction_values'] = question_data['_temp_satisfaction_values']
+                        # Restore temp ID
+                        if '_temp_id' in question_data:
+                            questions_list[idx]['_temp_id'] = question_data['_temp_id']
+                        # Restore real UUID (for updates)
+                        if '_saved_id' in question_data:
+                            questions_list[idx]['id'] = question_data['_saved_id']
+                            logger.info(f"SurveySerializer: Restored question ID {question_data['_saved_id']} at index {idx}")
         
         return result
     
@@ -624,7 +818,7 @@ class SurveySerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         """Create survey with creator set to current user and handle nested questions"""
-        from .models import QuestionOption
+        from .models import QuestionOption, QuestionCondition
         import hashlib
         
         request = self.context.get('request')
@@ -653,13 +847,37 @@ class SurveySerializer(serializers.ModelSerializer):
         if validated_data.get('visibility') == 'PRIVATE':
             survey.shared_with.set(shared_with)
         
-        # Create questions if provided
-        for question_data in questions_data:
-            # Extract satisfaction values before creating question
-            # Check both field names since they might come from different sources
+        # First pass: Create questions without conditions and build temp ID map
+        questions_map = {}  # Maps real UUIDs to question data
+        temp_id_map = {}    # Maps temp IDs (like "temp-123") to question objects
+        
+        for idx, question_data in enumerate(questions_data):
+            # Extract conditional logic for second pass
+            set_conditional_on = question_data.pop('set_conditional_on', None)
             options_satisfaction_values = question_data.pop('options_satisfaction_values', None) or question_data.pop('set_satisfaction_values', None)
             
+            # Extract temp ID if present
+            temp_id = question_data.pop('_temp_id', None)
+            
             question = Question.objects.create(survey=survey, **question_data)
+            
+            # Store by real UUID
+            questions_map[str(question.id)] = {
+                'question': question,
+                'conditions': set_conditional_on,
+                'satisfaction_values': options_satisfaction_values
+            }
+            
+            # Store by temp ID if present
+            if temp_id:
+                temp_id_map[temp_id] = question
+                logger.info(f"Mapped temp ID '{temp_id}' to question {question.id} (order {question.order})")
+        
+        # Second pass: Create conditions and satisfaction values
+        for q_id, q_data in questions_map.items():
+            question = q_data['question']
+            set_conditional_on = q_data['conditions']
+            options_satisfaction_values = q_data['satisfaction_values']
             
             # Create QuestionOption records if satisfaction values provided
             if options_satisfaction_values and question.CSAT_Calculate:
@@ -700,13 +918,68 @@ class SurveySerializer(serializers.ModelSerializer):
                                 satisfaction_value=options_satisfaction_values[idx],
                                 order=idx
                             )
+            
+            # Create conditional logic if provided
+            if set_conditional_on:
+                for condition in set_conditional_on:
+                    try:
+                        trigger_question_id = condition['trigger_question_id']
+                        trigger_answer_value = condition['trigger_answer_value']
+                        
+                        # Find trigger question - prioritize temp ID map, then real UUIDs
+                        trigger_question = None
+                        
+                        # 1. Check temp ID map first (for temp IDs like "temp-1763540371931")
+                        if isinstance(trigger_question_id, str) and trigger_question_id in temp_id_map:
+                            trigger_question = temp_id_map[trigger_question_id]
+                            logger.info(f"Resolved temp ID '{trigger_question_id}' to question {trigger_question.id}")
+                        
+                        # 2. Try as real UUID in our current questions map
+                        if not trigger_question:
+                            trigger_id_str = str(trigger_question_id)
+                            if trigger_id_str in questions_map:
+                                trigger_question = questions_map[trigger_id_str]['question']
+                        
+                        # 3. Last resort: try database lookup (for existing questions)
+                        if not trigger_question:
+                            try:
+                                trigger_question = Question.objects.get(
+                                    id=trigger_question_id,
+                                    survey=survey
+                                )
+                            except (Question.DoesNotExist, ValueError):
+                                logger.error(f"Trigger question {trigger_question_id} not found in survey {survey.id}")
+                                continue
+                        
+                        # Validate trigger question type
+                        valid_trigger_types = ['yes_no', 'single_choice', 'نعم/لا', 'اختيار واحد']
+                        if trigger_question.question_type not in valid_trigger_types:
+                            logger.error(f"Invalid trigger question type: {trigger_question.question_type}")
+                            continue
+                        
+                        # Validate order (trigger must come before dependent)
+                        if trigger_question.order >= question.order:
+                            logger.error(f"Trigger question order {trigger_question.order} must be less than dependent question order {question.order}")
+                            continue
+                        
+                        # Create the condition
+                        QuestionCondition.objects.create(
+                            trigger_question=trigger_question,
+                            trigger_answer_value=trigger_answer_value,
+                            dependent_question=question
+                        )
+                        logger.info(f"Created conditional logic: Q{trigger_question.order} = '{trigger_answer_value}' -> Q{question.order}")
+                        
+                    except Exception as e:
+                        logger.error(f"Error creating QuestionCondition: {e}")
+                        continue
         
         logger.info(f"Survey created: {survey.id} with {len(questions_data)} questions by {request.user.email}")
         return survey
     
     def update(self, instance, validated_data):
         """Update survey and handle nested questions"""
-        from .models import QuestionOption
+        from .models import QuestionOption, QuestionCondition
         import hashlib
         
         # Ensure per_device_access is never None
@@ -715,6 +988,10 @@ class SurveySerializer(serializers.ModelSerializer):
         
         # Extract questions data before updating survey
         questions_data = validated_data.pop('questions', None)
+        
+        logger.info(f"UPDATE: questions_data is None: {questions_data is None}, len={len(questions_data) if questions_data else 0}")
+        if questions_data:
+            logger.info(f"UPDATE: First question sample: {questions_data[0] if questions_data else 'N/A'}")
         
         # Handle shared_with separately
         shared_with = validated_data.pop('shared_with', None)
@@ -733,15 +1010,95 @@ class SurveySerializer(serializers.ModelSerializer):
         
         # Handle questions if provided
         if questions_data is not None:
-            # Delete existing questions (cascade will delete QuestionOption records)
-            instance.questions.all().delete()
+            # Track which questions are being updated vs created
+            provided_question_ids = set()
+            questions_map = {}  # Maps real UUIDs to question data
+            temp_id_map = {}    # Maps temp IDs (like "temp-123") to question objects
             
-            # Create new questions
+            # First pass: Create or update questions without conditions
             for question_data in questions_data:
-                # Extract satisfaction values before creating question
+                # Extract conditional logic and satisfaction values for second pass
+                set_conditional_on = question_data.pop('set_conditional_on', None)
                 options_satisfaction_values = question_data.pop('options_satisfaction_values', None)
                 
-                question = Question.objects.create(survey=instance, **question_data)
+                # Extract temp ID if present
+                temp_id = question_data.pop('_temp_id', None)
+                question_id = question_data.pop('id', None)
+                
+                logger.info(f"UPDATE: Processing question - temp_id={temp_id}, question_id={question_id}, set_conditional_on={set_conditional_on}, data keys={list(question_data.keys())}")
+                
+                if question_id and not (isinstance(question_id, str) and question_id.startswith('temp-')):
+                    # Update existing question (real UUID)
+                    try:
+                        logger.info(f"UPDATE: Attempting to find existing question with id={question_id} (type={type(question_id).__name__}) in survey {instance.id}")
+                        question = Question.objects.get(id=question_id, survey=instance)
+                        provided_question_ids.add(str(question.id))  # Convert UUID to string
+                        
+                        logger.info(f"UPDATE: Found existing question {question.id}, updating fields")
+                        
+                        # Update fields
+                        for attr, value in question_data.items():
+                            setattr(question, attr, value)
+                        question.save()
+                        
+                        logger.info(f"UPDATE: Updated existing question {question.id}")
+                        
+                        # Only delete old conditions if new ones are being set
+                        # If set_conditional_on is explicitly provided (even if empty), delete and recreate
+                        # If not provided at all (None from pop default), keep existing conditions
+                        if set_conditional_on is not None:
+                            QuestionCondition.objects.filter(dependent_question=question).delete()
+                            logger.info(f"UPDATE: Deleted old conditions for question {question.id} (will recreate)")
+                        
+                    except Question.DoesNotExist:
+                        # Question ID doesn't exist, create new one
+                        logger.error(f"UPDATE: Question ID {question_id} not found in survey {instance.id}, creating new question")
+                        question = Question.objects.create(survey=instance, **question_data)
+                        # Add newly created question to provided_question_ids so it won't be deleted
+                        provided_question_ids.add(str(question.id))
+                        logger.info(f"UPDATE: Created new question {question.id} from invalid UUID")
+                else:
+                    # Create new question (no ID or temp ID)
+                    logger.info(f"UPDATE: Creating new question from temp ID or no ID")
+                    question = Question.objects.create(survey=instance, **question_data)
+                    # Add newly created question to provided_question_ids so it won't be deleted
+                    provided_question_ids.add(str(question.id))
+                    logger.info(f"UPDATE: Created new question {question.id} (temp_id was {temp_id or question_id})")
+                
+                # Store by real UUID
+                questions_map[str(question.id)] = {
+                    'question': question,
+                    'conditions': set_conditional_on,
+                    'satisfaction_values': options_satisfaction_values
+                }
+                
+                # Store by temp ID if present
+                if temp_id:
+                    temp_id_map[temp_id] = question
+                    logger.info(f"Mapped temp ID '{temp_id}' to question {question.id} (order {question.order})")
+                elif question_id and isinstance(question_id, str) and question_id.startswith('temp-'):
+                    # If question_id itself is a temp ID, store it
+                    temp_id_map[question_id] = question
+                    logger.info(f"Mapped temp ID '{question_id}' to question {question.id} (order {question.order})")
+            
+            # Delete questions that were not provided in the update
+            # Convert both sets to strings for consistent comparison
+            existing_question_ids = set(str(qid) for qid in instance.questions.values_list('id', flat=True))
+            questions_to_delete = existing_question_ids - provided_question_ids
+            
+            logger.info(f"UPDATE: Existing question IDs: {existing_question_ids}")
+            logger.info(f"UPDATE: Provided question IDs: {provided_question_ids}")
+            logger.info(f"UPDATE: Questions to delete: {questions_to_delete}")
+            
+            if questions_to_delete:
+                Question.objects.filter(id__in=questions_to_delete).delete()
+                logger.info(f"UPDATE: Deleted {len(questions_to_delete)} questions")
+            
+            # Second pass: Create conditions and satisfaction values
+            for q_id, q_data in questions_map.items():
+                question = q_data['question']
+                set_conditional_on = q_data['conditions']
+                options_satisfaction_values = q_data['satisfaction_values']
                 
                 # Create QuestionOption records if satisfaction values provided
                 if options_satisfaction_values and question.CSAT_Calculate:
@@ -782,8 +1139,67 @@ class SurveySerializer(serializers.ModelSerializer):
                                     satisfaction_value=options_satisfaction_values[idx],
                                     order=idx
                                 )
+                
+                # Create conditional logic if provided
+                if set_conditional_on:
+                    for condition in set_conditional_on:
+                        try:
+                            trigger_question_id = condition['trigger_question_id']
+                            trigger_answer_value = condition['trigger_answer_value']
+                            
+                            # Find trigger question - prioritize temp ID map, then real UUIDs
+                            trigger_question = None
+                            
+                            # 1. Check temp ID map first (for temp IDs like "temp-1763540371931")
+                            if isinstance(trigger_question_id, str) and trigger_question_id in temp_id_map:
+                                trigger_question = temp_id_map[trigger_question_id]
+                                logger.info(f"Resolved temp ID '{trigger_question_id}' to question {trigger_question.id}")
+                            
+                            # 2. Try as real UUID in our current questions map
+                            if not trigger_question:
+                                trigger_id_str = str(trigger_question_id)
+                                if trigger_id_str in questions_map:
+                                    trigger_question = questions_map[trigger_id_str]['question']
+                            
+                            # 3. Last resort: try database lookup (for existing questions)
+                            if not trigger_question:
+                                try:
+                                    trigger_question = Question.objects.get(
+                                        id=trigger_question_id,
+                                        survey=instance
+                                    )
+                                except (Question.DoesNotExist, ValueError):
+                                    logger.error(f"Trigger question {trigger_question_id} not found in survey {instance.id}")
+                                    continue
+                            
+                            # Validate trigger question type
+                            valid_trigger_types = ['yes_no', 'single_choice', 'نعم/لا', 'اختيار واحد']
+                            if trigger_question.question_type not in valid_trigger_types:
+                                logger.error(f"Invalid trigger question type: {trigger_question.question_type}")
+                                continue
+                            
+                            # Validate order (trigger must come before dependent)
+                            if trigger_question.order >= question.order:
+                                logger.error(f"Trigger question order {trigger_question.order} must be less than dependent question order {question.order}")
+                                continue
+                            
+                            # Create the condition
+                            QuestionCondition.objects.create(
+                                trigger_question=trigger_question,
+                                trigger_answer_value=trigger_answer_value,
+                                dependent_question=question
+                            )
+                            logger.info(f"Created conditional logic: Q{trigger_question.order} = '{trigger_answer_value}' -> Q{question.order}")
+                            
+                        except Exception as e:
+                            logger.error(f"Error creating QuestionCondition: {e}")
+                            continue
         
         logger.info(f"Survey updated: {instance.id} with {len(questions_data) if questions_data else 0} questions")
+        
+        # Refresh the instance to pick up related objects (questions, conditions)
+        instance.refresh_from_db()
+        
         return instance
 
 
