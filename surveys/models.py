@@ -918,6 +918,7 @@ class DeviceResponse(models.Model):
     """
     Track survey responses by device fingerprint for per-device access control.
     This model stores device fingerprints to prevent multiple submissions from the same device.
+    Primary device identifier is MAC address; IP address kept for legacy/backward compatibility.
     """
     
     id = models.UUIDField(
@@ -933,12 +934,18 @@ class DeviceResponse(models.Model):
     )
     device_fingerprint = models.CharField(
         max_length=64,
-        help_text='SHA256 hash of device fingerprint (User-Agent + Screen Resolution + Timezone + Language)'
+        help_text='SHA256 hash of device fingerprint (MAC Address + User-Agent + Screen Resolution + Timezone + Platform)'
+    )
+    mac_address = models.CharField(
+        max_length=17,
+        null=True,
+        blank=True,
+        help_text='MAC address of the device (primary device identifier)'
     )
     ip_address = models.GenericIPAddressField(
         null=True,
         blank=True,
-        help_text='IP address of the device'
+        help_text='IP address of the device (kept for backward compatibility, not used for tracking)'
     )
     user_agent = models.TextField(
         null=True,
@@ -965,6 +972,7 @@ class DeviceResponse(models.Model):
         indexes = [
             models.Index(fields=['survey', 'device_fingerprint'], name='surveys_device_survey_fp_idx'),
             models.Index(fields=['device_fingerprint'], name='surveys_device_fp_idx'),
+            models.Index(fields=['mac_address'], name='surveys_device_mac_idx'),
         ]
         ordering = ['-submitted_at']
     
@@ -975,6 +983,7 @@ class DeviceResponse(models.Model):
     def generate_device_fingerprint(cls, request):
         """
         Generate a device fingerprint from request data.
+        Now uses MAC address as the primary identifier.
         
         Args:
             request: Django request object
@@ -982,6 +991,9 @@ class DeviceResponse(models.Model):
         Returns:
             str: SHA256 hash of device characteristics
         """
+        # Get MAC address from custom header (primary identifier)
+        mac_address = request.META.get('HTTP_X_MAC_ADDRESS', '')
+        
         # Get basic device information from request
         user_agent = request.META.get('HTTP_USER_AGENT', '')
         accept_language = request.META.get('HTTP_ACCEPT_LANGUAGE', '')
@@ -992,8 +1004,8 @@ class DeviceResponse(models.Model):
         timezone = request.META.get('HTTP_X_TIMEZONE', '')
         platform = request.META.get('HTTP_X_PLATFORM', '')
         
-        # Combine all available device characteristics
-        device_info = f"{user_agent}|{accept_language}|{accept_encoding}|{screen_resolution}|{timezone}|{platform}"
+        # Combine all available device characteristics with MAC as primary
+        device_info = f"{mac_address}|{user_agent}|{accept_language}|{accept_encoding}|{screen_resolution}|{timezone}|{platform}"
         
         # Generate SHA256 hash
         return hashlib.sha256(device_info.encode('utf-8')).hexdigest()
@@ -1030,12 +1042,14 @@ class DeviceResponse(models.Model):
             DeviceResponse: Created device response record
         """
         device_fingerprint = cls.generate_device_fingerprint(request)
-        ip_address = request.META.get('REMOTE_ADDR')
+        mac_address = request.META.get('HTTP_X_MAC_ADDRESS', '')
+        ip_address = request.META.get('REMOTE_ADDR')  # Kept for backward compatibility
         user_agent = request.META.get('HTTP_USER_AGENT', '')
         
         return cls.objects.create(
             survey=survey,
             device_fingerprint=device_fingerprint,
+            mac_address=mac_address if mac_address else None,
             ip_address=ip_address,
             user_agent=user_agent,
             response=response

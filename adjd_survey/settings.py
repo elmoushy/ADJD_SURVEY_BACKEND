@@ -309,6 +309,13 @@ CORS_ALLOW_HEADERS = [
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
+    # Custom headers for device fingerprinting and app functionality
+    'x-mac-address',
+    'x-screen-resolution',
+    'x-timezone',
+    'x-platform',
+    'x-language',
+    'x-user-agent',
 ]
 
 # CORS allowed methods

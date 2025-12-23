@@ -3947,7 +3947,6 @@ class AuthenticatedSurveyResponseView(APIView):
             survey_response = SurveyResponse.objects.create(
                 survey=survey,
                 respondent=user,
-                ip_address=request.META.get('REMOTE_ADDR'),
                 is_complete=True  # Assume complete submission for authenticated users
             )
             
@@ -4219,7 +4218,6 @@ class SurveyResponseSubmissionView(APIView):
             survey_response = SurveyResponse.objects.create(
                 survey=survey,
                 respondent=respondent,
-                ip_address=request.META.get('REMOTE_ADDR'),
                 respondent_email=respondent_email,  # Store email for anonymous responses
                 respondent_phone=respondent_phone   # Store phone for anonymous responses
             )
@@ -4401,8 +4399,7 @@ class SurveySubmissionView(APIView):
             # Create response
             survey_response = SurveyResponse.objects.create(
                 survey=survey,
-                respondent=request.user if request.user.is_authenticated else None,
-                ip_address=request.META.get('REMOTE_ADDR')
+                respondent=request.user if request.user.is_authenticated else None
             )
             
             # Create answers
@@ -4825,10 +4822,12 @@ class SurveyAnalyticsDashboardView(APIView):
         # Response velocity (responses per day)
         response_velocity = self._calculate_response_velocity(responses)
         
-        # Unique IPs (only if include_personal is True)
-        unique_ips = 0
+        # Unique devices (MAC-based tracking, only if include_personal is True)
+        unique_ips = 0  # Keep variable name for backward compatibility
         if include_personal:
-            unique_ips = responses.filter(ip_address__isnull=False).values('ip_address').distinct().count()
+            # Count unique devices from device tracking (more accurate than IP)
+            unique_devices = survey.device_responses.values('mac_address').distinct().count()
+            unique_ips = unique_devices
         
         # Calculate NPS (Net Promoter Score) - detects rating questions with dynamic scale support
         nps_data = self._calculate_nps_fixed(survey, responses)
@@ -7575,7 +7574,7 @@ class AdminResponsesView(generics.ListAPIView):
                 respondent_type,
                 response.submitted_at.strftime('%Y-%m-%d %H:%M:%S'),
                 'Yes' if response.is_complete else 'No',
-                response.ip_address or 'N/A'
+                'N/A'  # IP address no longer tracked
             ]
             writer.writerow(row)
         
@@ -7618,7 +7617,7 @@ class AdminResponsesView(generics.ListAPIView):
                 },
                 'submitted_at': response.submitted_at.isoformat(),
                 'is_complete': response.is_complete,
-                'ip_address': response.ip_address,
+                # Note: IP address no longer tracked - use device_tracking relationship for device info
                 'answers': []
             }
             
@@ -7763,7 +7762,7 @@ class AdminSurveyResponsesView(generics.ListAPIView):
                     'id': str(response.id),
                     'submitted_at': response.submitted_at.isoformat(),
                     'is_complete': response.is_complete,
-                    'ip_address': response.ip_address,
+                    # IP address no longer tracked - use device_tracking for device info
                     'respondent': respondent_info,
                     'answers': answers_with_context,
                     'answer_count': len(answers_with_context)

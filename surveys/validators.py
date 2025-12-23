@@ -23,8 +23,14 @@ def validate_email(value):
     Returns:
         tuple: (is_valid, error_message)
     """
-    if not value or not value.strip():
+    if not value:
         return (True, None)  # Empty values handled by is_required
+    
+    # Convert to string if not already
+    value = str(value)
+    
+    if not value.strip():
+        return (True, None)
     
     # Basic email regex pattern
     email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
@@ -51,8 +57,14 @@ def validate_phone(value):
     Returns:
         tuple: (is_valid, error_message)
     """
-    if not value or not value.strip():
+    if not value:
         return (True, None)  # Empty values handled by is_required
+    
+    # Convert to string if not already
+    value = str(value)
+    
+    if not value.strip():
+        return (True, None)
     
     # Remove spaces and dashes for validation
     cleaned = value.strip().replace(' ', '').replace('-', '')
@@ -76,8 +88,14 @@ def validate_number(value):
     Returns:
         tuple: (is_valid, error_message)
     """
-    if not value or not value.strip():
+    if not value:
         return (True, None)  # Empty values handled by is_required
+    
+    # Convert to string if not already
+    value = str(value)
+    
+    if not value.strip():
+        return (True, None)
     
     # Remove spaces
     cleaned = value.strip().replace(' ', '')
@@ -101,8 +119,14 @@ def validate_url(value):
     Returns:
         tuple: (is_valid, error_message)
     """
-    if not value or not value.strip():
+    if not value:
         return (True, None)  # Empty values handled by is_required
+    
+    # Convert to string if not already
+    value = str(value)
+    
+    if not value.strip():
+        return (True, None)
     
     # Check for http/https protocol
     cleaned_url = value.strip()
