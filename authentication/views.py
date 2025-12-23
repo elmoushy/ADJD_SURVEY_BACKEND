@@ -23,7 +23,7 @@ from .serializers import (
     GroupDetailSerializer, CreateGroupSerializer, AddUserToGroupSerializer,
     UpdateUserGroupSerializer, UserGroupSerializer,
     UserRegistrationSerializer, UserLoginSerializer, ChangePasswordSerializer,
-    BulkDeleteUsersSerializer, ResetUserPasswordSerializer
+    BulkDeleteUsersSerializer, ResetUserPasswordSerializer, BulkCreateUsersWithPasswordSerializer
 )
 from .models import Group, UserGroup
 from .permissions import (
@@ -2040,6 +2040,179 @@ class BulkCreateAzureUsersView(APIView):
             
         except Exception as e:
             logger.error(f"Error in bulk Azure AD user creation: {str(e)}")
+            return Response({
+                'detail': 'An unexpected error occurred during bulk user creation'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class BulkCreateUsersWithPasswordView(APIView):
+    """
+    API endpoint for bulk creation of regular users with passwords.
+    
+    This endpoint allows admins to create multiple regular users at once
+    with passwords. Users that already exist (by email) are automatically skipped.
+    This is useful when SSO/Azure AD is not available.
+    
+    Only super admins can create users with super_admin role.
+    """
+    
+    authentication_classes = [UniversalAuthentication]
+    permission_classes = [IsAdminOrSuperAdmin]
+    
+    def post(self, request):
+        """
+        Create multiple regular users with passwords in bulk.
+        
+        Request body:
+            {
+                "users": [
+                    {
+                        "email": "user1@example.com",
+                        "first_name": "John",
+                        "last_name": "Doe",
+                        "role": "user",
+                        "password": "SecurePass123!"
+                    },
+                    {
+                        "email": "admin@example.com",
+                        "first_name": "Jane",
+                        "last_name": "Smith",
+                        "role": "admin",
+                        "password": "AdminPass456!"
+                    }
+                ]
+            }
+        
+        Returns:
+            Summary of created and skipped users
+        """
+        try:
+            serializer = BulkCreateUsersWithPasswordSerializer(data=request.data)
+            
+            if not serializer.is_valid():
+                return Response({
+                    'detail': 'Invalid data provided',
+                    'errors': serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            users_data = serializer.validated_data['users']
+            
+            # Track results
+            created_users = []
+            skipped_users = []
+            failed_users = []
+            
+            with transaction.atomic():
+                for user_data in users_data:
+                    try:
+                        email = user_data['email']
+                        first_name = user_data.get('first_name', '')
+                        last_name = user_data.get('last_name', '')
+                        role = user_data.get('role', 'user')
+                        password = user_data['password']
+                        
+                        # Check if user is trying to create super_admin
+                        if role == 'super_admin' and request.user.role != 'super_admin':
+                            failed_users.append({
+                                'email': email,
+                                'error': 'فقط المدراء الرئيسيون يمكنهم إنشاء مستخدمين بدور مدير رئيسي'
+                            })
+                            continue
+                        
+                        # Check if user already exists by email
+                        if User.objects.email_exists(email):
+                            existing_user = User.objects.get_by_email(email)
+                            skipped_users.append({
+                                'email': email,
+                                'reason': 'المستخدم موجود بالفعل بهذا البريد الإلكتروني',
+                                'existing_user': {
+                                    'id': existing_user.id,
+                                    'email': existing_user.email,
+                                    'username': existing_user.username,
+                                    'role': existing_user.role
+                                }
+                            })
+                            continue
+                        
+                        # Create the new regular user with password
+                        user = User.objects.create_user(
+                            username=email,           # Use email as username for regular users
+                            email=email,              # User's email
+                            password=password,        # Set password
+                            first_name=first_name,    # Optional: for better UX
+                            last_name=last_name,      # Optional: for better UX
+                            role=role,                # User role
+                            auth_type='regular',      # Mark as regular user (not Azure AD)
+                            is_active=True,           # Active by default
+                        )
+                        
+                        created_users.append({
+                            'id': user.id,
+                            'email': email,
+                            'full_name': user.full_name,
+                            'role': role
+                        })
+                        
+                        # Log the creation
+                        logger.info(
+                            f"Regular user created by {request.user.email}: "
+                            f"{email} (Role: {role})"
+                        )
+                        
+                    except Exception as e:
+                        logger.error(f"Error creating regular user {user_data.get('email')}: {str(e)}")
+                        failed_users.append({
+                            'email': user_data.get('email', 'unknown'),
+                            'error': str(e)
+                        })
+            
+            # Prepare response
+            response_data = {
+                'message': 'تم إكمال إنشاء المستخدمين بكلمات المرور',
+                'summary': {
+                    'total_requested': len(users_data),
+                    'created': len(created_users),
+                    'skipped': len(skipped_users),
+                    'failed': len(failed_users)
+                },
+                'results': {
+                    'created': created_users,
+                    'skipped': skipped_users,
+                    'failed': failed_users
+                }
+            }
+            
+            # Determine response status
+            if len(created_users) > 0 and len(failed_users) == 0:
+                response_status = status.HTTP_201_CREATED
+                response_data['message'] = f"تم إنشاء {len(created_users)} مستخدم(ين) بنجاح"
+            elif len(created_users) > 0 and len(failed_users) > 0:
+                response_status = status.HTTP_207_MULTI_STATUS
+                response_data['message'] = f"نجاح جزئي: تم إنشاء {len(created_users)}، فشل {len(failed_users)}"
+            elif len(created_users) == 0 and len(skipped_users) > 0:
+                response_status = status.HTTP_200_OK
+                response_data['message'] = "جميع المستخدمين موجودون بالفعل - لم يتم إنشاء مستخدمين جدد"
+            else:
+                response_status = status.HTTP_400_BAD_REQUEST
+                response_data['message'] = "لم يتم إنشاء أي مستخدمين"
+            
+            # Log security event
+            log_security_event(
+                event_type='bulk_user_creation_with_password',
+                user=request.user,
+                request=request,
+                details={
+                    'total_requested': len(users_data),
+                    'created': len(created_users),
+                    'skipped': len(skipped_users),
+                    'failed': len(failed_users)
+                }
+            )
+            
+            return Response(response_data, status=response_status)
+            
+        except Exception as e:
+            logger.error(f"Error in bulk user creation with password: {str(e)}")
             return Response({
                 'detail': 'An unexpected error occurred during bulk user creation'
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

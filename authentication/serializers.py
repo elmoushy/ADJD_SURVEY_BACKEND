@@ -79,6 +79,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'initials',
             'role',
             'role_display',
+            'auth_type',
             'is_active',
             'is_staff',
             'date_joined',
@@ -87,6 +88,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         read_only_fields = [
             'id', 
             'azure_object_id', 
+            'auth_type',
             'is_staff', 
             'date_joined', 
             'last_login'
@@ -612,6 +614,95 @@ class BulkCreateAzureUsersSerializer(serializers.Serializer):
         child=AzureUserDataSerializer(),
         min_length=1,
         help_text='List of Azure AD users to create'
+    )
+    
+    def validate_users(self, value):
+        """Validate user data and check for duplicates in the request."""
+        if not value:
+            raise serializers.ValidationError("At least one user must be provided.")
+        
+        # Check for duplicate emails in the request
+        emails = [user['email'] for user in value]
+        if len(emails) != len(set(emails)):
+            raise serializers.ValidationError("Duplicate emails found in the request.")
+        
+        return value
+
+
+class RegularUserDataSerializer(serializers.Serializer):
+    """
+    Serializer for individual regular user data in bulk creation with password.
+    """
+    email = serializers.EmailField(
+        required=True,
+        help_text='User email address'
+    )
+    first_name = serializers.CharField(
+        max_length=30,
+        required=False,
+        allow_blank=True,
+        default='',
+        help_text='First name'
+    )
+    last_name = serializers.CharField(
+        max_length=30,
+        required=False,
+        allow_blank=True,
+        default='',
+        help_text='Last name'
+    )
+    role = serializers.ChoiceField(
+        choices=['user', 'admin', 'super_admin'],
+        default='user',
+        help_text='User role in the system'
+    )
+    password = serializers.CharField(
+        min_length=8,
+        max_length=128,
+        required=True,
+        help_text='User password (minimum 8 characters)'
+    )
+    
+    def validate_email(self, value):
+        """Validate and sanitize email."""
+        cleaned_email = sanitize_html_input(value, allow_tags=False)
+        if cleaned_email != value:
+            raise serializers.ValidationError("Invalid characters detected in email address.")
+        return cleaned_email
+    
+    def validate_first_name(self, value):
+        """Validate and sanitize first name."""
+        if not value:
+            return value
+        return validate_and_sanitize_text_input(value, max_length=30, field_name="First name")
+    
+    def validate_last_name(self, value):
+        """Validate and sanitize last name."""
+        if not value:
+            return value
+        return validate_and_sanitize_text_input(value, max_length=30, field_name="Last name")
+    
+    def validate_password(self, value):
+        """Validate password meets requirements."""
+        try:
+            validate_password(value)
+        except ValidationError as e:
+            raise serializers.ValidationError(list(e.messages))
+        return value
+
+
+class BulkCreateUsersWithPasswordSerializer(serializers.Serializer):
+    """
+    Serializer for bulk creation of regular users with passwords.
+    
+    This serializer accepts a list of user data with passwords and creates
+    regular (non-Azure) users in the system. Users that already exist 
+    (by email) are automatically skipped.
+    """
+    users = serializers.ListField(
+        child=RegularUserDataSerializer(),
+        min_length=1,
+        help_text='List of users to create with passwords'
     )
     
     def validate_users(self, value):
