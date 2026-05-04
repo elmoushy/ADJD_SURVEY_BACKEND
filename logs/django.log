@@ -333,3 +333,1665 @@ INFO 2025-11-19 12:08:45,961 dual_auth 25156 24692 User seif778811@gmail.com aut
 INFO 2025-11-19 12:08:45,967 views 25156 24692 Current link retrieved for survey ec98979c-cece-4345-af14-268d0204f314 by seif778811@gmail.com
 INFO 2025-11-19 12:16:30,212 signals 25156 17716 Sent survey completed notification to seif778811@gmail.com for response f8342a0c-3f95-4f66-9df9-83bca3a61879 to survey ec98979c-cece-4345-af14-268d0204f314
 INFO 2025-11-19 12:16:30,240 views 25156 17716 Survey response submitted: f8342a0c-3f95-4f66-9df9-83bca3a61879 for survey ec98979c-cece-4345-af14-268d0204f314 by email None
+INFO 2025-11-20 12:37:10,954 serializers 9508 15376 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-20 12:37:10,956 managers 9508 15376 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-20 12:37:10,964 serializers 9508 15376 User found: seif778811@gmail.com
+INFO 2025-11-20 12:37:10,965 serializers 9508 15376 Authenticating with username: seif778811@gmail.com
+INFO 2025-11-20 12:37:12,555 serializers 9508 15376 Authentication result: Success
+INFO 2025-11-20 12:37:12,556 serializers 9508 15376 Validation successful
+INFO 2025-11-20 12:37:12,566 views 9508 15376 User logged in: seif778811@gmail.com
+INFO 2025-11-20 12:37:12,855 views 9508 15376 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-20 12:37:12,909 dual_auth 9508 15376 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:37:12,909 views 9508 15376 User profile accessed: seif778811@gmail.com
+INFO 2025-11-20 12:37:12,920 dual_auth 9508 15376 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:37:12,921 views 9508 15376 User profile accessed: seif778811@gmail.com
+INFO 2025-11-20 12:37:13,398 dual_auth 9508 15376 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:37:13,399 views 9508 15376 Building queryset for user seif778811@gmail.com
+INFO 2025-11-20 12:37:13,403 views 9508 15376 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-20 12:38:40,369 dual_auth 9508 2444 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:38:40,370 views 9508 2444 Building queryset for user seif778811@gmail.com
+INFO 2025-11-20 12:38:40,373 views 9508 2444 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-20 12:39:30,594 dual_auth 9508 2444 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:39:30,595 views 9508 2444 Building queryset for user seif778811@gmail.com
+INFO 2025-11-20 12:39:30,597 views 9508 2444 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-20 12:39:30,638 dual_auth 9508 2444 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:39:30,639 views 9508 2444 Building queryset for user seif778811@gmail.com
+INFO 2025-11-20 12:39:30,641 views 9508 2444 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-20 12:39:47,949 views 9508 2444 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-20 12:39:47,960 dual_auth 9508 2444 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:39:47,961 views 9508 2444 User profile accessed: seif778811@gmail.com
+INFO 2025-11-20 12:39:48,382 dual_auth 9508 2444 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:39:48,383 views 9508 2444 Building queryset for user seif778811@gmail.com
+INFO 2025-11-20 12:39:48,386 views 9508 2444 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-20 12:40:21,394 dual_auth 9508 2444 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:40:21,399 dual_auth 9508 964 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:40:40,224 dual_auth 9508 964 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:40:40,247 dual_auth 9508 2444 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:43:34,397 dual_auth 9508 964 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:43:34,397 dual_auth 9508 2444 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:44:29,384 dual_auth 9508 964 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:44:29,388 dual_auth 9508 2444 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:44:29,458 dual_auth 9508 964 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:44:29,507 dual_auth 9508 2444 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:44:37,032 views 9508 2444 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-20 12:44:37,044 dual_auth 9508 2444 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:44:37,044 views 9508 2444 User profile accessed: seif778811@gmail.com
+INFO 2025-11-20 12:44:38,676 dual_auth 9508 2444 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:44:38,676 dual_auth 9508 964 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:45:14,470 dual_auth 9508 2444 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:45:14,472 dual_auth 9508 964 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:45:19,275 dual_auth 9508 2444 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:45:19,275 dual_auth 9508 964 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:45:19,275 views 9508 2444 User profile accessed: seif778811@gmail.com
+INFO 2025-11-20 12:45:19,283 dual_auth 9508 17260 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:45:19,293 dual_auth 9508 22372 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:45:19,313 dual_auth 9508 964 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:45:19,314 dual_auth 9508 22372 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:45:22,867 dual_auth 9508 22372 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 12:45:22,868 dual_auth 9508 964 User seif778811@gmail.com authenticated with regular JWT (universal)
+WARNING 2025-11-20 17:19:01,121 views 17516 8560 Token refresh failed - invalid token: Token is expired
+INFO 2025-11-20 17:45:04,041 serializers 12724 17404 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-20 17:45:04,042 managers 12724 17404 Looking for user with email: seif778811@gmail.com
+INFO 2025-11-20 17:45:04,048 serializers 12724 17404 User found: seif778811@gmail.com
+INFO 2025-11-20 17:45:04,048 serializers 12724 17404 Authenticating with username: seif778811@gmail.com
+INFO 2025-11-20 17:45:04,868 serializers 12724 17404 Authentication result: Success
+INFO 2025-11-20 17:45:04,868 serializers 12724 17404 Validation successful
+INFO 2025-11-20 17:45:04,884 views 12724 17404 User logged in: seif778811@gmail.com
+INFO 2025-11-20 17:45:05,048 views 12724 17404 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-20 17:45:05,058 dual_auth 12724 17404 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:45:05,059 views 12724 17404 User profile accessed: seif778811@gmail.com
+INFO 2025-11-20 17:45:05,064 dual_auth 12724 17404 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:45:05,065 views 12724 17404 User profile accessed: seif778811@gmail.com
+INFO 2025-11-20 17:45:05,360 dual_auth 12724 17404 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:45:05,360 views 12724 17404 Building queryset for user seif778811@gmail.com
+INFO 2025-11-20 17:45:05,364 views 12724 17404 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-11-20 17:45:07,182 dual_auth 12724 17404 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:45:07,185 dual_auth 12724 23364 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:45:10,378 dual_auth 12724 23364 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:45:10,383 views 12724 23364 Current link retrieved for survey ec98979c-cece-4345-af14-268d0204f314 by seif778811@gmail.com
+INFO 2025-11-20 17:45:10,388 dual_auth 12724 23364 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:45:10,392 views 12724 23364 Current link retrieved for survey ec98979c-cece-4345-af14-268d0204f314 by seif778811@gmail.com
+INFO 2025-11-20 17:54:46,380 views 12724 19504 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-20 17:54:46,499 dual_auth 12724 19504 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:54:46,500 views 12724 19504 User profile accessed: seif778811@gmail.com
+INFO 2025-11-20 17:54:49,871 dual_auth 12724 19504 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:54:49,874 dual_auth 12724 22580 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:55:02,201 views 12724 22580 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-20 17:55:02,246 dual_auth 12724 22580 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:55:02,248 views 12724 22580 User profile accessed: seif778811@gmail.com
+INFO 2025-11-20 17:55:03,897 dual_auth 12724 19504 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:55:03,897 dual_auth 12724 22580 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:56:17,578 views 12724 19504 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-20 17:56:17,754 dual_auth 12724 19504 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:56:17,755 views 12724 19504 User profile accessed: seif778811@gmail.com
+INFO 2025-11-20 17:56:20,385 dual_auth 12724 22580 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:56:20,386 dual_auth 12724 19504 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:56:45,469 views 12724 22580 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-20 17:56:45,641 dual_auth 12724 22580 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:56:45,642 views 12724 22580 User profile accessed: seif778811@gmail.com
+INFO 2025-11-20 17:56:47,512 dual_auth 12724 22580 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:56:47,516 dual_auth 12724 19504 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:56:52,259 views 12724 19504 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-11-20 17:56:52,308 dual_auth 12724 19504 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:56:52,308 views 12724 19504 User profile accessed: seif778811@gmail.com
+INFO 2025-11-20 17:56:54,586 dual_auth 12724 19504 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-11-20 17:56:54,590 dual_auth 12724 22580 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:23:28,781 serializers 30848 32628 Looking for user with email: seif778811@gmail.com
+INFO 2025-12-23 09:23:28,783 managers 30848 32628 Looking for user with email: seif778811@gmail.com
+INFO 2025-12-23 09:23:28,790 serializers 30848 32628 User found: seif778811@gmail.com
+INFO 2025-12-23 09:23:28,790 serializers 30848 32628 Authenticating with username: seif778811@gmail.com
+INFO 2025-12-23 09:23:29,916 serializers 30848 32628 Authentication result: Success
+INFO 2025-12-23 09:23:29,917 serializers 30848 32628 Validation successful
+INFO 2025-12-23 09:23:29,926 views 30848 32628 User logged in: seif778811@gmail.com
+INFO 2025-12-23 09:23:30,220 views 30848 32628 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-12-23 09:23:30,273 dual_auth 30848 32628 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:23:30,273 views 30848 32628 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 09:23:30,285 dual_auth 30848 32628 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:23:30,285 views 30848 32628 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 09:23:30,954 dual_auth 30848 10880 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:23:30,955 views 30848 10880 Building queryset for user seif778811@gmail.com
+INFO 2025-12-23 09:23:30,961 views 30848 10880 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-12-23 09:23:36,721 dual_auth 30848 18496 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:23:36,728 dual_auth 30848 9212 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:23:44,414 dual_auth 30848 9212 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:23:44,414 views 30848 9212 Building queryset for user seif778811@gmail.com
+INFO 2025-12-23 09:23:44,417 views 30848 9212 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-12-23 09:24:01,827 dual_auth 30848 9212 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:24:01,830 dual_auth 30848 18496 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:24:01,833 views 30848 9212 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 09:24:01,834 dual_auth 30848 17888 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:24:01,850 dual_auth 30848 30528 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:24:01,878 dual_auth 30848 18496 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:24:01,879 dual_auth 30848 30528 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:24:04,398 dual_auth 30848 18496 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:24:04,399 dual_auth 30848 30528 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:26:02,165 dual_auth 30848 30528 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:26:02,166 views 30848 30528 Building queryset for user seif778811@gmail.com
+INFO 2025-12-23 09:26:02,169 views 30848 30528 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-12-23 09:28:00,482 dual_auth 30848 30528 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:28:00,486 dual_auth 30848 18496 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:28:03,127 dual_auth 30848 30528 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:28:03,127 dual_auth 30848 18496 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:28:03,128 dual_auth 30848 9212 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:28:03,128 dual_auth 30848 17888 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:28:03,129 views 30848 18496 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 09:28:03,158 dual_auth 30848 30528 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:28:03,160 dual_auth 30848 18496 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:28:08,314 dual_auth 30848 18496 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:28:11,568 dual_auth 30848 18496 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:28:11,568 views 30848 18496 Building queryset for user seif778811@gmail.com
+INFO 2025-12-23 09:28:11,570 views 30848 18496 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-12-23 09:28:18,588 dual_auth 30848 18496 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:28:43,700 dual_auth 30848 18496 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:28:43,701 views 30848 18496 Building queryset for user seif778811@gmail.com
+INFO 2025-12-23 09:28:43,702 views 30848 18496 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-12-23 09:28:50,111 dual_auth 30848 18496 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:28:51,883 dual_auth 30848 18496 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:28:51,883 views 30848 18496 Building queryset for user seif778811@gmail.com
+INFO 2025-12-23 09:28:51,885 views 30848 18496 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-12-23 09:30:30,484 dual_auth 30848 18496 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:30:33,604 dual_auth 30848 17888 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:30:33,606 dual_auth 30848 18496 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:30:33,606 dual_auth 30848 30528 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:30:33,607 dual_auth 30848 9212 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:30:33,607 views 30848 18496 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 09:30:33,640 dual_auth 30848 18496 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:30:33,640 dual_auth 30848 30528 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:32:00,265 dual_auth 30848 30528 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:32:20,219 dual_auth 30848 30528 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:32:20,578 dual_auth 30848 30528 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:32:20,602 dual_auth 30848 30528 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:32:35,411 dual_auth 30848 30528 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:32:35,429 dual_auth 30848 30528 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:32:59,166 dual_auth 30848 25912 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:32:59,214 dual_auth 30848 28308 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:32:59,214 dual_auth 30848 19404 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:32:59,218 dual_auth 30848 17908 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:32:59,222 dual_auth 30848 25912 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:32:59,225 views 30848 25912 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 09:32:59,247 dual_auth 30848 28308 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:32:59,248 dual_auth 30848 25912 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:02,961 dual_auth 30848 25912 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:02,974 dual_auth 30848 25912 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:07,893 dual_auth 30848 25912 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:07,946 dual_auth 30848 19404 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:07,948 dual_auth 30848 28308 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:07,948 dual_auth 30848 17908 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:07,951 dual_auth 30848 25912 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:07,955 views 30848 25912 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 09:33:07,986 dual_auth 30848 28308 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:07,988 dual_auth 30848 25912 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:25,878 dual_auth 30848 25912 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:25,879 views 30848 25912 Building queryset for user seif778811@gmail.com
+INFO 2025-12-23 09:33:25,881 views 30848 25912 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-12-23 09:33:28,261 dual_auth 30848 25912 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:28,263 dual_auth 30848 28308 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:30,796 dual_auth 30848 25912 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:30,801 views 30848 25912 Current link retrieved for survey 53a749b6-2473-45c3-bdeb-cc3027ff5434 by seif778811@gmail.com
+INFO 2025-12-23 09:33:30,810 dual_auth 30848 25912 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:30,815 views 30848 25912 Current link retrieved for survey 53a749b6-2473-45c3-bdeb-cc3027ff5434 by seif778811@gmail.com
+INFO 2025-12-23 09:33:40,369 dual_auth 30848 25912 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:53,166 dual_auth 30848 25912 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:55,313 dual_auth 30848 28308 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:55,315 dual_auth 30848 25912 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:55,316 dual_auth 30848 19404 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:55,317 views 30848 25912 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 09:33:55,317 dual_auth 30848 17908 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:55,345 dual_auth 30848 28308 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 09:33:55,347 dual_auth 30848 17908 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:07:48,198 serializers 13600 18952 Looking for user with email: seif778811@gmail.com
+INFO 2025-12-23 10:07:48,199 managers 13600 18952 Looking for user with email: seif778811@gmail.com
+INFO 2025-12-23 10:07:48,207 serializers 13600 18952 User found: seif778811@gmail.com
+INFO 2025-12-23 10:07:48,207 serializers 13600 18952 Authenticating with username: seif778811@gmail.com
+INFO 2025-12-23 10:07:49,521 serializers 13600 18952 Authentication result: Success
+INFO 2025-12-23 10:07:49,522 serializers 13600 18952 Validation successful
+INFO 2025-12-23 10:07:49,546 views 13600 18952 User logged in: seif778811@gmail.com
+INFO 2025-12-23 10:07:49,932 views 13600 18952 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-12-23 10:07:49,960 dual_auth 13600 18952 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:07:49,961 views 13600 18952 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:07:49,972 dual_auth 13600 18952 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:07:49,973 views 13600 18952 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:07:50,717 dual_auth 13600 18952 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:07:50,718 views 13600 18952 Building queryset for user seif778811@gmail.com
+INFO 2025-12-23 10:07:50,721 views 13600 18952 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-12-23 10:07:53,675 dual_auth 13600 18952 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:07:57,372 dual_auth 13600 26340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:07:57,378 dual_auth 13600 18508 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:07:57,384 dual_auth 13600 30372 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:07:57,385 dual_auth 13600 18952 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:07:57,386 views 13600 18952 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:07:57,410 dual_auth 13600 26340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:07:57,412 dual_auth 13600 18952 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:16:17,827 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:16:17,828 dual_auth 27152 33952 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:16:17,828 dual_auth 27152 1460 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:16:17,829 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:16:17,833 views 27152 21340 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:16:18,007 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:16:18,009 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:16:35,489 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:16:35,490 views 27152 24036 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:16:35,490 dual_auth 27152 33952 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:16:35,493 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:16:35,493 dual_auth 27152 1460 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:16:35,515 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:16:35,516 dual_auth 27152 1460 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:16:49,936 dual_auth 27152 33952 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:16:49,936 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:16:49,938 dual_auth 27152 1460 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:16:49,938 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:16:49,939 views 27152 1460 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:16:49,966 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:16:49,966 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:20:24,339 dual_auth 27152 1460 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:20:24,341 dual_auth 27152 33952 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:20:24,341 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:20:24,353 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:20:24,354 views 27152 24036 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:20:24,370 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:20:24,371 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:20:33,651 dual_auth 27152 1460 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:20:33,652 dual_auth 27152 33952 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:20:33,654 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:20:33,664 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:20:33,665 views 27152 21340 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:20:33,681 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:20:33,682 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:20:44,769 dual_auth 27152 1460 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:20:44,769 dual_auth 27152 33952 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:20:44,770 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:20:44,770 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:20:44,772 views 27152 24036 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:20:44,798 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:20:44,800 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:18,873 dual_auth 27152 33952 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:18,873 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:18,874 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:18,874 dual_auth 27152 1460 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:18,876 views 27152 24036 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:21:18,893 dual_auth 27152 10644 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:18,897 dual_auth 27152 33952 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:18,901 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:18,902 views 27152 24036 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:21:18,909 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:18,911 dual_auth 27152 10644 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:18,915 dual_auth 27152 33952 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:18,940 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:18,944 dual_auth 27152 33952 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:38,048 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:38,048 dual_auth 27152 33952 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:38,049 views 27152 33952 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:21:38,050 dual_auth 27152 10644 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:38,062 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:38,065 dual_auth 27152 1460 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:38,066 views 27152 1460 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:21:38,069 dual_auth 27152 10644 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:38,076 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:38,086 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:38,099 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:38,101 dual_auth 27152 10644 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:38,114 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:21:38,126 dual_auth 27152 10644 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:23:11,965 views 27152 10644 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-12-23 10:23:11,997 dual_auth 27152 10644 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:23:11,998 views 27152 10644 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:23:12,123 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:23:12,124 dual_auth 27152 10644 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:23:12,125 dual_auth 27152 1460 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:23:12,125 views 27152 10644 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:23:12,126 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:23:12,176 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:23:12,176 dual_auth 27152 10644 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:23:48,143 dual_auth 27152 10644 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:23:49,653 signals 27152 10644 Sent welcome notification to new user superadmin@example.com
+INFO 2025-12-23 10:23:49,653 views 27152 10644 Regular user created by seif778811@gmail.com: superadmin@example.com (Role: super_admin)
+INFO 2025-12-23 10:23:49,655 managers 27152 10644 Looking for user with email: admin@example.com
+INFO 2025-12-23 10:23:49,657 managers 27152 10644 Looking for user with email: user@example.com
+INFO 2025-12-23 10:24:09,101 dual_auth 27152 10644 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:24:09,101 dual_auth 27152 21340 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:24:09,102 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:24:09,102 dual_auth 27152 1460 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:24:09,102 views 27152 10644 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:24:09,136 dual_auth 27152 24036 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:24:09,137 dual_auth 27152 10644 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,819 dual_auth 15776 6772 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,821 dual_auth 15776 27320 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,834 dual_auth 15776 27320 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,836 dual_auth 15776 30196 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,837 views 15776 30196 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:25:51,847 dual_auth 15776 27320 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,847 dual_auth 15776 6772 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,857 dual_auth 15776 6772 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,858 views 15776 6772 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:25:51,869 dual_auth 15776 30196 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,870 dual_auth 15776 27320 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,871 dual_auth 15776 6772 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,882 dual_auth 15776 27320 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,885 views 15776 27320 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:25:51,887 dual_auth 15776 30196 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,897 dual_auth 15776 6772 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,900 dual_auth 15776 27320 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,909 dual_auth 15776 30196 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,917 dual_auth 15776 6772 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,921 dual_auth 15776 27320 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,938 dual_auth 15776 27320 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,943 dual_auth 15776 30196 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,952 dual_auth 15776 27320 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:25:51,970 dual_auth 15776 30196 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:29:12,707 dual_auth 20548 33136 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:29:12,708 dual_auth 20548 16864 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:29:12,708 views 20548 33136 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:29:12,710 dual_auth 20548 23104 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:29:12,711 dual_auth 20548 13640 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:29:12,938 dual_auth 20548 23104 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:29:12,939 dual_auth 20548 13640 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:29:26,482 dual_auth 20548 33136 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:29:26,483 dual_auth 20548 13640 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:29:26,483 dual_auth 20548 16864 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:29:26,496 dual_auth 20548 23104 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:29:26,499 views 20548 23104 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:29:26,515 dual_auth 20548 23104 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:29:26,515 dual_auth 20548 13640 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:34:05,838 dual_auth 20548 30700 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:34:05,840 views 20548 30700 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:34:05,849 dual_auth 20548 16452 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:34:05,852 dual_auth 20548 21068 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:34:05,854 dual_auth 20548 1948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:34:05,868 dual_auth 20548 16452 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:34:05,869 dual_auth 20548 1948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:34:26,819 dual_auth 20548 21068 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:34:26,819 dual_auth 20548 16452 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:34:26,826 dual_auth 20548 30700 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:34:26,827 dual_auth 20548 1948 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:34:26,828 views 20548 1948 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:34:26,846 dual_auth 20548 16452 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:34:26,847 dual_auth 20548 30700 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:42:50,368 views 26368 16164 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-12-23 10:42:50,381 dual_auth 26368 16164 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:42:50,382 views 26368 16164 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:42:51,597 dual_auth 26368 16164 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:42:51,598 dual_auth 26368 6752 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:42:51,598 views 26368 16164 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:42:51,600 dual_auth 26368 8040 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:42:51,613 dual_auth 26368 15812 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:42:51,652 dual_auth 26368 6752 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:42:51,654 dual_auth 26368 15812 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:45:16,507 views 26368 15812 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-12-23 10:45:16,538 dual_auth 26368 15812 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:45:16,539 views 26368 15812 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:45:16,628 dual_auth 26368 6752 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:45:16,628 dual_auth 26368 16164 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:45:16,628 dual_auth 26368 15812 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:45:16,630 dual_auth 26368 8040 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:45:16,631 views 26368 15812 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:45:16,665 dual_auth 26368 6752 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:45:16,665 dual_auth 26368 15812 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:47:29,832 dual_auth 26368 15812 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:47:29,832 views 26368 15812 User logged out without token blacklisting: seif778811@gmail.com
+INFO 2025-12-23 10:47:43,035 serializers 26368 15812 Looking for user with email: seif778811@gmail.com
+INFO 2025-12-23 10:47:43,035 managers 26368 15812 Looking for user with email: seif778811@gmail.com
+INFO 2025-12-23 10:47:43,039 serializers 26368 15812 User found: seif778811@gmail.com
+INFO 2025-12-23 10:47:43,039 serializers 26368 15812 Authenticating with username: seif778811@gmail.com
+INFO 2025-12-23 10:47:44,238 serializers 26368 15812 Authentication result: Success
+INFO 2025-12-23 10:47:44,238 serializers 26368 15812 Validation successful
+INFO 2025-12-23 10:47:44,264 views 26368 15812 User logged in: seif778811@gmail.com
+INFO 2025-12-23 10:47:44,498 views 26368 15812 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-12-23 10:47:44,506 dual_auth 26368 15812 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:47:44,506 views 26368 15812 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:47:44,512 dual_auth 26368 15812 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:47:44,513 views 26368 15812 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:47:44,893 dual_auth 26368 15812 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:47:44,893 views 26368 15812 Building queryset for user seif778811@gmail.com
+INFO 2025-12-23 10:47:44,896 views 26368 15812 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-12-23 10:47:49,297 dual_auth 26368 16164 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:47:49,297 dual_auth 26368 6752 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:47:49,298 dual_auth 26368 15812 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:47:49,298 dual_auth 26368 8040 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:47:49,300 views 26368 15812 User profile accessed: seif778811@gmail.com
+INFO 2025-12-23 10:47:49,322 dual_auth 26368 6752 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-23 10:47:49,322 dual_auth 26368 8040 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-24 09:01:08,030 serializers 29780 14724 Looking for user with email: seif778811@gmail.com
+INFO 2025-12-24 09:01:08,032 managers 29780 14724 Looking for user with email: seif778811@gmail.com
+INFO 2025-12-24 09:01:08,044 serializers 29780 14724 User found: seif778811@gmail.com
+INFO 2025-12-24 09:01:08,044 serializers 29780 14724 Authenticating with username: seif778811@gmail.com
+INFO 2025-12-24 09:01:10,457 serializers 29780 14724 Authentication result: Success
+INFO 2025-12-24 09:01:10,459 serializers 29780 14724 Validation successful
+INFO 2025-12-24 09:01:10,473 views 29780 14724 User logged in: seif778811@gmail.com
+INFO 2025-12-24 09:01:10,819 views 29780 14724 JWT tokens refreshed with rotation for user: seif778811@gmail.com
+INFO 2025-12-24 09:01:10,859 dual_auth 29780 14724 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-24 09:01:10,864 views 29780 14724 User profile accessed: seif778811@gmail.com
+INFO 2025-12-24 09:01:10,875 dual_auth 29780 14724 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-24 09:01:10,875 views 29780 14724 User profile accessed: seif778811@gmail.com
+INFO 2025-12-24 09:01:11,369 dual_auth 29780 14724 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-24 09:01:11,370 views 29780 14724 Building queryset for user seif778811@gmail.com
+INFO 2025-12-24 09:01:11,376 views 29780 14724 Successfully built queryset for user seif778811@gmail.com
+INFO 2025-12-24 09:01:20,055 dual_auth 29780 14724 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-24 09:01:20,060 views 29780 14724 User profile accessed: seif778811@gmail.com
+INFO 2025-12-24 09:01:20,072 dual_auth 29780 19560 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-24 09:01:20,072 dual_auth 29780 30352 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-24 09:01:20,074 dual_auth 29780 26708 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-24 09:01:20,116 dual_auth 29780 19560 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-24 09:01:20,117 dual_auth 29780 26708 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-24 09:02:25,322 dual_auth 29780 19560 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-24 09:02:25,379 managers 29780 19560 Looking for user with email: superadmin@example.com
+INFO 2025-12-24 09:02:25,380 managers 29780 19560 Looking for user with email: admin@example.com
+INFO 2025-12-24 09:02:25,382 managers 29780 19560 Looking for user with email: user@example.com
+INFO 2025-12-24 09:02:26,769 signals 29780 19560 Sent welcome notification to new user user55@example.com
+INFO 2025-12-24 09:02:26,770 views 29780 19560 Regular user created by seif778811@gmail.com: user55@example.com (Role: user)
+INFO 2025-12-24 09:02:34,692 dual_auth 29780 26708 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-24 09:02:34,695 dual_auth 29780 30352 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-24 09:02:34,700 dual_auth 29780 14724 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-24 09:02:34,702 dual_auth 29780 19560 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-24 09:02:34,724 views 29780 19560 User profile accessed: seif778811@gmail.com
+INFO 2025-12-24 09:02:34,782 dual_auth 29780 14724 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2025-12-24 09:02:34,782 dual_auth 29780 19560 User seif778811@gmail.com authenticated with regular JWT (universal)
+INFO 2026-05-01 12:08:38,987 0011_ensure_oracle_boolean_field 40408 9956 Not Oracle database, skipping Oracle-specific fixes
+INFO 2026-05-01 12:08:39,008 0012_fix_oracle_default_value 40408 9956 Not Oracle database, skipping Oracle-specific fixes
+INFO 2026-05-01 12:08:41,294 signals 40408 9956 Sent welcome notification to new user apicreator@test.com
+INFO 2026-05-01 12:08:42,042 signals 40408 9956 Sent welcome notification to new user apimember@test.com
+INFO 2026-05-01 12:08:42,044 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:08:42,044 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:08:42,067 signals 40408 9956 Sent survey assigned notification to apimember@test.com for survey 18bc5217-ef8b-41ec-a08d-e230e20ef56a (via group API Test Group)
+INFO 2026-05-01 12:08:42,868 signals 40408 9956 Sent welcome notification to new user apicreator@test.com
+INFO 2026-05-01 12:08:43,662 signals 40408 9956 Sent welcome notification to new user apimember@test.com
+INFO 2026-05-01 12:08:43,666 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:08:43,667 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:08:43,672 signals 40408 9956 Sent survey assigned notification to apimember@test.com for survey 699c5463-4be0-4dda-a670-90f88b407f46 (via group API Test Group)
+INFO 2026-05-01 12:08:43,673 views 40408 9956 Building queryset for user apimember@test.com
+INFO 2026-05-01 12:08:43,675 views 40408 9956 Successfully built queryset for user apimember@test.com
+INFO 2026-05-01 12:08:44,502 signals 40408 9956 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:08:45,429 signals 40408 9956 Sent welcome notification to new user member1@test.com
+INFO 2026-05-01 12:08:46,226 signals 40408 9956 Sent welcome notification to new user member2@test.com
+INFO 2026-05-01 12:08:47,019 signals 40408 9956 Sent welcome notification to new user nonmember@test.com
+INFO 2026-05-01 12:08:47,022 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:08:47,022 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:08:47,025 signals 40408 9956 Sent survey assigned notification to member1@test.com for survey babe3bb2-265c-4045-85fd-27ce1fbf9cba (via group Eligible Users Group)
+INFO 2026-05-01 12:08:47,026 signals 40408 9956 Sent survey assigned notification to member2@test.com for survey babe3bb2-265c-4045-85fd-27ce1fbf9cba (via group Eligible Users Group)
+INFO 2026-05-01 12:08:47,793 signals 40408 9956 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:08:48,564 signals 40408 9956 Sent welcome notification to new user member1@test.com
+INFO 2026-05-01 12:08:49,330 signals 40408 9956 Sent welcome notification to new user member2@test.com
+INFO 2026-05-01 12:08:50,105 signals 40408 9956 Sent welcome notification to new user nonmember@test.com
+INFO 2026-05-01 12:08:50,108 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:08:50,108 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:08:50,112 signals 40408 9956 Sent survey assigned notification to member1@test.com for survey f049bcc6-a0eb-46d6-9f49-6471e053ab01 (via group Eligible Users Group)
+INFO 2026-05-01 12:08:50,113 signals 40408 9956 Sent survey assigned notification to member2@test.com for survey f049bcc6-a0eb-46d6-9f49-6471e053ab01 (via group Eligible Users Group)
+INFO 2026-05-01 12:08:50,983 signals 40408 9956 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:08:51,757 signals 40408 9956 Sent welcome notification to new user member1@test.com
+INFO 2026-05-01 12:08:52,522 signals 40408 9956 Sent welcome notification to new user member2@test.com
+INFO 2026-05-01 12:08:53,288 signals 40408 9956 Sent welcome notification to new user nonmember@test.com
+INFO 2026-05-01 12:08:53,291 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:08:53,291 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:08:53,294 signals 40408 9956 Sent survey assigned notification to member1@test.com for survey 0cf5be82-ce84-48c4-aeea-daaf90d57812 (via group Eligible Users Group)
+INFO 2026-05-01 12:08:53,295 signals 40408 9956 Sent survey assigned notification to member2@test.com for survey 0cf5be82-ce84-48c4-aeea-daaf90d57812 (via group Eligible Users Group)
+INFO 2026-05-01 12:08:53,295 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:08:53,295 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:08:54,128 signals 40408 9956 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:08:54,960 signals 40408 9956 Sent welcome notification to new user member1@test.com
+INFO 2026-05-01 12:08:55,777 signals 40408 9956 Sent welcome notification to new user member2@test.com
+INFO 2026-05-01 12:08:56,624 signals 40408 9956 Sent welcome notification to new user nonmember@test.com
+INFO 2026-05-01 12:08:56,629 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:08:56,629 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:08:56,635 signals 40408 9956 Sent survey assigned notification to member1@test.com for survey d683ce0a-6a44-4d1d-9dea-8c9add99d975 (via group Eligible Users Group)
+INFO 2026-05-01 12:08:56,638 signals 40408 9956 Sent survey assigned notification to member2@test.com for survey d683ce0a-6a44-4d1d-9dea-8c9add99d975 (via group Eligible Users Group)
+INFO 2026-05-01 12:08:57,539 signals 40408 9956 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:08:58,347 signals 40408 9956 Sent welcome notification to new user member1@test.com
+INFO 2026-05-01 12:08:59,140 signals 40408 9956 Sent welcome notification to new user member2@test.com
+INFO 2026-05-01 12:08:59,971 signals 40408 9956 Sent welcome notification to new user nonmember@test.com
+INFO 2026-05-01 12:08:59,974 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:08:59,975 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:08:59,978 signals 40408 9956 Sent survey assigned notification to member1@test.com for survey 15297d93-f1af-4405-a720-635c4cc971e2 (via group Eligible Users Group)
+INFO 2026-05-01 12:08:59,979 signals 40408 9956 Sent survey assigned notification to member2@test.com for survey 15297d93-f1af-4405-a720-635c4cc971e2 (via group Eligible Users Group)
+INFO 2026-05-01 12:09:00,822 signals 40408 9956 Sent welcome notification to new user latecomer@test.com
+INFO 2026-05-01 12:09:00,827 signals 40408 9956 Sent existing survey notification to latecomer@test.com for survey 15297d93-f1af-4405-a720-635c4cc971e2 (joined group Eligible Users Group)
+INFO 2026-05-01 12:09:01,641 signals 40408 9956 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:09:01,642 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:09:01,642 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:09:02,592 signals 40408 9956 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:09:02,593 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:09:02,593 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:09:03,514 signals 40408 9956 Sent welcome notification to new user newmember@test.com
+INFO 2026-05-01 12:09:03,518 signals 40408 9956 Sent existing survey notification to newmember@test.com for survey ec26d028-c156-4a5b-807d-405c5104da7c (joined group Notification Test Group)
+INFO 2026-05-01 12:09:04,540 signals 40408 9956 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:09:04,541 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:09:04,541 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:09:04,544 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:09:04,544 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:09:05,400 signals 40408 9956 Sent welcome notification to new user drafttest@test.com
+INFO 2026-05-01 12:09:05,404 signals 40408 9956 Sent existing survey notification to drafttest@test.com for survey e668bc6c-d64a-438a-9a5a-c80990924c42 (joined group Notification Test Group)
+INFO 2026-05-01 12:09:06,228 signals 40408 9956 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:09:06,228 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:09:06,228 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:09:06,231 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:09:06,232 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:09:07,066 signals 40408 9956 Sent welcome notification to new user inactivetest@test.com
+INFO 2026-05-01 12:09:07,070 signals 40408 9956 Sent existing survey notification to inactivetest@test.com for survey f4fa577f-9d3b-43db-8e14-adec20db60d7 (joined group Notification Test Group)
+INFO 2026-05-01 12:09:07,966 signals 40408 9956 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:09:08,793 signals 40408 9956 Sent welcome notification to new user member@test.com
+INFO 2026-05-01 12:09:09,645 signals 40408 9956 Sent welcome notification to new user outsider@test.com
+INFO 2026-05-01 12:09:09,647 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:09:09,647 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:09:09,651 signals 40408 9956 Sent survey assigned notification to member@test.com for survey 0db8cd99-ab9d-4f66-aa2c-e43b87b73fa4 (via group Test Group)
+INFO 2026-05-01 12:09:10,506 signals 40408 9956 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:09:11,317 signals 40408 9956 Sent welcome notification to new user member@test.com
+INFO 2026-05-01 12:09:12,135 signals 40408 9956 Sent welcome notification to new user outsider@test.com
+INFO 2026-05-01 12:09:12,137 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:09:12,137 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:09:12,145 signals 40408 9956 Sent survey assigned notification to member@test.com for survey ff0a7574-5b7c-424c-a8d2-98ace8ff0ea1 (via group Test Group)
+INFO 2026-05-01 12:09:12,958 signals 40408 9956 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:09:13,768 signals 40408 9956 Sent welcome notification to new user member@test.com
+INFO 2026-05-01 12:09:14,569 signals 40408 9956 Sent welcome notification to new user outsider@test.com
+INFO 2026-05-01 12:09:14,570 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:09:14,570 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:09:14,577 signals 40408 9956 Sent survey assigned notification to member@test.com for survey 1dddf210-7106-4212-85f5-7aebfdac8644 (via group Test Group)
+INFO 2026-05-01 12:09:15,398 signals 40408 9956 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:09:16,216 signals 40408 9956 Sent welcome notification to new user member@test.com
+INFO 2026-05-01 12:09:16,996 signals 40408 9956 Sent welcome notification to new user outsider@test.com
+INFO 2026-05-01 12:09:16,998 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:09:16,998 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:09:17,001 signals 40408 9956 Sent survey assigned notification to member@test.com for survey 209e06b3-bb84-4249-a785-727ac9285ac2 (via group Test Group)
+INFO 2026-05-01 12:09:17,804 signals 40408 9956 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:09:18,585 signals 40408 9956 Sent welcome notification to new user member@test.com
+INFO 2026-05-01 12:09:19,322 signals 40408 9956 Sent welcome notification to new user outsider@test.com
+INFO 2026-05-01 12:09:19,326 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:09:19,326 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:09:19,330 signals 40408 9956 Sent survey assigned notification to member@test.com for survey ad070bf2-7774-4692-8f97-fab69415c6e4 (via group Test Group)
+INFO 2026-05-01 12:09:20,088 signals 40408 9956 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:09:20,821 signals 40408 9956 Sent welcome notification to new user member@test.com
+INFO 2026-05-01 12:09:21,574 signals 40408 9956 Sent welcome notification to new user outsider@test.com
+INFO 2026-05-01 12:09:21,576 models 40408 9956 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:09:21,577 models 40408 9956 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:09:21,580 signals 40408 9956 Sent survey assigned notification to member@test.com for survey 7a2b69e6-c1e9-48d6-8d47-367cf69a8931 (via group Test Group)
+INFO 2026-05-01 12:09:22,314 signals 40408 9956 Sent welcome notification to new user newuser@test.com
+INFO 2026-05-01 12:09:22,318 signals 40408 9956 Sent existing survey notification to newuser@test.com for survey 7a2b69e6-c1e9-48d6-8d47-367cf69a8931 (joined group Test Group)
+INFO 2026-05-01 12:10:21,183 0011_ensure_oracle_boolean_field 25400 44116 Not Oracle database, skipping Oracle-specific fixes
+INFO 2026-05-01 12:10:21,210 0012_fix_oracle_default_value 25400 44116 Not Oracle database, skipping Oracle-specific fixes
+INFO 2026-05-01 12:10:34,331 0011_ensure_oracle_boolean_field 12512 45432 Not Oracle database, skipping Oracle-specific fixes
+INFO 2026-05-01 12:10:34,353 0012_fix_oracle_default_value 12512 45432 Not Oracle database, skipping Oracle-specific fixes
+INFO 2026-05-01 12:10:35,899 signals 12512 45432 Sent welcome notification to new user apicreator@test.com
+INFO 2026-05-01 12:10:36,660 signals 12512 45432 Sent welcome notification to new user apimember@test.com
+INFO 2026-05-01 12:10:36,663 models 12512 45432 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:10:36,664 models 12512 45432 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:10:36,669 signals 12512 45432 Sent survey assigned notification to apimember@test.com for survey 7e735781-eba9-4ce9-bb73-69c3df58e452 (via group API Test Group)
+INFO 2026-05-01 12:10:36,683 views 12512 45432 Building queryset for user apimember@test.com
+INFO 2026-05-01 12:10:36,686 views 12512 45432 Successfully built queryset for user apimember@test.com
+INFO 2026-05-01 12:11:11,466 0011_ensure_oracle_boolean_field 44564 45652 Not Oracle database, skipping Oracle-specific fixes
+INFO 2026-05-01 12:11:11,486 0012_fix_oracle_default_value 44564 45652 Not Oracle database, skipping Oracle-specific fixes
+INFO 2026-05-01 12:11:12,924 signals 44564 45652 Sent welcome notification to new user apicreator@test.com
+INFO 2026-05-01 12:11:13,732 signals 44564 45652 Sent welcome notification to new user apimember@test.com
+INFO 2026-05-01 12:11:13,734 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:13,734 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:13,743 signals 44564 45652 Sent survey assigned notification to apimember@test.com for survey c8f6854e-9faa-48d8-9ce9-f648d539f65a (via group API Test Group)
+INFO 2026-05-01 12:11:14,581 signals 44564 45652 Sent welcome notification to new user apicreator@test.com
+INFO 2026-05-01 12:11:15,394 signals 44564 45652 Sent welcome notification to new user apimember@test.com
+INFO 2026-05-01 12:11:15,396 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:15,397 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:15,403 signals 44564 45652 Sent survey assigned notification to apimember@test.com for survey 54663ccc-1b48-4437-a36d-9cfc9cdc1720 (via group API Test Group)
+INFO 2026-05-01 12:11:15,405 views 44564 45652 Building queryset for user apimember@test.com
+INFO 2026-05-01 12:11:15,408 views 44564 45652 Successfully built queryset for user apimember@test.com
+INFO 2026-05-01 12:11:16,250 signals 44564 45652 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:11:17,087 signals 44564 45652 Sent welcome notification to new user member1@test.com
+INFO 2026-05-01 12:11:17,849 signals 44564 45652 Sent welcome notification to new user member2@test.com
+INFO 2026-05-01 12:11:18,593 signals 44564 45652 Sent welcome notification to new user nonmember@test.com
+INFO 2026-05-01 12:11:18,595 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:18,596 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:18,599 signals 44564 45652 Sent survey assigned notification to member1@test.com for survey 750a7969-716a-4605-963c-0a73dc98c7b7 (via group Eligible Users Group)
+INFO 2026-05-01 12:11:18,600 signals 44564 45652 Sent survey assigned notification to member2@test.com for survey 750a7969-716a-4605-963c-0a73dc98c7b7 (via group Eligible Users Group)
+INFO 2026-05-01 12:11:19,467 signals 44564 45652 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:11:20,424 signals 44564 45652 Sent welcome notification to new user member1@test.com
+INFO 2026-05-01 12:11:21,249 signals 44564 45652 Sent welcome notification to new user member2@test.com
+INFO 2026-05-01 12:11:22,110 signals 44564 45652 Sent welcome notification to new user nonmember@test.com
+INFO 2026-05-01 12:11:22,113 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:22,113 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:22,116 signals 44564 45652 Sent survey assigned notification to member1@test.com for survey 4dbe3758-962e-414f-bbc7-3221f73366ea (via group Eligible Users Group)
+INFO 2026-05-01 12:11:22,117 signals 44564 45652 Sent survey assigned notification to member2@test.com for survey 4dbe3758-962e-414f-bbc7-3221f73366ea (via group Eligible Users Group)
+INFO 2026-05-01 12:11:22,859 signals 44564 45652 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:11:23,595 signals 44564 45652 Sent welcome notification to new user member1@test.com
+INFO 2026-05-01 12:11:24,337 signals 44564 45652 Sent welcome notification to new user member2@test.com
+INFO 2026-05-01 12:11:25,069 signals 44564 45652 Sent welcome notification to new user nonmember@test.com
+INFO 2026-05-01 12:11:25,071 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:25,072 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:25,076 signals 44564 45652 Sent survey assigned notification to member1@test.com for survey f7be0052-2770-4227-8939-6f8bb33e18dc (via group Eligible Users Group)
+INFO 2026-05-01 12:11:25,078 signals 44564 45652 Sent survey assigned notification to member2@test.com for survey f7be0052-2770-4227-8939-6f8bb33e18dc (via group Eligible Users Group)
+INFO 2026-05-01 12:11:25,078 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:25,078 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:25,849 signals 44564 45652 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:11:26,589 signals 44564 45652 Sent welcome notification to new user member1@test.com
+INFO 2026-05-01 12:11:27,393 signals 44564 45652 Sent welcome notification to new user member2@test.com
+INFO 2026-05-01 12:11:28,128 signals 44564 45652 Sent welcome notification to new user nonmember@test.com
+INFO 2026-05-01 12:11:28,131 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:28,131 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:28,134 signals 44564 45652 Sent survey assigned notification to member1@test.com for survey b3ef67ed-bff0-4114-bf7d-d5febf662f23 (via group Eligible Users Group)
+INFO 2026-05-01 12:11:28,135 signals 44564 45652 Sent survey assigned notification to member2@test.com for survey b3ef67ed-bff0-4114-bf7d-d5febf662f23 (via group Eligible Users Group)
+INFO 2026-05-01 12:11:28,886 signals 44564 45652 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:11:29,627 signals 44564 45652 Sent welcome notification to new user member1@test.com
+INFO 2026-05-01 12:11:30,360 signals 44564 45652 Sent welcome notification to new user member2@test.com
+INFO 2026-05-01 12:11:31,080 signals 44564 45652 Sent welcome notification to new user nonmember@test.com
+INFO 2026-05-01 12:11:31,083 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:31,083 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:31,086 signals 44564 45652 Sent survey assigned notification to member1@test.com for survey b86e1bca-ecdf-413d-8125-04fc3f08b5d1 (via group Eligible Users Group)
+INFO 2026-05-01 12:11:31,087 signals 44564 45652 Sent survey assigned notification to member2@test.com for survey b86e1bca-ecdf-413d-8125-04fc3f08b5d1 (via group Eligible Users Group)
+INFO 2026-05-01 12:11:31,846 signals 44564 45652 Sent welcome notification to new user latecomer@test.com
+INFO 2026-05-01 12:11:31,849 signals 44564 45652 Sent existing survey notification to latecomer@test.com for survey b86e1bca-ecdf-413d-8125-04fc3f08b5d1 (joined group Eligible Users Group)
+INFO 2026-05-01 12:11:32,586 signals 44564 45652 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:11:32,587 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:32,587 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:33,339 signals 44564 45652 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:11:33,340 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:33,340 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:34,077 signals 44564 45652 Sent welcome notification to new user newmember@test.com
+INFO 2026-05-01 12:11:34,081 signals 44564 45652 Sent existing survey notification to newmember@test.com for survey 2ce129a2-1ffb-4e72-b7e2-5de9a216ff91 (joined group Notification Test Group)
+INFO 2026-05-01 12:11:34,815 signals 44564 45652 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:11:34,816 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:34,816 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:34,818 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:34,819 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:35,551 signals 44564 45652 Sent welcome notification to new user drafttest@test.com
+INFO 2026-05-01 12:11:35,554 signals 44564 45652 Sent existing survey notification to drafttest@test.com for survey c27825cd-0808-4c44-9297-a70e98459c8d (joined group Notification Test Group)
+INFO 2026-05-01 12:11:36,284 signals 44564 45652 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:11:36,285 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:36,285 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:36,287 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:36,287 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:37,029 signals 44564 45652 Sent welcome notification to new user inactivetest@test.com
+INFO 2026-05-01 12:11:37,033 signals 44564 45652 Sent existing survey notification to inactivetest@test.com for survey 1e824bd1-cdd1-45e4-8fcc-32edb7c40836 (joined group Notification Test Group)
+INFO 2026-05-01 12:11:37,760 signals 44564 45652 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:11:38,593 signals 44564 45652 Sent welcome notification to new user member@test.com
+INFO 2026-05-01 12:11:39,362 signals 44564 45652 Sent welcome notification to new user outsider@test.com
+INFO 2026-05-01 12:11:39,365 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:39,365 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:39,369 signals 44564 45652 Sent survey assigned notification to member@test.com for survey 83700590-67a6-4f8c-82e3-116b9d37ee05 (via group Test Group)
+INFO 2026-05-01 12:11:40,112 signals 44564 45652 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:11:40,851 signals 44564 45652 Sent welcome notification to new user member@test.com
+INFO 2026-05-01 12:11:41,588 signals 44564 45652 Sent welcome notification to new user outsider@test.com
+INFO 2026-05-01 12:11:41,590 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:41,590 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:41,593 signals 44564 45652 Sent survey assigned notification to member@test.com for survey 189911f1-8e79-4bfc-8bf5-c287c62e4d95 (via group Test Group)
+INFO 2026-05-01 12:11:42,350 signals 44564 45652 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:11:43,092 signals 44564 45652 Sent welcome notification to new user member@test.com
+INFO 2026-05-01 12:11:43,837 signals 44564 45652 Sent welcome notification to new user outsider@test.com
+INFO 2026-05-01 12:11:43,839 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:43,839 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:43,842 signals 44564 45652 Sent survey assigned notification to member@test.com for survey b202bf1d-e20c-4b39-a937-ecf95c047e05 (via group Test Group)
+INFO 2026-05-01 12:11:44,593 signals 44564 45652 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:11:45,324 signals 44564 45652 Sent welcome notification to new user member@test.com
+INFO 2026-05-01 12:11:46,061 signals 44564 45652 Sent welcome notification to new user outsider@test.com
+INFO 2026-05-01 12:11:46,063 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:46,063 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:46,068 signals 44564 45652 Sent survey assigned notification to member@test.com for survey 7e118f04-928d-4b7d-8b51-3f50b36fc0d3 (via group Test Group)
+INFO 2026-05-01 12:11:46,802 signals 44564 45652 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:11:47,566 signals 44564 45652 Sent welcome notification to new user member@test.com
+INFO 2026-05-01 12:11:48,334 signals 44564 45652 Sent welcome notification to new user outsider@test.com
+INFO 2026-05-01 12:11:48,335 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:48,336 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:48,339 signals 44564 45652 Sent survey assigned notification to member@test.com for survey ac1722f2-e963-4bb8-9058-d3e047ac0341 (via group Test Group)
+INFO 2026-05-01 12:11:50,509 signals 44564 45652 Sent welcome notification to new user creator@test.com
+INFO 2026-05-01 12:11:51,774 signals 44564 45652 Sent welcome notification to new user member@test.com
+INFO 2026-05-01 12:11:52,539 signals 44564 45652 Sent welcome notification to new user outsider@test.com
+INFO 2026-05-01 12:11:52,541 models 44564 45652 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 12:11:52,541 models 44564 45652 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 12:11:52,545 signals 44564 45652 Sent survey assigned notification to member@test.com for survey 70ac6ac8-36de-4992-8c1a-a84e30dc761f (via group Test Group)
+INFO 2026-05-01 12:11:53,291 signals 44564 45652 Sent welcome notification to new user newuser@test.com
+INFO 2026-05-01 12:11:53,295 signals 44564 45652 Sent existing survey notification to newuser@test.com for survey 70ac6ac8-36de-4992-8c1a-a84e30dc761f (joined group Test Group)
+INFO 2026-05-01 14:06:44,077 serializers 37120 44480 Looking for user with email: superadmin@example.com
+INFO 2026-05-01 14:06:44,078 managers 37120 44480 Looking for user with email: superadmin@example.com
+INFO 2026-05-01 14:06:44,085 serializers 37120 44480 User found: superadmin@example.com
+INFO 2026-05-01 14:06:44,086 serializers 37120 44480 Authenticating with username: superadmin@example.com
+INFO 2026-05-01 14:06:44,899 serializers 37120 44480 Authentication result: Success
+INFO 2026-05-01 14:06:44,899 serializers 37120 44480 Validation successful
+INFO 2026-05-01 14:06:44,909 views 37120 44480 User logged in: superadmin@example.com
+INFO 2026-05-01 14:06:45,813 views 37120 44480 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 14:06:45,860 dual_auth 37120 44480 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:06:45,861 views 37120 44480 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:06:45,889 dual_auth 37120 40260 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:06:45,890 views 37120 40260 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:06:49,313 dual_auth 37120 44480 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:06:49,315 views 37120 44480 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:06:49,350 views 37120 44480 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:07:23,223 dual_auth 23468 45344 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:07:23,226 dual_auth 23468 43844 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:07:37,709 dual_auth 8588 38864 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:07:37,710 dual_auth 8588 43220 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:07:37,711 views 8588 43220 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:07:37,710 dual_auth 8588 49004 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:07:37,714 dual_auth 8588 38124 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:07:37,765 dual_auth 8588 38864 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:07:37,766 dual_auth 8588 38124 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:09:29,126 views 8588 38864 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 14:09:29,319 dual_auth 8588 38864 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:09:29,320 views 8588 38864 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:09:29,625 dual_auth 8588 38864 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:09:29,630 dual_auth 8588 38124 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:09:29,634 views 8588 38124 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:09:29,659 dual_auth 8588 43220 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:09:29,672 dual_auth 8588 49004 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:09:29,808 dual_auth 8588 38864 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:09:29,811 dual_auth 8588 49004 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:11:04,423 dual_auth 17208 28144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:11:04,443 views 17208 28144 User admin@test.com role changed from super_admin to user by superadmin@example.com
+INFO 2026-05-01 14:11:28,160 serializers 15632 13732 Looking for user with email: superadmin@example.com
+INFO 2026-05-01 14:11:28,160 managers 15632 13732 Looking for user with email: superadmin@example.com
+INFO 2026-05-01 14:11:28,165 serializers 15632 13732 User found: superadmin@example.com
+INFO 2026-05-01 14:11:28,166 serializers 15632 13732 Authenticating with username: superadmin@example.com
+INFO 2026-05-01 14:11:31,084 serializers 48812 5980 Looking for user with email: superadmin@example.com
+INFO 2026-05-01 14:11:31,085 managers 48812 5980 Looking for user with email: superadmin@example.com
+INFO 2026-05-01 14:11:31,089 serializers 48812 5980 User found: superadmin@example.com
+INFO 2026-05-01 14:11:31,089 serializers 48812 5980 Authenticating with username: superadmin@example.com
+INFO 2026-05-01 14:11:31,886 serializers 48812 5980 Authentication result: Success
+INFO 2026-05-01 14:11:31,886 serializers 48812 5980 Validation successful
+INFO 2026-05-01 14:11:31,899 views 48812 5980 User logged in: superadmin@example.com
+INFO 2026-05-01 14:11:32,654 views 48812 5980 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 14:11:32,696 dual_auth 48812 5980 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:11:32,696 views 48812 5980 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:11:32,699 dual_auth 48812 25788 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:11:32,702 views 48812 25788 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:11:33,091 dual_auth 48812 25788 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:11:33,092 dual_auth 48812 33996 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:11:33,093 dual_auth 48812 48292 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:11:33,094 dual_auth 48812 5980 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:11:33,108 views 48812 5980 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:11:33,205 dual_auth 48812 33996 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:11:33,207 dual_auth 48812 25788 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:11:49,834 dual_auth 48812 33996 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:11:56,373 dual_auth 48812 33996 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:13:05,881 cleanup_expired_reset_codes 43328 39360 Deleted 0 stale password-reset code(s).
+INFO 2026-05-01 14:14:26,986 0011_ensure_oracle_boolean_field 49036 25268 Not Oracle database, skipping Oracle-specific fixes
+INFO 2026-05-01 14:14:27,014 0012_fix_oracle_default_value 49036 25268 Not Oracle database, skipping Oracle-specific fixes
+INFO 2026-05-01 14:14:28,537 signals 49036 25268 Sent welcome notification to new user cleanup@test.com
+INFO 2026-05-01 14:14:28,553 cleanup_expired_reset_codes 49036 25268 Deleted 1 stale password-reset code(s).
+INFO 2026-05-01 14:14:29,313 signals 49036 25268 Sent welcome notification to new user keep@test.com
+INFO 2026-05-01 14:14:29,317 cleanup_expired_reset_codes 49036 25268 Deleted 0 stale password-reset code(s).
+INFO 2026-05-01 14:14:30,074 signals 49036 25268 Sent welcome notification to new user fp@test.com
+INFO 2026-05-01 14:14:30,076 signals 49036 25268 Sent welcome notification to new user azure@test.com
+INFO 2026-05-01 14:14:30,150 managers 49036 25268 Looking for user with email: azure@test.com
+INFO 2026-05-01 14:14:30,929 signals 49036 25268 Sent welcome notification to new user fp@test.com
+INFO 2026-05-01 14:14:30,931 managers 49036 25268 Looking for user with email: fp@test.com
+INFO 2026-05-01 14:14:30,957 email_utils 49036 25268 Password reset email sent to fp@test.com
+INFO 2026-05-01 14:14:30,958 views 49036 25268 Password reset code sent to fp@test.com
+INFO 2026-05-01 14:14:31,734 signals 49036 25268 Sent welcome notification to new user fp@test.com
+INFO 2026-05-01 14:14:32,655 signals 49036 25268 Sent welcome notification to new user fp@test.com
+INFO 2026-05-01 14:14:32,658 managers 49036 25268 Looking for user with email: fp@test.com
+INFO 2026-05-01 14:14:32,662 email_utils 49036 25268 Password reset email sent to fp@test.com
+INFO 2026-05-01 14:14:32,663 views 49036 25268 Password reset code sent to fp@test.com
+INFO 2026-05-01 14:14:33,480 signals 49036 25268 Sent welcome notification to new user fp@test.com
+INFO 2026-05-01 14:14:33,484 managers 49036 25268 Looking for user with email: fp@test.com
+INFO 2026-05-01 14:14:33,487 email_utils 49036 25268 Password reset email sent to fp@test.com
+INFO 2026-05-01 14:14:33,487 views 49036 25268 Password reset code sent to fp@test.com
+INFO 2026-05-01 14:14:34,278 signals 49036 25268 Sent welcome notification to new user fp@test.com
+INFO 2026-05-01 14:14:34,281 managers 49036 25268 Looking for user with email: fp@test.com
+INFO 2026-05-01 14:14:34,285 email_utils 49036 25268 Password reset email sent to fp@test.com
+INFO 2026-05-01 14:14:34,285 views 49036 25268 Password reset code sent to fp@test.com
+INFO 2026-05-01 14:14:35,069 signals 49036 25268 Sent welcome notification to new user fp@test.com
+INFO 2026-05-01 14:14:35,071 managers 49036 25268 Looking for user with email: fp@test.com
+INFO 2026-05-01 14:14:35,073 email_utils 49036 25268 Password reset email sent to fp@test.com
+INFO 2026-05-01 14:14:35,073 views 49036 25268 Password reset code sent to fp@test.com
+INFO 2026-05-01 14:14:35,075 managers 49036 25268 Looking for user with email: fp@test.com
+INFO 2026-05-01 14:14:35,837 signals 49036 25268 Sent welcome notification to new user fp@test.com
+INFO 2026-05-01 14:14:35,838 managers 49036 25268 Looking for user with email: nobody@test.com
+INFO 2026-05-01 14:14:35,839 views 49036 25268 Forgot-password request for unknown email: nobody@test.com
+INFO 2026-05-01 14:14:36,614 signals 49036 25268 Sent welcome notification to new user fp@test.com
+INFO 2026-05-01 14:14:36,617 managers 49036 25268 Looking for user with email: fp@test.com
+INFO 2026-05-01 14:14:36,620 email_utils 49036 25268 Password reset email sent to fp@test.com
+INFO 2026-05-01 14:14:36,620 views 49036 25268 Password reset code sent to fp@test.com
+INFO 2026-05-01 14:14:37,410 signals 49036 25268 Sent welcome notification to new user flow@test.com
+INFO 2026-05-01 14:14:37,412 managers 49036 25268 Looking for user with email: flow@test.com
+INFO 2026-05-01 14:14:37,416 email_utils 49036 25268 Password reset email sent to flow@test.com
+INFO 2026-05-01 14:14:37,416 views 49036 25268 Password reset code sent to flow@test.com
+INFO 2026-05-01 14:14:37,421 managers 49036 25268 Looking for user with email: flow@test.com
+INFO 2026-05-01 14:14:37,424 email_utils 49036 25268 Password reset email sent to flow@test.com
+INFO 2026-05-01 14:14:37,424 views 49036 25268 Password reset code sent to flow@test.com
+INFO 2026-05-01 14:14:37,426 managers 49036 25268 Looking for user with email: flow@test.com
+INFO 2026-05-01 14:14:37,428 views 49036 25268 Password reset code verified for flow@test.com
+INFO 2026-05-01 14:14:38,331 views 49036 25268 Password successfully reset for flow@test.com
+INFO 2026-05-01 14:14:40,615 signals 49036 25268 Sent welcome notification to new user reset@test.com
+INFO 2026-05-01 14:14:41,379 views 49036 25268 Password successfully reset for reset@test.com
+INFO 2026-05-01 14:14:42,157 signals 49036 25268 Sent welcome notification to new user reset@test.com
+INFO 2026-05-01 14:14:42,972 signals 49036 25268 Sent welcome notification to new user reset@test.com
+INFO 2026-05-01 14:14:43,788 signals 49036 25268 Sent welcome notification to new user reset@test.com
+INFO 2026-05-01 14:14:44,593 signals 49036 25268 Sent welcome notification to new user reset@test.com
+INFO 2026-05-01 14:14:45,350 signals 49036 25268 Sent welcome notification to new user reset@test.com
+INFO 2026-05-01 14:14:46,115 signals 49036 25268 Sent welcome notification to new user reset@test.com
+INFO 2026-05-01 14:14:46,882 signals 49036 25268 Sent welcome notification to new user reset@test.com
+INFO 2026-05-01 14:14:47,658 views 49036 25268 Password successfully reset for reset@test.com
+INFO 2026-05-01 14:14:49,223 signals 49036 25268 Sent welcome notification to new user verify@test.com
+INFO 2026-05-01 14:14:49,225 managers 49036 25268 Looking for user with email: verify@test.com
+INFO 2026-05-01 14:14:49,227 views 49036 25268 Password reset code verified for verify@test.com
+INFO 2026-05-01 14:14:50,114 signals 49036 25268 Sent welcome notification to new user verify@test.com
+INFO 2026-05-01 14:14:50,117 managers 49036 25268 Looking for user with email: verify@test.com
+INFO 2026-05-01 14:14:50,120 views 49036 25268 Password reset code verified for verify@test.com
+INFO 2026-05-01 14:14:50,921 signals 49036 25268 Sent welcome notification to new user verify@test.com
+INFO 2026-05-01 14:14:50,924 managers 49036 25268 Looking for user with email: verify@test.com
+INFO 2026-05-01 14:14:51,710 signals 49036 25268 Sent welcome notification to new user verify@test.com
+INFO 2026-05-01 14:14:52,498 signals 49036 25268 Sent welcome notification to new user verify@test.com
+INFO 2026-05-01 14:14:52,499 managers 49036 25268 Looking for user with email: verify@test.com
+INFO 2026-05-01 14:14:52,501 views 49036 25268 Password reset code verified for verify@test.com
+INFO 2026-05-01 14:14:53,267 signals 49036 25268 Sent welcome notification to new user verify@test.com
+INFO 2026-05-01 14:14:53,269 managers 49036 25268 Looking for user with email: ghost@test.com
+INFO 2026-05-01 14:14:54,026 signals 49036 25268 Sent welcome notification to new user verify@test.com
+INFO 2026-05-01 14:14:54,028 managers 49036 25268 Looking for user with email: verify@test.com
+INFO 2026-05-01 14:14:54,790 signals 49036 25268 Sent welcome notification to new user verify@test.com
+INFO 2026-05-01 14:14:54,791 managers 49036 25268 Looking for user with email: verify@test.com
+INFO 2026-05-01 14:15:13,740 dual_auth 48812 25788 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:15:13,741 views 48812 25788 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:15:13,752 views 48812 25788 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:15:17,290 dual_auth 48812 48292 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:15:17,298 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:15:19,971 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:15:19,974 dual_auth 48812 48292 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:15:19,983 views 48812 48908 Current link retrieved for survey ec98979c-cece-4345-af14-268d0204f314 by superadmin@example.com
+INFO 2026-05-01 14:15:19,984 views 48812 48292 Current link retrieved for survey ec98979c-cece-4345-af14-268d0204f314 by superadmin@example.com
+INFO 2026-05-01 14:15:29,254 dual_auth 48812 48292 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:15:32,736 dual_auth 48812 48292 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:15:32,745 serializers 48812 48292 UPDATE: questions_data is None: True, len=0
+INFO 2026-05-01 14:15:32,749 models 48812 48292 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 14:15:32,749 models 48812 48292 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 14:15:32,768 signals 48812 48292 Survey d6db12af-72f7-418d-a92c-948b6987f15c visibility changed from PUBLIC to GROUPS
+INFO 2026-05-01 14:15:32,772 serializers 48812 48292 Survey updated: d6db12af-72f7-418d-a92c-948b6987f15c with 0 questions
+INFO 2026-05-01 14:15:32,784 views 48812 48292 Survey d6db12af-72f7-418d-a92c-948b6987f15c visibility changed from PUBLIC to GROUPS. Invalidated 1 public tokens.
+INFO 2026-05-01 14:15:32,784 views 48812 48292 Survey d6db12af-72f7-418d-a92c-948b6987f15c updated by superadmin@example.com (role: super_admin)
+INFO 2026-05-01 14:15:32,827 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:16:59,387 0011_ensure_oracle_boolean_field 46300 48856 Not Oracle database, skipping Oracle-specific fixes
+INFO 2026-05-01 14:16:59,409 0012_fix_oracle_default_value 46300 48856 Not Oracle database, skipping Oracle-specific fixes
+INFO 2026-05-01 14:17:00,766 signals 46300 48856 Sent welcome notification to new user cleanup@test.com
+INFO 2026-05-01 14:17:00,783 cleanup_expired_reset_codes 46300 48856 Deleted 1 stale password-reset code(s).
+INFO 2026-05-01 14:17:01,518 signals 46300 48856 Sent welcome notification to new user keep@test.com
+INFO 2026-05-01 14:17:01,519 cleanup_expired_reset_codes 46300 48856 Deleted 0 stale password-reset code(s).
+INFO 2026-05-01 14:17:02,319 signals 46300 48856 Sent welcome notification to new user fp@test.com
+INFO 2026-05-01 14:17:02,324 signals 46300 48856 Sent welcome notification to new user azure@test.com
+INFO 2026-05-01 14:17:02,386 managers 46300 48856 Looking for user with email: azure@test.com
+INFO 2026-05-01 14:17:03,213 signals 46300 48856 Sent welcome notification to new user fp@test.com
+INFO 2026-05-01 14:17:03,215 managers 46300 48856 Looking for user with email: fp@test.com
+INFO 2026-05-01 14:17:03,247 email_utils 46300 48856 Password reset email sent to fp@test.com
+INFO 2026-05-01 14:17:03,247 views 46300 48856 Password reset code sent to fp@test.com
+INFO 2026-05-01 14:17:04,091 signals 46300 48856 Sent welcome notification to new user fp@test.com
+INFO 2026-05-01 14:17:04,907 signals 46300 48856 Sent welcome notification to new user fp@test.com
+INFO 2026-05-01 14:17:04,909 managers 46300 48856 Looking for user with email: fp@test.com
+INFO 2026-05-01 14:17:04,911 email_utils 46300 48856 Password reset email sent to fp@test.com
+INFO 2026-05-01 14:17:04,912 views 46300 48856 Password reset code sent to fp@test.com
+INFO 2026-05-01 14:17:05,746 signals 46300 48856 Sent welcome notification to new user fp@test.com
+INFO 2026-05-01 14:17:05,748 managers 46300 48856 Looking for user with email: fp@test.com
+INFO 2026-05-01 14:17:06,575 signals 46300 48856 Sent welcome notification to new user fp@test.com
+INFO 2026-05-01 14:17:06,578 managers 46300 48856 Looking for user with email: fp@test.com
+INFO 2026-05-01 14:17:06,581 email_utils 46300 48856 Password reset email sent to fp@test.com
+INFO 2026-05-01 14:17:06,581 views 46300 48856 Password reset code sent to fp@test.com
+INFO 2026-05-01 14:17:07,392 signals 46300 48856 Sent welcome notification to new user fp@test.com
+INFO 2026-05-01 14:17:07,394 managers 46300 48856 Looking for user with email: fp@test.com
+INFO 2026-05-01 14:17:07,397 email_utils 46300 48856 Password reset email sent to fp@test.com
+INFO 2026-05-01 14:17:07,397 views 46300 48856 Password reset code sent to fp@test.com
+INFO 2026-05-01 14:17:07,398 managers 46300 48856 Looking for user with email: fp@test.com
+INFO 2026-05-01 14:17:08,252 signals 46300 48856 Sent welcome notification to new user fp@test.com
+INFO 2026-05-01 14:17:08,253 managers 46300 48856 Looking for user with email: nobody@test.com
+INFO 2026-05-01 14:17:08,253 views 46300 48856 Forgot-password request for unknown email: nobody@test.com
+INFO 2026-05-01 14:17:09,203 signals 46300 48856 Sent welcome notification to new user fp@test.com
+INFO 2026-05-01 14:17:09,204 managers 46300 48856 Looking for user with email: fp@test.com
+INFO 2026-05-01 14:17:09,209 email_utils 46300 48856 Password reset email sent to fp@test.com
+INFO 2026-05-01 14:17:09,210 views 46300 48856 Password reset code sent to fp@test.com
+INFO 2026-05-01 14:17:10,061 signals 46300 48856 Sent welcome notification to new user flow@test.com
+INFO 2026-05-01 14:17:10,062 managers 46300 48856 Looking for user with email: flow@test.com
+INFO 2026-05-01 14:17:10,065 email_utils 46300 48856 Password reset email sent to flow@test.com
+INFO 2026-05-01 14:17:10,065 views 46300 48856 Password reset code sent to flow@test.com
+INFO 2026-05-01 14:17:10,068 managers 46300 48856 Looking for user with email: flow@test.com
+INFO 2026-05-01 14:17:10,071 email_utils 46300 48856 Password reset email sent to flow@test.com
+INFO 2026-05-01 14:17:10,071 views 46300 48856 Password reset code sent to flow@test.com
+INFO 2026-05-01 14:17:10,075 managers 46300 48856 Looking for user with email: flow@test.com
+INFO 2026-05-01 14:17:10,077 views 46300 48856 Password reset code verified for flow@test.com
+INFO 2026-05-01 14:17:11,018 views 46300 48856 Password successfully reset for flow@test.com
+INFO 2026-05-01 14:17:13,464 signals 46300 48856 Sent welcome notification to new user reset@test.com
+INFO 2026-05-01 14:17:14,297 views 46300 48856 Password successfully reset for reset@test.com
+INFO 2026-05-01 14:17:15,110 signals 46300 48856 Sent welcome notification to new user reset@test.com
+INFO 2026-05-01 14:17:15,914 signals 46300 48856 Sent welcome notification to new user reset@test.com
+INFO 2026-05-01 14:17:16,717 signals 46300 48856 Sent welcome notification to new user reset@test.com
+INFO 2026-05-01 14:17:17,573 signals 46300 48856 Sent welcome notification to new user reset@test.com
+INFO 2026-05-01 14:17:18,367 signals 46300 48856 Sent welcome notification to new user reset@test.com
+INFO 2026-05-01 14:17:19,107 signals 46300 48856 Sent welcome notification to new user reset@test.com
+INFO 2026-05-01 14:17:19,858 signals 46300 48856 Sent welcome notification to new user reset@test.com
+INFO 2026-05-01 14:17:20,588 views 46300 48856 Password successfully reset for reset@test.com
+INFO 2026-05-01 14:17:22,090 signals 46300 48856 Sent welcome notification to new user verify@test.com
+INFO 2026-05-01 14:17:22,093 managers 46300 48856 Looking for user with email: verify@test.com
+INFO 2026-05-01 14:17:22,097 views 46300 48856 Password reset code verified for verify@test.com
+INFO 2026-05-01 14:17:22,893 signals 46300 48856 Sent welcome notification to new user verify@test.com
+INFO 2026-05-01 14:17:22,896 managers 46300 48856 Looking for user with email: verify@test.com
+INFO 2026-05-01 14:17:22,897 views 46300 48856 Password reset code verified for verify@test.com
+INFO 2026-05-01 14:17:23,718 signals 46300 48856 Sent welcome notification to new user verify@test.com
+INFO 2026-05-01 14:17:23,720 managers 46300 48856 Looking for user with email: verify@test.com
+INFO 2026-05-01 14:17:24,600 signals 46300 48856 Sent welcome notification to new user verify@test.com
+INFO 2026-05-01 14:17:25,389 signals 46300 48856 Sent welcome notification to new user verify@test.com
+INFO 2026-05-01 14:17:25,391 managers 46300 48856 Looking for user with email: verify@test.com
+INFO 2026-05-01 14:17:25,393 views 46300 48856 Password reset code verified for verify@test.com
+INFO 2026-05-01 14:17:26,164 signals 46300 48856 Sent welcome notification to new user verify@test.com
+INFO 2026-05-01 14:17:26,166 managers 46300 48856 Looking for user with email: ghost@test.com
+INFO 2026-05-01 14:17:26,909 signals 46300 48856 Sent welcome notification to new user verify@test.com
+INFO 2026-05-01 14:17:26,912 managers 46300 48856 Looking for user with email: verify@test.com
+INFO 2026-05-01 14:17:27,657 signals 46300 48856 Sent welcome notification to new user verify@test.com
+INFO 2026-05-01 14:17:27,658 managers 46300 48856 Looking for user with email: verify@test.com
+INFO 2026-05-01 14:17:52,041 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:17:52,045 dual_auth 48812 28148 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:06,084 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:12,365 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:16,131 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:17,768 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:18,510 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:18,513 views 48812 48908 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:18:18,514 dual_auth 48812 49560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:18,530 dual_auth 48812 29824 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:18,531 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:18,562 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:18,567 dual_auth 48812 29824 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:27,136 dual_auth 48812 29824 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:27,140 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:31,614 dual_auth 48812 29824 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:31,620 views 48812 29824 Current link retrieved for survey 53a749b6-2473-45c3-bdeb-cc3027ff5434 by superadmin@example.com
+INFO 2026-05-01 14:18:31,625 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:31,635 views 48812 48888 Current link retrieved for survey 53a749b6-2473-45c3-bdeb-cc3027ff5434 by superadmin@example.com
+INFO 2026-05-01 14:18:35,860 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:35,866 views 48812 48888 Current link retrieved for survey ec98979c-cece-4345-af14-268d0204f314 by superadmin@example.com
+INFO 2026-05-01 14:18:35,876 dual_auth 48812 29824 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:35,884 views 48812 29824 Current link retrieved for survey ec98979c-cece-4345-af14-268d0204f314 by superadmin@example.com
+INFO 2026-05-01 14:18:39,516 dual_auth 48812 29824 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:39,521 views 48812 29824 Current link retrieved for survey 53a749b6-2473-45c3-bdeb-cc3027ff5434 by superadmin@example.com
+INFO 2026-05-01 14:18:39,528 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:39,537 views 48812 48888 Current link retrieved for survey 53a749b6-2473-45c3-bdeb-cc3027ff5434 by superadmin@example.com
+INFO 2026-05-01 14:18:47,524 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:47,524 views 48812 48888 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:18:47,527 views 48812 48888 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:18:55,444 dual_auth 48812 49560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:55,446 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:55,446 dual_auth 48812 29824 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:55,446 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:55,448 views 48812 48888 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:18:55,477 dual_auth 48812 29824 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:18:55,478 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:19:01,263 views 48812 48888 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 14:19:01,373 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:19:01,374 views 48812 48888 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:19:01,697 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:19:01,699 views 48812 48888 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:19:01,711 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:19:01,712 dual_auth 48812 49560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:19:01,715 dual_auth 48812 29824 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:19:01,890 dual_auth 48812 29824 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:19:01,893 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:19:30,130 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:19:30,131 views 48812 48908 User logged out without token blacklisting: superadmin@example.com
+INFO 2026-05-01 14:19:34,987 serializers 48812 48908 Looking for user with email: admin@test.com
+INFO 2026-05-01 14:19:34,988 managers 48812 48908 Looking for user with email: admin@test.com
+INFO 2026-05-01 14:19:34,991 serializers 48812 48908 User found: admin@test.com
+INFO 2026-05-01 14:19:34,992 serializers 48812 48908 Authenticating with username: admin@test.com
+INFO 2026-05-01 14:19:35,739 serializers 48812 48908 Authentication result: Success
+INFO 2026-05-01 14:19:35,740 serializers 48812 48908 Validation successful
+INFO 2026-05-01 14:19:35,749 views 48812 48908 User logged in: admin@test.com
+INFO 2026-05-01 14:19:36,322 views 48812 48908 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-01 14:19:36,387 dual_auth 48812 48908 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:19:36,387 views 48812 48908 User profile accessed: admin@test.com
+INFO 2026-05-01 14:19:36,390 dual_auth 48812 29824 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:19:36,391 views 48812 29824 User profile accessed: admin@test.com
+INFO 2026-05-01 14:19:36,598 dual_auth 48812 48908 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:19:36,599 views 48812 48908 Building queryset for user admin@test.com
+INFO 2026-05-01 14:19:36,604 views 48812 48908 Successfully built queryset for user admin@test.com
+INFO 2026-05-01 14:20:33,631 dual_auth 48812 48908 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:20:33,632 views 48812 48908 User logged out without token blacklisting: admin@test.com
+INFO 2026-05-01 14:20:40,429 serializers 48812 48908 Looking for user with email: superadmin@example.com
+INFO 2026-05-01 14:20:40,429 managers 48812 48908 Looking for user with email: superadmin@example.com
+INFO 2026-05-01 14:20:40,434 serializers 48812 48908 User found: superadmin@example.com
+INFO 2026-05-01 14:20:40,435 serializers 48812 48908 Authenticating with username: superadmin@example.com
+INFO 2026-05-01 14:20:41,216 serializers 48812 48908 Authentication result: Success
+INFO 2026-05-01 14:20:41,216 serializers 48812 48908 Validation successful
+INFO 2026-05-01 14:20:41,224 views 48812 48908 User logged in: superadmin@example.com
+INFO 2026-05-01 14:20:41,524 views 48812 48908 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 14:20:41,553 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:20:41,554 views 48812 48908 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:20:41,562 dual_auth 48812 49560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:20:41,564 views 48812 49560 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:20:41,658 dual_auth 48812 49560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:20:41,659 views 48812 49560 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:20:41,662 views 48812 49560 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:20:43,336 dual_auth 48812 49560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:20:43,337 views 48812 49560 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:20:43,339 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:20:43,344 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:20:43,352 dual_auth 48812 38304 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:20:43,408 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:20:43,408 dual_auth 48812 38304 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:20:45,879 dual_auth 48812 38304 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:20:45,879 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:20:49,296 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:20:59,037 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:20:59,046 views 48812 48908 Retrieved 5 predefined templates for superadmin@example.com
+INFO 2026-05-01 14:21:48,245 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:21:48,259 serializers 48812 48908 Serializer create - per_device_access: False
+INFO 2026-05-01 14:21:48,259 serializers 48812 48908 Serializer create - all validated_data keys: ['title', 'description', 'visibility', 'is_active', 'start_date', 'end_date', 'per_device_access', 'questions', 'status', 'creator']
+INFO 2026-05-01 14:21:48,259 serializers 48812 48908 About to create survey with data: {'title': 'معلومات التواصل جديد', 'description': 'يرجى تزويدنا بمعلومات الاتصال الخاصة بك حتى نتمكن من التواصل معك عند الحاجة أو لإرسال التحديثات المستقبلية.', 'visibility': 'AUTH', 'is_active': True, 'start_date': None, 'end_date': None, 'per_device_access': False, 'status': 'draft', 'creator': <User: superadmin@example.com (super_admin)>}
+INFO 2026-05-01 14:21:48,261 models 48812 48908 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 14:21:48,261 models 48812 48908 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 14:21:48,294 serializers 48812 48908 Mapped temp ID 'temp-1777634459058-0' to question ea4e7696-d259-4725-b7d0-cf957c37dee3 (order 1)
+INFO 2026-05-01 14:21:48,305 serializers 48812 48908 Mapped temp ID 'temp-1777634459058-1' to question b2aeb7ad-8bb4-47d4-8497-48357a30bb1e (order 2)
+INFO 2026-05-01 14:21:48,316 serializers 48812 48908 Mapped temp ID 'temp-1777634459058-2' to question de2d0fe9-01fe-4222-9106-e4148612adfa (order 3)
+INFO 2026-05-01 14:21:48,316 serializers 48812 48908 Survey created: ef823dad-181b-46a9-b9b3-6aa9e4a81046 with 3 questions by superadmin@example.com
+INFO 2026-05-01 14:21:48,382 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:21:48,391 views 48812 48908 Successfully retrieved survey ef823dad-181b-46a9-b9b3-6aa9e4a81046: معلومات التواصل جديد
+INFO 2026-05-01 14:21:48,392 views 48812 48908 Successfully serialized survey ef823dad-181b-46a9-b9b3-6aa9e4a81046
+INFO 2026-05-01 14:21:48,397 dual_auth 48812 38304 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:21:48,408 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:21:50,859 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:21:53,425 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:21:53,429 serializers 48812 48888 UPDATE: questions_data is None: True, len=0
+INFO 2026-05-01 14:21:53,429 models 48812 48888 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 14:21:53,429 models 48812 48888 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 14:21:53,576 serializers 48812 48888 Survey updated: ef823dad-181b-46a9-b9b3-6aa9e4a81046 with 0 questions
+INFO 2026-05-01 14:21:53,595 views 48812 48888 Survey ef823dad-181b-46a9-b9b3-6aa9e4a81046 updated by superadmin@example.com (role: super_admin)
+INFO 2026-05-01 14:21:53,618 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:21:53,628 models 48812 48888 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 14:21:53,679 models 48812 48888 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 14:21:53,933 signals 48812 48888 Survey ef823dad-181b-46a9-b9b3-6aa9e4a81046 was published, sending availability notifications
+INFO 2026-05-01 14:21:53,942 views 48812 48888 Skipped sending survey availability notifications for survey ef823dad-181b-46a9-b9b3-6aa9e4a81046 as send_notifications was not requested
+INFO 2026-05-01 14:21:53,968 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:22:03,006 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:22:03,006 views 48812 48888 User logged out without token blacklisting: superadmin@example.com
+INFO 2026-05-01 14:22:15,793 serializers 48812 48888 Looking for user with email: admin@test.com
+INFO 2026-05-01 14:22:15,794 managers 48812 48888 Looking for user with email: admin@test.com
+INFO 2026-05-01 14:22:15,798 serializers 48812 48888 User found: admin@test.com
+INFO 2026-05-01 14:22:15,798 serializers 48812 48888 Authenticating with username: admin@test.com
+INFO 2026-05-01 14:22:16,776 serializers 48812 48888 Authentication result: Success
+INFO 2026-05-01 14:22:16,776 serializers 48812 48888 Validation successful
+INFO 2026-05-01 14:22:16,784 views 48812 48888 User logged in: admin@test.com
+INFO 2026-05-01 14:22:17,083 views 48812 48888 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-01 14:22:17,107 dual_auth 48812 48888 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:22:17,107 views 48812 48888 User profile accessed: admin@test.com
+INFO 2026-05-01 14:22:17,117 dual_auth 48812 38304 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:22:17,118 views 48812 38304 User profile accessed: admin@test.com
+INFO 2026-05-01 14:22:17,193 dual_auth 48812 38304 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:22:17,195 views 48812 38304 Building queryset for user admin@test.com
+INFO 2026-05-01 14:22:17,202 views 48812 38304 Successfully built queryset for user admin@test.com
+INFO 2026-05-01 14:22:19,572 views 48812 38304 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-01 14:22:19,601 dual_auth 48812 38304 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:22:19,602 views 48812 38304 User profile accessed: admin@test.com
+INFO 2026-05-01 14:22:19,656 dual_auth 48812 38304 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:22:19,660 views 48812 38304 Building queryset for user admin@test.com
+INFO 2026-05-01 14:22:19,679 views 48812 38304 Successfully built queryset for user admin@test.com
+INFO 2026-05-01 14:22:29,677 dual_auth 48812 38304 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:22:29,678 views 48812 38304 User logged out without token blacklisting: admin@test.com
+INFO 2026-05-01 14:22:38,767 serializers 48812 38304 Looking for user with email: superadmin@example.com
+INFO 2026-05-01 14:22:38,767 managers 48812 38304 Looking for user with email: superadmin@example.com
+INFO 2026-05-01 14:22:38,770 serializers 48812 38304 User found: superadmin@example.com
+INFO 2026-05-01 14:22:38,770 serializers 48812 38304 Authenticating with username: superadmin@example.com
+INFO 2026-05-01 14:22:39,511 serializers 48812 38304 Authentication result: Success
+INFO 2026-05-01 14:22:39,511 serializers 48812 38304 Validation successful
+INFO 2026-05-01 14:22:39,520 views 48812 38304 User logged in: superadmin@example.com
+INFO 2026-05-01 14:22:39,777 views 48812 38304 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 14:22:39,806 dual_auth 48812 38304 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:22:39,806 views 48812 38304 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:22:39,813 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:22:39,814 views 48812 48888 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:22:39,875 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:22:39,875 views 48812 48888 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:22:39,877 views 48812 48888 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:22:45,784 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:22:45,787 dual_auth 48812 38304 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:22:51,174 dual_auth 48812 38304 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:22:51,176 views 48812 38304 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:22:51,175 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:22:51,176 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:22:51,181 dual_auth 48812 49560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:22:51,227 dual_auth 48812 49560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:22:51,227 dual_auth 48812 48888 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:23:20,796 dual_auth 48812 38304 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:23:20,799 dual_auth 48812 48908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:02,719 dual_auth 49036 9276 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:02,722 dual_auth 49036 24924 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:02,723 dual_auth 49036 34156 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:02,724 dual_auth 49036 48144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:02,725 views 49036 34156 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:27:02,760 dual_auth 49036 48144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:02,761 dual_auth 49036 34156 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:09,016 dual_auth 49036 34156 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:09,038 dual_auth 49036 34156 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:12,003 dual_auth 49036 34156 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:12,062 dual_auth 49036 34156 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:12,067 dual_auth 49036 24924 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:12,068 views 49036 24924 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:27:12,073 dual_auth 49036 48144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:12,075 dual_auth 49036 9276 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:12,100 dual_auth 49036 34156 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:12,101 dual_auth 49036 9276 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:13,762 dual_auth 49036 34156 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:13,763 views 49036 34156 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:27:13,765 views 49036 34156 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:27:15,932 views 49036 34156 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 14:27:15,998 dual_auth 49036 34156 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:15,998 views 49036 34156 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:27:16,580 dual_auth 49036 48144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:16,580 views 49036 48144 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:27:16,583 views 49036 48144 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:27:18,675 dual_auth 49036 48144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:18,677 views 49036 48144 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:27:18,681 dual_auth 49036 24924 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:18,684 dual_auth 49036 44096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:18,686 dual_auth 49036 48688 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:18,728 dual_auth 49036 44096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:18,729 dual_auth 49036 48688 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:23,444 dual_auth 49036 44096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:23,444 views 49036 44096 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:27:23,446 views 49036 44096 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:27:24,545 dual_auth 49036 48144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:27:24,548 dual_auth 49036 48776 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:29:00,933 dual_auth 49036 48144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:29:00,935 dual_auth 49036 48776 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:29:00,936 dual_auth 49036 46444 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:29:00,938 views 49036 46444 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:29:00,942 dual_auth 49036 40732 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:29:00,977 dual_auth 49036 48776 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:29:00,979 dual_auth 49036 40732 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:37:25,005 signals 36824 46804 Sent survey assigned notification to admin@example.com for survey ef823dad-181b-46a9-b9b3-6aa9e4a81046 (via group tarek)
+INFO 2026-05-01 14:37:25,008 signals 36824 46804 Sent survey assigned notification to admin@test.com for survey ef823dad-181b-46a9-b9b3-6aa9e4a81046 (via group tarek)
+INFO 2026-05-01 14:37:25,010 signals 36824 46804 Sent survey assigned notification to mayman@lightidea.org for survey ef823dad-181b-46a9-b9b3-6aa9e4a81046 (via group tarek)
+INFO 2026-05-01 14:37:25,013 signals 36824 46804 Sent survey assigned notification to user@example.com for survey ef823dad-181b-46a9-b9b3-6aa9e4a81046 (via group tarek)
+INFO 2026-05-01 14:37:25,016 signals 36824 46804 Sent survey assigned notification to superadmin@example.com for survey ef823dad-181b-46a9-b9b3-6aa9e4a81046 (via group tarek)
+INFO 2026-05-01 14:40:24,613 views 49844 25612 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 14:40:24,696 dual_auth 49844 25612 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:24,697 views 49844 25612 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:40:24,917 dual_auth 49844 25612 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:24,917 views 49844 25612 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:40:24,922 dual_auth 49844 30668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:24,935 dual_auth 49844 42132 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:24,946 dual_auth 49844 35344 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:25,029 dual_auth 49844 42132 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:25,032 dual_auth 49844 35344 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:26,031 dual_auth 49844 30668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:26,035 dual_auth 49844 25612 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:30,697 dual_auth 49844 30668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:30,701 models 49844 30668 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 14:40:30,701 models 49844 30668 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 14:40:30,716 views 49844 30668 Survey ef823dad-181b-46a9-b9b3-6aa9e4a81046 deleted by superadmin@example.com (role: super_admin)
+INFO 2026-05-01 14:40:30,762 dual_auth 49844 46548 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:30,765 dual_auth 49844 49712 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:34,937 dual_auth 49844 49712 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:36,762 dual_auth 49844 49712 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:36,778 views 49844 49712 Retrieved 5 predefined templates for superadmin@example.com
+INFO 2026-05-01 14:40:47,099 dual_auth 49844 49712 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:47,120 serializers 49844 49712 Serializer create - per_device_access: False
+INFO 2026-05-01 14:40:47,120 serializers 49844 49712 Serializer create - all validated_data keys: ['title', 'description', 'visibility', 'is_active', 'start_date', 'end_date', 'per_device_access', 'questions', 'status', 'creator']
+INFO 2026-05-01 14:40:47,120 serializers 49844 49712 About to create survey with data: {'title': 'معلومات التواصل جديد 2', 'description': 'يرجى تزويدنا بمعلومات الاتصال الخاصة بك حتى نتمكن من التواصل معك عند الحاجة أو لإرسال التحديثات المستقبلية.', 'visibility': 'AUTH', 'is_active': True, 'start_date': None, 'end_date': None, 'per_device_access': False, 'status': 'draft', 'creator': <User: superadmin@example.com (super_admin)>}
+INFO 2026-05-01 14:40:47,121 models 49844 49712 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 14:40:47,121 models 49844 49712 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 14:40:47,143 serializers 49844 49712 Mapped temp ID 'temp-1777635636798-0' to question ee941248-8034-426e-b944-e7521670cff5 (order 1)
+INFO 2026-05-01 14:40:47,154 serializers 49844 49712 Mapped temp ID 'temp-1777635636798-1' to question 3a151e09-5682-402c-ba79-5c114d85db58 (order 2)
+INFO 2026-05-01 14:40:47,163 serializers 49844 49712 Mapped temp ID 'temp-1777635636798-2' to question 4e62d199-da79-49a8-a6dd-70d503e9e54a (order 3)
+INFO 2026-05-01 14:40:47,163 serializers 49844 49712 Survey created: 376f7b2f-6de4-4230-810d-918294c4c209 with 3 questions by superadmin@example.com
+INFO 2026-05-01 14:40:47,270 dual_auth 49844 20448 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:47,276 views 49844 20448 Successfully retrieved survey 376f7b2f-6de4-4230-810d-918294c4c209: معلومات التواصل جديد 2
+INFO 2026-05-01 14:40:47,277 views 49844 20448 Successfully serialized survey 376f7b2f-6de4-4230-810d-918294c4c209
+INFO 2026-05-01 14:40:47,286 dual_auth 49844 48952 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:47,289 dual_auth 49844 36600 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:48,383 dual_auth 49844 36600 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:49,736 dual_auth 49844 36600 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:49,740 serializers 49844 36600 UPDATE: questions_data is None: True, len=0
+INFO 2026-05-01 14:40:49,740 models 49844 36600 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 14:40:49,741 models 49844 36600 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 14:40:49,754 serializers 49844 36600 Survey updated: 376f7b2f-6de4-4230-810d-918294c4c209 with 0 questions
+INFO 2026-05-01 14:40:49,757 views 49844 36600 Survey 376f7b2f-6de4-4230-810d-918294c4c209 updated by superadmin@example.com (role: super_admin)
+INFO 2026-05-01 14:40:49,784 dual_auth 49844 36600 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:49,786 models 49844 36600 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 14:40:49,786 models 49844 36600 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 14:40:49,796 signals 49844 36600 Survey 376f7b2f-6de4-4230-810d-918294c4c209 was published, sending availability notifications
+INFO 2026-05-01 14:40:49,799 views 49844 36600 Skipped sending survey availability notifications for survey 376f7b2f-6de4-4230-810d-918294c4c209 as send_notifications was not requested
+INFO 2026-05-01 14:40:49,841 dual_auth 49844 48952 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:52,041 dual_auth 49844 20448 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:52,042 views 49844 20448 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:40:52,044 views 49844 20448 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:40:54,129 views 49844 20448 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 14:40:54,169 dual_auth 49844 20448 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:54,170 views 49844 20448 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:40:54,329 dual_auth 49844 13136 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:54,331 views 49844 13136 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:40:54,341 views 49844 13136 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:40:57,958 dual_auth 49844 13136 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:40:57,959 views 49844 13136 User logged out without token blacklisting: superadmin@example.com
+INFO 2026-05-01 14:41:07,795 serializers 49844 13136 Looking for user with email: admin@test.com
+INFO 2026-05-01 14:41:07,796 managers 49844 13136 Looking for user with email: admin@test.com
+INFO 2026-05-01 14:41:07,806 serializers 49844 13136 User found: admin@test.com
+INFO 2026-05-01 14:41:07,807 serializers 49844 13136 Authenticating with username: admin@test.com
+INFO 2026-05-01 14:41:09,071 serializers 49844 13136 Authentication result: Success
+INFO 2026-05-01 14:41:09,071 serializers 49844 13136 Validation successful
+INFO 2026-05-01 14:41:09,088 views 49844 13136 User logged in: admin@test.com
+INFO 2026-05-01 14:41:09,840 views 49844 13136 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-01 14:41:09,869 dual_auth 49844 13136 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:09,870 views 49844 13136 User profile accessed: admin@test.com
+INFO 2026-05-01 14:41:09,874 dual_auth 49844 50092 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:09,875 views 49844 50092 User profile accessed: admin@test.com
+INFO 2026-05-01 14:41:10,108 dual_auth 49844 13136 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:10,108 views 49844 13136 Building queryset for user admin@test.com
+INFO 2026-05-01 14:41:10,118 views 49844 13136 Successfully built queryset for user admin@test.com
+INFO 2026-05-01 14:41:12,255 dual_auth 49844 13136 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:12,256 views 49844 13136 User profile accessed: admin@test.com
+INFO 2026-05-01 14:41:12,259 dual_auth 49844 48764 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:12,259 dual_auth 49844 38000 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:12,273 dual_auth 49844 16992 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:12,322 dual_auth 49844 16992 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:12,323 dual_auth 49844 38000 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:13,571 dual_auth 49844 13136 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:13,575 dual_auth 49844 48764 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:15,401 dual_auth 49844 13136 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:15,402 views 49844 13136 Building queryset for user admin@test.com
+INFO 2026-05-01 14:41:15,404 views 49844 13136 Successfully built queryset for user admin@test.com
+INFO 2026-05-01 14:41:32,714 views 46384 45000 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-01 14:41:32,745 dual_auth 46384 45000 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:32,746 views 46384 45000 User profile accessed: admin@test.com
+INFO 2026-05-01 14:41:32,912 dual_auth 46384 3732 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:32,917 views 46384 3732 Building queryset for user admin@test.com
+INFO 2026-05-01 14:41:32,927 views 46384 3732 Successfully built queryset for user admin@test.com
+INFO 2026-05-01 14:41:35,077 views 46384 3732 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-01 14:41:35,141 dual_auth 46384 3732 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:35,142 views 46384 3732 User profile accessed: admin@test.com
+INFO 2026-05-01 14:41:35,302 dual_auth 46384 10344 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:35,302 views 46384 10344 Building queryset for user admin@test.com
+INFO 2026-05-01 14:41:35,309 views 46384 10344 Successfully built queryset for user admin@test.com
+INFO 2026-05-01 14:41:38,119 dual_auth 46384 8088 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:38,131 dual_auth 46384 25804 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:40,220 dual_auth 46384 8088 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:41:40,220 views 46384 8088 Building queryset for user admin@test.com
+INFO 2026-05-01 14:41:40,227 views 46384 8088 Successfully built queryset for user admin@test.com
+INFO 2026-05-01 14:44:37,298 dual_auth 46384 1600 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:44:37,298 dual_auth 46384 8088 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:44:37,300 views 46384 8088 User profile accessed: admin@test.com
+INFO 2026-05-01 14:44:37,310 dual_auth 46384 26292 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:44:37,313 dual_auth 46384 47148 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:44:37,365 dual_auth 46384 1600 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:44:37,367 dual_auth 46384 47148 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:44:41,899 dual_auth 46384 47148 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:44:45,496 dual_auth 46384 26292 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:44:45,496 dual_auth 46384 8088 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:44:48,782 dual_auth 46384 8088 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:44:48,783 views 46384 8088 User logged out without token blacklisting: admin@test.com
+INFO 2026-05-01 14:44:52,865 serializers 46384 8088 Looking for user with email: superadmin@example.com
+INFO 2026-05-01 14:44:52,865 managers 46384 8088 Looking for user with email: superadmin@example.com
+INFO 2026-05-01 14:44:52,869 serializers 46384 8088 User found: superadmin@example.com
+INFO 2026-05-01 14:44:52,870 serializers 46384 8088 Authenticating with username: superadmin@example.com
+INFO 2026-05-01 14:44:53,589 serializers 46384 8088 Authentication result: Success
+INFO 2026-05-01 14:44:53,589 serializers 46384 8088 Validation successful
+INFO 2026-05-01 14:44:53,599 views 46384 8088 User logged in: superadmin@example.com
+INFO 2026-05-01 14:44:54,182 views 46384 8088 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 14:44:54,257 dual_auth 46384 26292 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:44:54,258 views 46384 26292 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:44:54,263 dual_auth 46384 8088 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:44:54,264 views 46384 8088 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:44:54,466 dual_auth 46384 26292 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:44:54,467 views 46384 26292 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:44:54,526 views 46384 26292 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:45:11,624 dual_auth 46384 6148 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:45:11,636 dual_auth 46384 32468 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:51:03,468 signals 4848 48244 Sent survey assigned notification to admin@example.com for survey 376f7b2f-6de4-4230-810d-918294c4c209 (via group tarek)
+INFO 2026-05-01 14:51:03,472 signals 4848 48244 Sent survey assigned notification to admin@test.com for survey 376f7b2f-6de4-4230-810d-918294c4c209 (via group tarek)
+INFO 2026-05-01 14:51:03,474 signals 4848 48244 Sent survey assigned notification to mayman@lightidea.org for survey 376f7b2f-6de4-4230-810d-918294c4c209 (via group tarek)
+INFO 2026-05-01 14:51:03,477 signals 4848 48244 Sent survey assigned notification to user@example.com for survey 376f7b2f-6de4-4230-810d-918294c4c209 (via group tarek)
+INFO 2026-05-01 14:51:03,480 signals 4848 48244 Sent survey assigned notification to superadmin@example.com for survey 376f7b2f-6de4-4230-810d-918294c4c209 (via group tarek)
+INFO 2026-05-01 14:51:03,515 models 4848 48244 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 14:51:03,517 models 4848 48244 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 14:52:36,414 dual_auth 13476 47268 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:52:36,415 views 13476 47268 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:52:36,420 views 13476 47268 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:53:14,255 views 16616 28728 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 14:53:14,301 dual_auth 16616 28728 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:53:14,302 views 16616 28728 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:53:14,981 dual_auth 16616 49948 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:53:14,981 views 16616 49948 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:53:14,985 views 16616 49948 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:53:20,451 dual_auth 16616 5492 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:53:20,461 dual_auth 16616 28108 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:53:22,594 dual_auth 16616 28108 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:53:22,598 models 16616 28108 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 14:53:22,599 models 16616 28108 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 14:53:22,609 views 16616 28108 Bulk operation 'activate' performed by superadmin@example.com: 1 successful, 0 failed
+INFO 2026-05-01 14:53:22,657 dual_auth 16616 37724 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:53:22,659 dual_auth 16616 44744 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:53:30,533 dual_auth 16616 37724 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:53:32,255 dual_auth 16616 37724 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:53:32,259 models 16616 37724 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 14:53:32,259 models 16616 37724 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 14:53:32,277 views 16616 37724 Survey 376f7b2f-6de4-4230-810d-918294c4c209 audience updated by superadmin@example.com
+INFO 2026-05-01 14:53:32,309 dual_auth 16616 44744 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:53:34,673 dual_auth 16616 37364 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:53:34,673 views 16616 37364 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:53:34,676 views 16616 37364 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:53:36,439 views 16616 37364 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 14:53:36,478 dual_auth 16616 37364 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:53:36,479 views 16616 37364 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:53:36,662 dual_auth 16616 27360 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:53:36,662 views 16616 27360 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:53:36,671 views 16616 27360 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:53:41,494 dual_auth 16616 22980 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:53:41,496 dual_auth 16616 44248 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:53:45,815 dual_auth 16616 44248 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:53:48,317 dual_auth 16616 44248 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:53:48,321 models 16616 44248 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 14:53:48,322 models 16616 44248 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 14:53:48,343 views 16616 44248 Survey 376f7b2f-6de4-4230-810d-918294c4c209 audience updated by superadmin@example.com
+INFO 2026-05-01 14:53:48,378 dual_auth 16616 22980 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:54:10,834 dual_auth 16616 47148 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:54:10,834 views 16616 47148 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:54:10,836 views 16616 47148 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:54:12,657 views 16616 47148 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 14:54:12,717 dual_auth 16616 47148 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:54:12,718 views 16616 47148 User profile accessed: superadmin@example.com
+INFO 2026-05-01 14:54:12,915 dual_auth 16616 43960 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:54:12,915 views 16616 43960 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:54:12,922 views 16616 43960 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:54:15,169 dual_auth 16616 8032 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:54:15,175 dual_auth 16616 36876 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:54:16,926 dual_auth 16616 36876 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:54:21,513 dual_auth 16616 36876 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:54:21,523 views 16616 36876 Retrieved 5 predefined templates for superadmin@example.com
+INFO 2026-05-01 14:54:23,083 dual_auth 16616 36876 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:54:23,109 serializers 16616 36876 Serializer create - per_device_access: False
+INFO 2026-05-01 14:54:23,109 serializers 16616 36876 Serializer create - all validated_data keys: ['title', 'description', 'visibility', 'is_active', 'start_date', 'end_date', 'per_device_access', 'questions', 'status', 'creator']
+INFO 2026-05-01 14:54:23,109 serializers 16616 36876 About to create survey with data: {'title': 'معلومات التواصل', 'description': 'يرجى تزويدنا بمعلومات الاتصال الخاصة بك حتى نتمكن من التواصل معك عند الحاجة أو لإرسال التحديثات المستقبلية.', 'visibility': 'AUTH', 'is_active': True, 'start_date': None, 'end_date': None, 'per_device_access': False, 'status': 'draft', 'creator': <User: superadmin@example.com (super_admin)>}
+INFO 2026-05-01 14:54:23,110 models 16616 36876 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 14:54:23,110 models 16616 36876 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 14:54:23,131 serializers 16616 36876 Mapped temp ID 'temp-1777636461541-0' to question f6ee2448-40d7-426b-ab18-743553c104ea (order 1)
+INFO 2026-05-01 14:54:23,139 serializers 16616 36876 Mapped temp ID 'temp-1777636461541-1' to question 3b95d717-4ec9-418b-bd4a-2008a1022d5f (order 2)
+INFO 2026-05-01 14:54:23,148 serializers 16616 36876 Mapped temp ID 'temp-1777636461541-2' to question a8739787-5f64-4bfc-bd04-c5ee562295b6 (order 3)
+INFO 2026-05-01 14:54:23,148 serializers 16616 36876 Survey created: ffe1c0c7-9db8-4470-a00c-ede6b1978a66 with 3 questions by superadmin@example.com
+INFO 2026-05-01 14:54:23,224 dual_auth 16616 37644 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:54:23,230 views 16616 37644 Successfully retrieved survey ffe1c0c7-9db8-4470-a00c-ede6b1978a66: معلومات التواصل
+INFO 2026-05-01 14:54:23,231 views 16616 37644 Successfully serialized survey ffe1c0c7-9db8-4470-a00c-ede6b1978a66
+INFO 2026-05-01 14:54:23,242 dual_auth 16616 39260 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:54:23,245 dual_auth 16616 42164 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:54:24,612 dual_auth 16616 42164 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:54:26,094 dual_auth 16616 42164 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:54:26,100 models 16616 42164 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 14:54:26,101 models 16616 42164 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 14:54:26,126 views 16616 42164 Survey ffe1c0c7-9db8-4470-a00c-ede6b1978a66 audience updated by superadmin@example.com
+INFO 2026-05-01 14:54:26,139 dual_auth 16616 42164 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:54:26,141 models 16616 42164 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 14:54:26,141 models 16616 42164 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 14:54:26,156 signals 16616 42164 Survey ffe1c0c7-9db8-4470-a00c-ede6b1978a66 was published, sending availability notifications
+INFO 2026-05-01 14:54:26,221 views 16616 42164 Skipped sending survey availability notifications for survey ffe1c0c7-9db8-4470-a00c-ede6b1978a66 as send_notifications was not requested
+INFO 2026-05-01 14:54:26,277 dual_auth 16616 39260 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:54:30,950 dual_auth 16616 37644 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:54:30,950 views 16616 37644 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:54:30,954 views 16616 37644 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:58:26,658 dual_auth 16616 6996 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:58:26,659 dual_auth 16616 49804 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:58:28,381 dual_auth 16616 49804 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:58:28,382 views 16616 49804 Building queryset for user superadmin@example.com
+INFO 2026-05-01 14:58:28,385 views 16616 49804 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 14:58:30,902 dual_auth 16616 49804 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:58:30,903 views 16616 49804 User logged out without token blacklisting: superadmin@example.com
+INFO 2026-05-01 14:58:44,517 serializers 16616 49804 Looking for user with email: admin@test.com
+INFO 2026-05-01 14:58:44,519 managers 16616 49804 Looking for user with email: admin@test.com
+INFO 2026-05-01 14:58:44,527 serializers 16616 49804 User found: admin@test.com
+INFO 2026-05-01 14:58:44,528 serializers 16616 49804 Authenticating with username: admin@test.com
+INFO 2026-05-01 14:58:45,361 serializers 16616 49804 Authentication result: Success
+INFO 2026-05-01 14:58:45,361 serializers 16616 49804 Validation successful
+INFO 2026-05-01 14:58:45,372 views 16616 49804 User logged in: admin@test.com
+INFO 2026-05-01 14:58:46,646 views 16616 49804 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-01 14:58:46,693 dual_auth 16616 49804 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:58:46,694 views 16616 49804 User profile accessed: admin@test.com
+INFO 2026-05-01 14:58:46,698 dual_auth 16616 13948 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:58:46,698 views 16616 13948 User profile accessed: admin@test.com
+INFO 2026-05-01 14:58:46,873 dual_auth 16616 49804 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:58:46,873 views 16616 49804 Building queryset for user admin@test.com
+INFO 2026-05-01 14:58:46,875 views 16616 49804 Successfully built queryset for user admin@test.com
+INFO 2026-05-01 14:59:12,912 dual_auth 16616 40292 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:59:12,919 dual_auth 16616 45916 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:59:15,372 dual_auth 16616 45916 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:59:18,038 dual_auth 16616 45916 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:59:18,055 views 16616 45916 Retrieved 5 predefined templates for admin@test.com
+INFO 2026-05-01 14:59:20,402 dual_auth 16616 45916 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:59:20,408 serializers 16616 45916 Serializer create - per_device_access: False
+INFO 2026-05-01 14:59:20,408 serializers 16616 45916 Serializer create - all validated_data keys: ['title', 'description', 'visibility', 'is_active', 'start_date', 'end_date', 'per_device_access', 'questions', 'status', 'creator']
+INFO 2026-05-01 14:59:20,408 serializers 16616 45916 About to create survey with data: {'title': 'تأكيد الحضور', 'description': 'نرجو منك تأكيد حضورك للفعالية القادمة عبر تعبئة النموذج أدناه. يساعدنا ذلك في تنظيم المقاعد والخدمات بشكل أفضل.', 'visibility': 'AUTH', 'is_active': True, 'start_date': None, 'end_date': None, 'per_device_access': False, 'status': 'draft', 'creator': <User: admin@test.com (admin)>}
+INFO 2026-05-01 14:59:20,410 models 16616 45916 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 14:59:20,412 models 16616 45916 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 14:59:20,434 serializers 16616 45916 Mapped temp ID 'temp-1777636758081-0' to question 60e96780-966e-4f83-afe3-8366e7e9a3ae (order 1)
+INFO 2026-05-01 14:59:20,444 serializers 16616 45916 Mapped temp ID 'temp-1777636758081-1' to question 8117113a-9be8-4b31-9d9f-33c892a58e20 (order 2)
+INFO 2026-05-01 14:59:20,455 serializers 16616 45916 Mapped temp ID 'temp-1777636758081-2' to question 6b46cbab-ca92-4d51-9cdf-4184ebe9d38f (order 3)
+INFO 2026-05-01 14:59:20,455 serializers 16616 45916 Survey created: f33cac35-9bff-4e2b-9351-15d4297b9ada with 3 questions by admin@test.com
+INFO 2026-05-01 14:59:20,540 dual_auth 16616 46764 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:59:20,548 views 16616 46764 Successfully retrieved survey f33cac35-9bff-4e2b-9351-15d4297b9ada: تأكيد الحضور
+INFO 2026-05-01 14:59:20,549 views 16616 46764 Successfully serialized survey f33cac35-9bff-4e2b-9351-15d4297b9ada
+INFO 2026-05-01 14:59:20,554 dual_auth 16616 41272 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:59:20,558 dual_auth 16616 40260 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:59:22,277 dual_auth 16616 40260 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:59:29,149 dual_auth 16616 40260 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:59:35,007 dual_auth 16616 40260 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:59:49,797 dual_auth 16616 40260 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:59:53,346 dual_auth 16616 40260 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:59:53,346 views 16616 40260 User logged out without token blacklisting: admin@test.com
+INFO 2026-05-01 14:59:55,704 serializers 16616 40260 Looking for user with email: admin@test.com
+INFO 2026-05-01 14:59:55,704 managers 16616 40260 Looking for user with email: admin@test.com
+INFO 2026-05-01 14:59:55,709 serializers 16616 40260 User found: admin@test.com
+INFO 2026-05-01 14:59:55,709 serializers 16616 40260 Authenticating with username: admin@test.com
+INFO 2026-05-01 14:59:56,647 serializers 16616 40260 Authentication result: Success
+INFO 2026-05-01 14:59:56,648 serializers 16616 40260 Validation successful
+INFO 2026-05-01 14:59:56,658 views 16616 40260 User logged in: admin@test.com
+INFO 2026-05-01 14:59:57,322 views 16616 40260 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-01 14:59:57,363 dual_auth 16616 41272 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:59:57,363 views 16616 41272 User profile accessed: admin@test.com
+INFO 2026-05-01 14:59:57,363 dual_auth 16616 40260 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:59:57,366 views 16616 40260 User profile accessed: admin@test.com
+INFO 2026-05-01 14:59:57,558 dual_auth 16616 41272 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 14:59:57,559 views 16616 41272 Building queryset for user admin@test.com
+INFO 2026-05-01 14:59:57,564 views 16616 41272 Successfully built queryset for user admin@test.com
+INFO 2026-05-01 15:00:01,356 dual_auth 16616 41272 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:01,357 views 16616 41272 User logged out without token blacklisting: admin@test.com
+INFO 2026-05-01 15:00:32,257 serializers 16616 41272 Looking for user with email: superadmin@example.com
+INFO 2026-05-01 15:00:32,258 managers 16616 41272 Looking for user with email: superadmin@example.com
+INFO 2026-05-01 15:00:32,263 serializers 16616 41272 User found: superadmin@example.com
+INFO 2026-05-01 15:00:32,264 serializers 16616 41272 Authenticating with username: superadmin@example.com
+INFO 2026-05-01 15:00:33,055 serializers 16616 41272 Authentication result: Success
+INFO 2026-05-01 15:00:33,056 serializers 16616 41272 Validation successful
+INFO 2026-05-01 15:00:33,064 views 16616 41272 User logged in: superadmin@example.com
+INFO 2026-05-01 15:00:33,969 views 16616 41272 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 15:00:34,016 dual_auth 16616 41272 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:34,016 views 16616 41272 User profile accessed: superadmin@example.com
+INFO 2026-05-01 15:00:34,018 dual_auth 16616 46764 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:34,021 views 16616 46764 User profile accessed: superadmin@example.com
+INFO 2026-05-01 15:00:34,205 dual_auth 16616 41272 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:34,205 views 16616 41272 Building queryset for user superadmin@example.com
+INFO 2026-05-01 15:00:34,207 views 16616 41272 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 15:00:36,235 dual_auth 16616 41272 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:36,236 views 16616 41272 User profile accessed: superadmin@example.com
+INFO 2026-05-01 15:00:36,244 dual_auth 16616 7348 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:36,249 dual_auth 16616 40320 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:36,250 dual_auth 16616 47672 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:36,293 dual_auth 16616 7348 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:36,293 dual_auth 16616 40320 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:37,705 dual_auth 16616 40320 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:37,706 views 16616 40320 Building queryset for user superadmin@example.com
+INFO 2026-05-01 15:00:37,708 views 16616 40320 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 15:00:38,560 dual_auth 16616 47672 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:38,561 dual_auth 16616 41272 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:38,562 dual_auth 16616 40320 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:38,568 views 16616 40320 User profile accessed: superadmin@example.com
+INFO 2026-05-01 15:00:38,576 dual_auth 16616 27288 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:38,608 dual_auth 16616 27288 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:38,608 dual_auth 16616 47672 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:39,014 dual_auth 16616 40320 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:39,017 dual_auth 16616 41272 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:41,530 dual_auth 16616 41272 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:44,004 dual_auth 16616 41272 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:44,009 models 16616 41272 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 15:00:44,010 models 16616 41272 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 15:00:44,035 views 16616 41272 Survey f33cac35-9bff-4e2b-9351-15d4297b9ada audience updated by superadmin@example.com
+INFO 2026-05-01 15:00:44,048 dual_auth 16616 41272 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:44,050 models 16616 41272 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 15:00:44,050 models 16616 41272 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 15:00:44,060 signals 16616 41272 Survey f33cac35-9bff-4e2b-9351-15d4297b9ada was published, sending availability notifications
+INFO 2026-05-01 15:00:44,096 views 16616 41272 Skipped sending survey availability notifications for survey f33cac35-9bff-4e2b-9351-15d4297b9ada as send_notifications was not requested
+INFO 2026-05-01 15:00:44,139 dual_auth 16616 40320 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:55,864 views 16616 40320 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 15:00:55,941 dual_auth 16616 40320 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:55,942 views 16616 40320 User profile accessed: superadmin@example.com
+INFO 2026-05-01 15:00:56,211 dual_auth 16616 5036 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:56,223 dual_auth 16616 48264 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:58,363 dual_auth 16616 5036 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:00:58,363 views 16616 5036 Building queryset for user superadmin@example.com
+INFO 2026-05-01 15:00:58,365 views 16616 5036 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 15:01:07,853 dual_auth 16616 43564 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:07,858 dual_auth 16616 22032 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:17,723 views 16616 22032 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 15:01:17,798 dual_auth 16616 22032 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:17,800 views 16616 22032 User profile accessed: superadmin@example.com
+INFO 2026-05-01 15:01:18,086 dual_auth 16616 47868 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:18,087 dual_auth 16616 20104 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:33,485 dual_auth 16616 20104 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:33,486 views 16616 20104 Building queryset for user superadmin@example.com
+INFO 2026-05-01 15:01:33,488 views 16616 20104 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 15:01:36,248 dual_auth 16616 20104 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:36,249 views 16616 20104 User logged out without token blacklisting: superadmin@example.com
+INFO 2026-05-01 15:01:42,654 serializers 16616 20104 Looking for user with email: admin@test.com
+INFO 2026-05-01 15:01:42,655 managers 16616 20104 Looking for user with email: admin@test.com
+INFO 2026-05-01 15:01:42,659 serializers 16616 20104 User found: admin@test.com
+INFO 2026-05-01 15:01:42,659 serializers 16616 20104 Authenticating with username: admin@test.com
+INFO 2026-05-01 15:01:43,441 serializers 16616 20104 Authentication result: Success
+INFO 2026-05-01 15:01:43,441 serializers 16616 20104 Validation successful
+INFO 2026-05-01 15:01:43,451 views 16616 20104 User logged in: admin@test.com
+INFO 2026-05-01 15:01:44,082 views 16616 20104 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-01 15:01:44,123 dual_auth 16616 20104 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:44,124 views 16616 20104 User profile accessed: admin@test.com
+INFO 2026-05-01 15:01:44,137 dual_auth 16616 43088 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:44,139 views 16616 43088 User profile accessed: admin@test.com
+INFO 2026-05-01 15:01:44,338 dual_auth 16616 20104 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:44,339 views 16616 20104 Building queryset for user admin@test.com
+INFO 2026-05-01 15:01:44,345 views 16616 20104 Successfully built queryset for user admin@test.com
+INFO 2026-05-01 15:01:47,589 dual_auth 16616 46200 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:47,593 dual_auth 16616 5040 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:53,996 dual_auth 16616 5040 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:53,996 dual_auth 16616 46200 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:53,997 views 16616 5040 User profile accessed: admin@test.com
+INFO 2026-05-01 15:01:54,000 dual_auth 16616 32708 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:54,007 dual_auth 16616 38660 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:54,044 dual_auth 16616 38660 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:54,044 dual_auth 16616 32708 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:55,982 dual_auth 16616 5040 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:55,982 dual_auth 16616 46200 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:56,674 dual_auth 16616 46200 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:01:56,674 views 16616 46200 Building queryset for user admin@test.com
+INFO 2026-05-01 15:01:56,676 views 16616 46200 Successfully built queryset for user admin@test.com
+INFO 2026-05-01 15:02:02,497 dual_auth 16616 46200 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:02:02,497 views 16616 46200 User logged out without token blacklisting: admin@test.com
+INFO 2026-05-01 15:02:26,708 serializers 16616 46200 Looking for user with email: superadmin@example.com
+INFO 2026-05-01 15:02:26,708 managers 16616 46200 Looking for user with email: superadmin@example.com
+INFO 2026-05-01 15:02:26,712 serializers 16616 46200 User found: superadmin@example.com
+INFO 2026-05-01 15:02:26,713 serializers 16616 46200 Authenticating with username: superadmin@example.com
+INFO 2026-05-01 15:02:27,439 serializers 16616 46200 Authentication result: Success
+INFO 2026-05-01 15:02:27,439 serializers 16616 46200 Validation successful
+INFO 2026-05-01 15:02:27,447 views 16616 46200 User logged in: superadmin@example.com
+INFO 2026-05-01 15:02:27,975 views 16616 46200 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 15:02:28,025 dual_auth 16616 46200 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:02:28,030 views 16616 46200 User profile accessed: superadmin@example.com
+INFO 2026-05-01 15:02:28,050 dual_auth 16616 41056 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:02:28,051 views 16616 41056 User profile accessed: superadmin@example.com
+INFO 2026-05-01 15:02:28,219 dual_auth 16616 46200 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:02:28,219 views 16616 46200 Building queryset for user superadmin@example.com
+INFO 2026-05-01 15:02:28,225 views 16616 46200 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 15:02:30,767 dual_auth 16616 46200 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:02:30,768 dual_auth 16616 24924 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:02:30,769 views 16616 24924 User profile accessed: superadmin@example.com
+INFO 2026-05-01 15:02:30,771 dual_auth 16616 30980 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:02:30,773 dual_auth 16616 50048 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:02:30,804 dual_auth 16616 46200 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:02:30,805 dual_auth 16616 50048 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:02:31,635 dual_auth 16616 30980 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:02:31,642 dual_auth 16616 24924 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:02:35,644 dual_auth 16616 30980 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:02:35,644 views 16616 30980 Building queryset for user superadmin@example.com
+INFO 2026-05-01 15:02:35,647 views 16616 30980 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 15:02:57,250 views 16616 30980 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 15:02:57,309 dual_auth 16616 30980 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:02:57,313 views 16616 30980 User profile accessed: superadmin@example.com
+INFO 2026-05-01 15:02:57,442 dual_auth 16616 28360 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:02:57,442 views 16616 28360 Building queryset for user superadmin@example.com
+INFO 2026-05-01 15:02:57,445 views 16616 28360 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 15:03:05,136 dual_auth 16616 28172 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:05,146 dual_auth 16616 44608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:07,239 dual_auth 16616 44608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:09,353 dual_auth 16616 44608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:09,369 views 16616 44608 Retrieved 5 predefined templates for superadmin@example.com
+INFO 2026-05-01 15:03:12,021 dual_auth 16616 44608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:12,030 serializers 16616 44608 Serializer create - per_device_access: False
+INFO 2026-05-01 15:03:12,030 serializers 16616 44608 Serializer create - all validated_data keys: ['title', 'description', 'visibility', 'is_active', 'start_date', 'end_date', 'per_device_access', 'questions', 'status', 'creator']
+INFO 2026-05-01 15:03:12,031 serializers 16616 44608 About to create survey with data: {'title': 'ee', 'description': 'قالب تم إنشاؤه من بنية الاستطلاع', 'visibility': 'AUTH', 'is_active': True, 'start_date': None, 'end_date': None, 'per_device_access': False, 'status': 'draft', 'creator': <User: superadmin@example.com (super_admin)>}
+INFO 2026-05-01 15:03:12,031 models 16616 44608 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 15:03:12,031 models 16616 44608 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 15:03:12,054 serializers 16616 44608 Mapped temp ID 'temp-1777636989383-0' to question c59b3947-a4d2-473c-b1e3-0f055110012a (order 1)
+INFO 2026-05-01 15:03:12,055 serializers 16616 44608 Survey created: 09b8342c-6d2c-4cad-b8ca-dc8435a739ce with 1 questions by superadmin@example.com
+INFO 2026-05-01 15:03:12,133 dual_auth 16616 35704 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:12,143 views 16616 35704 Successfully retrieved survey 09b8342c-6d2c-4cad-b8ca-dc8435a739ce: ee
+INFO 2026-05-01 15:03:12,144 views 16616 35704 Successfully serialized survey 09b8342c-6d2c-4cad-b8ca-dc8435a739ce
+INFO 2026-05-01 15:03:12,153 dual_auth 16616 35104 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:12,158 dual_auth 16616 39256 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:13,012 dual_auth 16616 39256 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:14,604 dual_auth 16616 39256 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:14,610 models 16616 39256 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 15:03:14,611 models 16616 39256 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 15:03:14,636 views 16616 39256 Survey 09b8342c-6d2c-4cad-b8ca-dc8435a739ce audience updated by superadmin@example.com
+INFO 2026-05-01 15:03:14,648 dual_auth 16616 39256 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:14,649 models 16616 39256 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 15:03:14,649 models 16616 39256 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 15:03:14,658 signals 16616 39256 Survey 09b8342c-6d2c-4cad-b8ca-dc8435a739ce was published, sending availability notifications
+INFO 2026-05-01 15:03:14,695 views 16616 39256 Skipped sending survey availability notifications for survey 09b8342c-6d2c-4cad-b8ca-dc8435a739ce as send_notifications was not requested
+INFO 2026-05-01 15:03:14,736 dual_auth 16616 35104 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:17,433 dual_auth 16616 35704 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:17,433 views 16616 35704 Building queryset for user superadmin@example.com
+INFO 2026-05-01 15:03:17,435 views 16616 35704 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 15:03:20,017 dual_auth 16616 35704 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:20,017 views 16616 35704 User logged out without token blacklisting: superadmin@example.com
+INFO 2026-05-01 15:03:24,011 serializers 16616 35704 Looking for user with email: admin@test.com
+INFO 2026-05-01 15:03:24,011 managers 16616 35704 Looking for user with email: admin@test.com
+INFO 2026-05-01 15:03:24,016 serializers 16616 35704 User found: admin@test.com
+INFO 2026-05-01 15:03:24,016 serializers 16616 35704 Authenticating with username: admin@test.com
+INFO 2026-05-01 15:03:24,790 serializers 16616 35704 Authentication result: Success
+INFO 2026-05-01 15:03:24,790 serializers 16616 35704 Validation successful
+INFO 2026-05-01 15:03:24,799 views 16616 35704 User logged in: admin@test.com
+INFO 2026-05-01 15:03:25,327 views 16616 35704 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-01 15:03:25,388 dual_auth 16616 35704 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:25,390 views 16616 35704 User profile accessed: admin@test.com
+INFO 2026-05-01 15:03:25,398 dual_auth 16616 16064 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:25,399 views 16616 16064 User profile accessed: admin@test.com
+INFO 2026-05-01 15:03:25,572 dual_auth 16616 35704 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:25,573 views 16616 35704 Building queryset for user admin@test.com
+INFO 2026-05-01 15:03:25,578 views 16616 35704 Successfully built queryset for user admin@test.com
+INFO 2026-05-01 15:03:28,877 dual_auth 16616 48544 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:28,885 dual_auth 16616 42216 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:31,596 dual_auth 16616 42216 User admin@test.com authenticated with regular JWT (universal)
+ERROR 2026-05-01 15:03:31,610 views 16616 42216 Error deleting survey: You do not have permission to perform this action.
+INFO 2026-05-01 15:03:35,440 dual_auth 16616 42216 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:35,441 views 16616 42216 User logged out without token blacklisting: admin@test.com
+INFO 2026-05-01 15:03:44,396 serializers 16616 42216 Looking for user with email: superadmin@example.com
+INFO 2026-05-01 15:03:44,397 managers 16616 42216 Looking for user with email: superadmin@example.com
+INFO 2026-05-01 15:03:44,402 serializers 16616 42216 User found: superadmin@example.com
+INFO 2026-05-01 15:03:44,403 serializers 16616 42216 Authenticating with username: superadmin@example.com
+INFO 2026-05-01 15:03:45,261 serializers 16616 42216 Authentication result: Success
+INFO 2026-05-01 15:03:45,261 serializers 16616 42216 Validation successful
+INFO 2026-05-01 15:03:45,269 views 16616 42216 User logged in: superadmin@example.com
+INFO 2026-05-01 15:03:46,813 views 16616 42216 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-01 15:03:46,858 dual_auth 16616 42216 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:46,858 views 16616 42216 User profile accessed: superadmin@example.com
+INFO 2026-05-01 15:03:46,862 dual_auth 16616 48544 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:46,862 views 16616 48544 User profile accessed: superadmin@example.com
+INFO 2026-05-01 15:03:47,034 dual_auth 16616 42216 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:47,035 views 16616 42216 Building queryset for user superadmin@example.com
+INFO 2026-05-01 15:03:47,039 views 16616 42216 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-01 15:03:48,879 dual_auth 16616 39844 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:48,881 dual_auth 16616 45400 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:53,295 dual_auth 16616 45400 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:53,299 models 16616 45400 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 15:03:53,299 models 16616 45400 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 15:03:53,313 views 16616 45400 Survey 09b8342c-6d2c-4cad-b8ca-dc8435a739ce deleted by superadmin@example.com (role: super_admin)
+INFO 2026-05-01 15:03:53,377 dual_auth 16616 32816 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:53,383 dual_auth 16616 49240 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:57,188 dual_auth 16616 49240 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:57,192 models 16616 49240 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 15:03:57,192 models 16616 49240 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 15:03:57,202 views 16616 49240 Survey ffe1c0c7-9db8-4470-a00c-ede6b1978a66 deleted by superadmin@example.com (role: super_admin)
+INFO 2026-05-01 15:03:57,258 dual_auth 16616 15000 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:57,259 dual_auth 16616 35632 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:03:59,485 dual_auth 16616 15000 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:04:02,443 dual_auth 16616 15000 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:04:02,447 models 16616 15000 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-01 15:04:02,447 models 16616 15000 Survey.save() - per_device_access final value: False
+INFO 2026-05-01 15:04:02,460 views 16616 15000 Survey 376f7b2f-6de4-4230-810d-918294c4c209 deleted by superadmin@example.com (role: super_admin)
+INFO 2026-05-01 15:04:02,517 dual_auth 16616 42336 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:04:02,520 dual_auth 16616 31320 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:04:06,950 dual_auth 16616 31320 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-01 15:04:09,185 dual_auth 16616 31320 User superadmin@example.com authenticated with regular JWT (universal)

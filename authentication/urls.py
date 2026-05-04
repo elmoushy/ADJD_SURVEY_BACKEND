@@ -65,6 +65,11 @@ urlpatterns = [
     
     # Health check
     path('health/', views.health_check, name='health-check'),
+
+    # Forgot-password flow (unauthenticated)
+    path('forgot-password/', views.ForgotPasswordView.as_view(), name='forgot-password'),
+    path('verify-reset-code/', views.VerifyResetCodeView.as_view(), name='verify-reset-code'),
+    path('reset-password/', views.ResetPasswordView.as_view(), name='reset-password'),
 ]
 
 # Add JWT token refresh endpoint if available

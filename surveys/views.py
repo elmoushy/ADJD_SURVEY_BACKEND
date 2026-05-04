@@ -1392,14 +1392,23 @@ class SurveyViewSet(ModelViewSet):
                 # Clear groups when switching to PRIVATE
                 survey.shared_with_groups.clear()
             elif visibility == 'GROUPS':
-                if group_ids:
-                    # Import Group model
-                    from authentication.models import Group
-                    # Validate group IDs
-                    valid_groups = Group.objects.filter(id__in=group_ids)
-                    survey.shared_with_groups.set(valid_groups)
-                else:
-                    survey.shared_with_groups.clear()
+                if not group_ids:
+                    return uniform_response(
+                        success=False,
+                        message="group_ids is required when visibility is GROUPS. Please provide at least one group ID.",
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                    )
+                # Import Group model
+                from authentication.models import Group
+                # Validate group IDs
+                valid_groups = Group.objects.filter(id__in=group_ids)
+                if not valid_groups.exists():
+                    return uniform_response(
+                        success=False,
+                        message="No valid groups found for the provided group_ids.",
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                    )
+                survey.shared_with_groups.set(valid_groups)
                 # Clear user sharing when switching to GROUPS
                 survey.shared_with.clear()
             else:

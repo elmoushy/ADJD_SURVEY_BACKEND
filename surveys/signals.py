@@ -15,6 +15,7 @@ from django.urls import reverse
 from .models import Survey, Response
 from notifications.services import NotificationService, SurveyNotificationService
 from notifications.models import Notification
+from authentication.models import UserGroup
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -136,6 +137,63 @@ def survey_shared_with_groups_notification(sender, instance, action, pk_set, **k
             logger.error("Could not import Group model from authentication app")
         except Exception as e:
             logger.error(f"Error processing group notifications for survey {survey.id}: {str(e)}")
+
+
+@receiver(post_save, sender=UserGroup)
+def notify_new_group_member_of_existing_surveys(sender, instance, created, **kwargs):
+    """
+    Send notifications to a newly added group member about existing surveys
+    shared with that group.
+    
+    This signal fires when a UserGroup entry is created (user added to a group).
+    It checks for active submitted surveys shared with this group and notifies
+    the new member.
+    """
+    if not created:
+        return
+    
+    user = instance.user
+    group = instance.group
+    
+    try:
+        # Find all active submitted surveys shared with this group
+        existing_surveys = Survey.objects.filter(
+            visibility='GROUPS',
+            shared_with_groups=group,
+            is_active=True,
+            status='submitted',
+            deleted_at__isnull=True
+        )
+        
+        if not existing_surveys.exists():
+            logger.debug(f"No existing surveys for group {group.name} to notify new member {user.email}")
+            return
+        
+        for survey in existing_surveys:
+            # Don't notify if user is the creator
+            if survey.creator == user:
+                continue
+            
+            try:
+                survey_url = f"/surveys/{survey.id}/"
+                NotificationService.create_survey_assigned_notification(
+                    recipient=user,
+                    survey_title=survey.title,
+                    sender=survey.creator,
+                    survey_id=str(survey.id),
+                    survey_url=survey_url
+                )
+                logger.info(
+                    f"Sent existing survey notification to {user.email} "
+                    f"for survey {survey.id} (joined group {group.name})"
+                )
+            except Exception as e:
+                logger.error(
+                    f"Failed to notify {user.email} about survey {survey.id} "
+                    f"after joining group {group.name}: {str(e)}"
+                )
+    except Exception as e:
+        logger.error(f"Error notifying new group member {user.email} about existing surveys: {str(e)}")
 
 
 @receiver(post_save, sender=Survey)

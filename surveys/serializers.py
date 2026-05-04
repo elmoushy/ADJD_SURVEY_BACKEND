@@ -573,8 +573,8 @@ class SurveySerializer(serializers.ModelSerializer):
             'id', 'title', 'description', 'visibility', 'shared_with',
             'creator', 'creator_email', 'is_locked', 'is_active',
             'start_date', 'end_date', 'status', 'status_display', 'is_currently_active',
-            'can_be_edited', 'public_contact_method', 'per_device_access', 'questions', 'response_count', 
-            'shared_with_emails', 'created_at', 'updated_at'
+            'can_be_edited', 'public_contact_method', 'per_device_access', 'questions', 'response_count',
+            'shared_with_emails', 'shared_with_groups', 'created_at', 'updated_at'
         ]
         read_only_fields = ['id', 'creator', 'created_at', 'updated_at', 'status_display', 'is_currently_active', 'can_be_edited']
     
@@ -839,6 +839,7 @@ class SurveySerializer(serializers.ModelSerializer):
         
         # Handle shared_with separately
         shared_with = validated_data.pop('shared_with', [])
+        shared_with_groups = validated_data.pop('shared_with_groups', [])
         
         # Debug: Log data just before Survey.objects.create
         logger.info(f"About to create survey with data: {validated_data}")
@@ -846,6 +847,8 @@ class SurveySerializer(serializers.ModelSerializer):
         
         if validated_data.get('visibility') == 'PRIVATE':
             survey.shared_with.set(shared_with)
+        elif validated_data.get('visibility') == 'GROUPS' and shared_with_groups:
+            survey.shared_with_groups.set(shared_with_groups)
         
         # First pass: Create questions without conditions and build temp ID map
         questions_map = {}  # Maps real UUIDs to question data
@@ -995,6 +998,7 @@ class SurveySerializer(serializers.ModelSerializer):
         
         # Handle shared_with separately
         shared_with = validated_data.pop('shared_with', None)
+        shared_with_groups = validated_data.pop('shared_with_groups', None)
         
         # Update survey fields
         for attr, value in validated_data.items():
@@ -1007,6 +1011,13 @@ class SurveySerializer(serializers.ModelSerializer):
                 instance.shared_with.set(shared_with)
             else:
                 instance.shared_with.clear()
+        
+        # Handle shared_with_groups if provided
+        if shared_with_groups is not None:
+            if instance.visibility == 'GROUPS':
+                instance.shared_with_groups.set(shared_with_groups)
+            else:
+                instance.shared_with_groups.clear()
         
         # Handle questions if provided
         if questions_data is not None:

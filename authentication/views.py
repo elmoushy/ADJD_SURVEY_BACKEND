@@ -2216,3 +2216,258 @@ class BulkCreateUsersWithPasswordView(APIView):
             return Response({
                 'detail': 'An unexpected error occurred during bulk user creation'
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Forgot-password flow — 3 views
+# ─────────────────────────────────────────────────────────────────────────────
+
+class ForgotPasswordView(APIView):
+    """
+    Step 1 — request a 6-digit password-reset code by email.
+
+    POST /api/auth/forgot-password/
+    Body: { "email": "user@example.com" }
+
+    Rules:
+    - Only regular (email/password) users can use this flow.
+      Azure AD users are blocked with a clear message.
+    - Always returns HTTP 200, even when the email is not found,
+      to prevent user-enumeration attacks.
+    - Rate limit: max 5 codes per email address per hour.
+    - Resend cooldown: 1.5 minutes between requests.
+    - Previous unused codes are invalidated on a new request.
+    """
+
+    permission_classes = [AllowAny]
+
+    # Configuration constants
+    MAX_CODES_PER_HOUR = 5
+    RESEND_COOLDOWN_SECONDS = 90  # 1.5 minutes
+
+    def post(self, request):
+        from .serializers import ForgotPasswordSerializer
+        from .models import PasswordResetCode
+        from .email_utils import send_password_reset_email
+        import secrets
+        import hashlib
+
+        serializer = ForgotPasswordSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        email = serializer.validated_data['email']
+        ip_address = self._get_client_ip(request)
+
+        # Look up user — we must NOT reveal whether the account exists
+        user = User.objects.get_by_email(email)
+
+        if user is None:
+            # Unknown email — return 200 silently (anti-enumeration)
+            logger.info(f"Forgot-password request for unknown email: {email}")
+            return Response({'message': 'If this email is registered, a reset code has been sent.'}, status=status.HTTP_200_OK)
+
+        # Block Azure AD users
+        if user.auth_type == 'azure':
+            return Response(
+                {
+                    'detail': (
+                        'This account uses Microsoft. '
+                        'Please reset your password through the Azure portal.'
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        now = timezone.now()
+
+        # ── Resend cooldown check ────────────────────────────────────────────
+        cooldown_cutoff = now - timezone.timedelta(seconds=self.RESEND_COOLDOWN_SECONDS)
+        recent_code = (
+            PasswordResetCode.objects
+            .filter(user=user, created_at__gte=cooldown_cutoff)
+            .order_by('-created_at')
+            .first()
+        )
+        if recent_code:
+            seconds_left = int(
+                self.RESEND_COOLDOWN_SECONDS
+                - (now - recent_code.created_at).total_seconds()
+            )
+            return Response(
+                {
+                    'detail': 'Please wait before requesting another code.',
+                    'retry_after_seconds': max(seconds_left, 1),
+                },
+                status=status.HTTP_429_TOO_MANY_REQUESTS,
+            )
+
+        # ── Hourly rate limit ────────────────────────────────────────────────
+        one_hour_ago = now - timezone.timedelta(hours=1)
+        codes_this_hour = PasswordResetCode.objects.filter(
+            user=user, created_at__gte=one_hour_ago
+        ).count()
+        if codes_this_hour >= self.MAX_CODES_PER_HOUR:
+            return Response(
+                {
+                    'detail': 'Too many reset requests. Please try again later.',
+                    'retry_after_seconds': 3600,
+                },
+                status=status.HTTP_429_TOO_MANY_REQUESTS,
+            )
+
+        # ── Invalidate all previous unused codes ────────────────────────────
+        PasswordResetCode.objects.filter(user=user, is_used=False).update(is_used=True)
+
+        # ── Generate and store the new code ─────────────────────────────────
+        code = str(secrets.randbelow(900000) + 100000)  # 100000–999999
+        code_hash = hashlib.sha256(code.encode()).hexdigest()
+
+        PasswordResetCode.objects.create(
+            user=user,
+            code_hash=code_hash,
+            ip_address=ip_address,
+        )
+
+        # ── Send email ───────────────────────────────────────────────────────
+        send_password_reset_email(user, code)
+
+        log_security_event(
+            event_type='password_reset_code_sent',
+            request=request,
+            details={'email': email},
+        )
+        logger.info(f"Password reset code sent to {email}")
+
+        return Response(
+            {'message': 'If this email is registered, a reset code has been sent.'},
+            status=status.HTTP_200_OK,
+        )
+
+    @staticmethod
+    def _get_client_ip(request):
+        x_forwarded = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded:
+            return x_forwarded.split(',')[0].strip()
+        return request.META.get('REMOTE_ADDR')
+
+
+class VerifyResetCodeView(APIView):
+    """
+    Step 2 — verify the 6-digit code and obtain a signed token.
+
+    POST /api/auth/verify-reset-code/
+    Body: { "email": "user@example.com", "code": "482031" }
+
+    On success returns: { "token": "<signed_token>" }
+    The token is valid for 10 minutes and must be supplied to
+    ResetPasswordView.
+    """
+
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        from .serializers import VerifyResetCodeSerializer
+        from .models import PasswordResetCode
+        from django.core import signing
+        import hashlib
+
+        serializer = VerifyResetCodeSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        email = serializer.validated_data['email']
+        submitted_code = serializer.validated_data['code']
+
+        user = User.objects.get_by_email(email)
+        if user is None:
+            return Response({'detail': 'Invalid code or email.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        submitted_hash = hashlib.sha256(submitted_code.encode()).hexdigest()
+
+        reset_code = (
+            PasswordResetCode.objects
+            .filter(user=user, is_used=False)
+            .order_by('-created_at')
+            .first()
+        )
+
+        if reset_code is None or reset_code.is_expired() or reset_code.code_hash != submitted_hash:
+            log_security_event(
+                event_type='password_reset_code_invalid',
+                request=request,
+                details={'email': email},
+            )
+            return Response({'detail': 'Invalid or expired reset code.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Issue a signed token (max_age enforced at the reset step)
+        token = signing.dumps({'user_id': user.pk, 'code_id': str(reset_code.id)})
+
+        logger.info(f"Password reset code verified for {email}")
+        return Response({'token': token}, status=status.HTTP_200_OK)
+
+
+class ResetPasswordView(APIView):
+    """
+    Step 3 — set a new password using the signed token from step 2.
+
+    POST /api/auth/reset-password/
+    Body: { "token": "<signed_token>", "new_password": "...", "confirm_password": "..." }
+    """
+
+    permission_classes = [AllowAny]
+
+    TOKEN_MAX_AGE = 600  # 10 minutes in seconds
+
+    def post(self, request):
+        from .serializers import SetNewPasswordSerializer
+        from .models import PasswordResetCode
+        from django.core import signing
+
+        serializer = SetNewPasswordSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        token = serializer.validated_data['token']
+        new_password = serializer.validated_data['new_password']
+
+        # Verify the signed token
+        try:
+            payload = signing.loads(token, max_age=self.TOKEN_MAX_AGE)
+        except signing.SignatureExpired:
+            return Response({'detail': 'Reset token has expired. Please request a new code.'}, status=status.HTTP_400_BAD_REQUEST)
+        except signing.BadSignature:
+            return Response({'detail': 'Invalid reset token.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user_id = payload.get('user_id')
+        code_id = payload.get('code_id')
+
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return Response({'detail': 'Invalid reset token.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Confirm the specific code referenced in the token is still valid
+        try:
+            reset_code = PasswordResetCode.objects.get(id=code_id, user=user, is_used=False)
+        except PasswordResetCode.DoesNotExist:
+            return Response({'detail': 'Reset code has already been used or is invalid.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if reset_code.is_expired():
+            return Response({'detail': 'Reset code has expired. Please request a new one.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Set the new password
+        user.set_password(new_password)
+        user.save()
+
+        # Invalidate all reset codes for this user
+        PasswordResetCode.objects.filter(user=user, is_used=False).update(is_used=True)
+
+        log_security_event(
+            event_type='password_reset_successful',
+            request=request,
+            details={'user_email': user.email},
+        )
+        logger.info(f"Password successfully reset for {user.email}")
+
+        return Response({'message': 'Password has been reset successfully.'}, status=status.HTTP_200_OK)

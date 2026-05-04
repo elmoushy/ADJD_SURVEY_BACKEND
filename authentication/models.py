@@ -6,6 +6,7 @@ database compatibility while maintaining encryption functionality.
 """
 
 import hashlib
+import uuid
 from django.contrib.auth.models import AbstractBaseUser
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -348,3 +349,76 @@ User.add_to_class('groups', models.ManyToManyField(
     blank=True,
     help_text='Groups this user belongs to'
 ))
+
+
+def _reset_code_expires_at():
+    """Return timezone-aware datetime 10 minutes from now."""
+    return timezone.now() + timezone.timedelta(minutes=10)
+
+
+class PasswordResetCode(models.Model):
+    """
+    Stores a hashed one-time code used in the forgot-password flow.
+
+    Rules enforced by the views (not the model):
+    - Only one active (unused, non-expired) code per user at a time.
+    - Max 5 codes per user per hour (rate limit).
+    - Min 1.5 minutes between requests (resend cooldown).
+    - Code expires 10 minutes after creation.
+    - Azure AD users are blocked before a code is ever created.
+    """
+
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
+    user = models.ForeignKey(
+        'authentication.User',
+        on_delete=models.CASCADE,
+        related_name='password_reset_codes',
+        help_text='User who requested the reset',
+    )
+    code_hash = models.CharField(
+        max_length=64,
+        help_text='SHA-256 hex digest of the 6-digit code — never store plaintext',
+    )
+    created_at = models.DateTimeField(
+        default=timezone.now,
+    )
+    expires_at = models.DateTimeField(
+        default=_reset_code_expires_at,
+        help_text='Code expires 10 minutes after creation',
+    )
+    is_used = models.BooleanField(
+        default=False,
+        help_text='True once the password has been successfully reset',
+    )
+    ip_address = models.GenericIPAddressField(
+        null=True,
+        blank=True,
+        help_text='IP address of the requester (for audit)',
+    )
+
+    class Meta:
+        db_table = 'auth_password_reset_code'
+        verbose_name = 'Password Reset Code'
+        verbose_name_plural = 'Password Reset Codes'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['user', 'is_used', 'expires_at']),
+        ]
+
+    def __str__(self):
+        status = 'used' if self.is_used else ('expired' if self.is_expired() else 'active')
+        return f"PasswordResetCode({self.user.email}, {status})"
+
+    def is_expired(self):
+        """Return True if the code has passed its expiry time."""
+        return timezone.now() > self.expires_at
+
+    def mark_used(self):
+        """Mark this code as used and save."""
+        self.is_used = True
+        self.save(update_fields=['is_used'])
+

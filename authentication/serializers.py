@@ -716,3 +716,73 @@ class BulkCreateUsersWithPasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError("Duplicate emails found in the request.")
         
         return value
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Forgot-password flow serializers
+# ─────────────────────────────────────────────────────────────────────────────
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    """
+    Step 1 — accept an email address to send the reset code to.
+    Intentionally does NOT reveal whether the email exists (anti-enumeration).
+    """
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        """Sanitize the email input."""
+        cleaned = sanitize_html_input(value, allow_tags=False)
+        if cleaned != value:
+            raise serializers.ValidationError("Invalid characters detected in email address.")
+        return cleaned.lower().strip()
+
+
+class VerifyResetCodeSerializer(serializers.Serializer):
+    """
+    Step 2 — verify the 6-digit code sent to the user's email.
+    Returns a signed token on success.
+    """
+    email = serializers.EmailField()
+    code = serializers.CharField(
+        min_length=6,
+        max_length=6,
+    )
+
+    def validate_email(self, value):
+        cleaned = sanitize_html_input(value, allow_tags=False)
+        if cleaned != value:
+            raise serializers.ValidationError("Invalid characters detected in email address.")
+        return cleaned.lower().strip()
+
+    def validate_code(self, value):
+        if not value.isdigit():
+            raise serializers.ValidationError("Code must contain digits only.")
+        return value
+
+
+class SetNewPasswordSerializer(serializers.Serializer):
+    """
+    Step 3 — set a new password using the signed token obtained from step 2.
+    """
+    token = serializers.CharField()
+    new_password = serializers.CharField(
+        min_length=8,
+        style={'input_type': 'password'},
+    )
+    confirm_password = serializers.CharField(
+        min_length=8,
+        style={'input_type': 'password'},
+    )
+
+    def validate_new_password(self, value):
+        """Apply the same strength rules as ChangePasswordSerializer."""
+        try:
+            validate_password(value)
+        except ValidationError as e:
+            raise serializers.ValidationError(list(e.messages))
+        return value
+
+    def validate(self, data):
+        if data['new_password'] != data['confirm_password']:
+            raise serializers.ValidationError("Passwords do not match.")
+        return data

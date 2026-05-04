@@ -36,6 +36,14 @@ class IsCreatorOrVisible(BasePermission):
                 if request.user.is_authenticated and request.user in obj.shared_with.all():
                     return True
             
+            if obj.visibility == "GROUPS":
+                if request.user == obj.creator:
+                    return True
+                if request.user.is_authenticated:
+                    user_group_ids = request.user.user_groups.values_list('group_id', flat=True)
+                    if obj.shared_with_groups.filter(id__in=user_group_ids).exists():
+                        return True
+            
             return False
         
         # For unsafe methods, only creator can modify
@@ -89,6 +97,14 @@ class CanSubmitResponse(BasePermission):
                 request.user == obj.creator or
                 request.user in obj.shared_with.all()
             )
+        
+        if obj.visibility == "GROUPS":
+            if not request.user.is_authenticated:
+                return False
+            if request.user == obj.creator:
+                return True
+            user_group_ids = request.user.user_groups.values_list('group_id', flat=True)
+            return obj.shared_with_groups.filter(id__in=user_group_ids).exists()
         
         return False
 

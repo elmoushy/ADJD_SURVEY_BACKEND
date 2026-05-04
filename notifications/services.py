@@ -551,7 +551,7 @@ class SurveyNotificationService:
         
         queryset = User.objects.filter(base_query).distinct()
         
-        if exclude_creator:
+        if exclude_creator and survey.creator:
             queryset = queryset.exclude(id=survey.creator.id)
         
         return queryset
