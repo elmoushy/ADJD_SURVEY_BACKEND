@@ -502,49 +502,131 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 
 class AnswerSerializer(serializers.ModelSerializer):
-    """Serializer for survey answers with input sanitization"""
-    
+    """Serializer for survey answers with input sanitization and question metadata"""
+
+    question_id = serializers.SerializerMethodField()
+    question_text = serializers.SerializerMethodField()
+    question_type = serializers.SerializerMethodField()
+    question_order = serializers.SerializerMethodField()
+    is_required = serializers.SerializerMethodField()
+
     class Meta:
         model = Answer
-        fields = ['id', 'question', 'answer_text', 'created_at']
+        fields = [
+            'id', 'question', 'question_id', 'question_text',
+            'question_type', 'question_order', 'is_required',
+            'answer_text', 'created_at',
+        ]
         read_only_fields = ['id', 'created_at']
-    
+
+    def get_question_id(self, obj):
+        return str(obj.question_id) if obj.question_id else None
+
+    def get_question_text(self, obj):
+        try:
+            return obj.question.text
+        except Exception:
+            return ''
+
+    def get_question_type(self, obj):
+        try:
+            return obj.question.question_type
+        except Exception:
+            return ''
+
+    def get_question_order(self, obj):
+        try:
+            return obj.question.order
+        except Exception:
+            return 0
+
+    def get_is_required(self, obj):
+        try:
+            return obj.question.is_required
+        except Exception:
+            return False
+
     def validate_answer_text(self, value):
-        """Validate and sanitize answer text."""
         if not value:
             return value
         return validate_and_sanitize_text_input(value, max_length=2000, field_name="Answer")
 
 
 class ResponseSerializer(serializers.ModelSerializer):
-    """Serializer for survey responses with nested answers and UAE timezone"""
-    
+    """Serializer for survey responses with nested answers, respondent info, and follow-up status"""
+
     answers = AnswerSerializer(many=True, read_only=True)
     respondent_email = serializers.SerializerMethodField()
-    
-    # Use UAE timezone for datetime fields
+    respondent_info = serializers.SerializerMethodField()
+    latest_follow_up_status = serializers.SerializerMethodField()
+    answer_count = serializers.SerializerMethodField()
+
     submitted_at = UAEDateTimeField(read_only=True)
     created_at = UAEDateTimeField(read_only=True)
     updated_at = UAEDateTimeField(read_only=True)
-    
+
     class Meta:
         model = Response
         fields = [
             'id', 'survey', 'respondent', 'respondent_email',
-            'submitted_at', 'is_complete', 'answers'
+            'respondent_info', 'latest_follow_up_status', 'answer_count',
+            'submitted_at', 'is_complete', 'answers',
         ]
         read_only_fields = ['id', 'submitted_at', 'respondent_email']
-    
+
     def get_respondent_email(self, obj):
-        """Get respondent email - either from user, stored email field, or phone"""
         if obj.respondent:
             return obj.respondent.email
         elif obj.respondent_phone:
             return obj.respondent_phone
         elif obj.respondent_email:
             return obj.respondent_email
-        else:
-            return "Anonymous"
+        return "Anonymous"
+
+    def get_respondent_info(self, obj):
+        if obj.is_group_submission:
+            group_name = None
+            try:
+                group_name = obj.submitted_via_group.name if obj.submitted_via_group_id else None
+            except Exception:
+                pass
+            return {'type': 'group_member', 'group_name': group_name}
+
+        if obj.respondent:
+            user = obj.respondent
+            try:
+                full_name = user.full_name or ''
+            except Exception:
+                full_name = ''
+            parts = full_name.split() if full_name.strip() else []
+            if len(parts) >= 2:
+                initials = parts[0][0].upper() + parts[-1][0].upper()
+            elif parts:
+                initials = parts[0][:2].upper()
+            else:
+                initials = (user.email or 'U')[:2].upper()
+            return {
+                'type': 'authenticated',
+                'id': user.id,
+                'email': user.email,
+                'full_name': full_name,
+                'avatar_initials': initials,
+            }
+
+        return {'type': 'anonymous'}
+
+    def get_latest_follow_up_status(self, obj):
+        try:
+            thread = obj.follow_ups.first()
+            return thread.status if thread else None
+        except Exception:
+            return None
+
+    def get_answer_count(self, obj):
+        try:
+            return obj.answers.count()
+        except Exception:
+            return 0
 
 
 class SurveySerializer(serializers.ModelSerializer):

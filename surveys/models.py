@@ -853,6 +853,20 @@ class Response(models.Model):
         help_text='Phone for anonymous responses (when respondent is null)'
     )
     
+    # Group-submission tracking (set at submission time based on how user got access)
+    is_group_submission = models.BooleanField(
+        default=False,
+        help_text='True when respondent matched via shared_with_groups (not named individually)'
+    )
+    submitted_via_group = models.ForeignKey(
+        'authentication.Group',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='submissions',
+        help_text='The group through which the respondent gained access (if is_group_submission)'
+    )
+
     # Response metadata
     submitted_at = models.DateTimeField(auto_now_add=True)
     is_complete = models.BooleanField(default=True)
@@ -1442,3 +1456,101 @@ class TemplateQuestion(models.Model):
     
     def __str__(self):
         return f"Template Q{self.order}: {self.text[:50]}..."
+
+
+class ResponseFollowUp(models.Model):
+    """Follow-up thread between admin and an authenticated respondent."""
+
+    STATUS_PENDING_REPLY = 'pending_reply'
+    STATUS_REPLIED = 'replied'
+    STATUS_ACCEPTED = 'accepted'
+    STATUS_REJECTED = 'rejected'
+    STATUS_CLOSED = 'closed'
+
+    STATUS_CHOICES = [
+        (STATUS_PENDING_REPLY, 'Pending Reply'),
+        (STATUS_REPLIED, 'Replied'),
+        (STATUS_ACCEPTED, 'Accepted'),
+        (STATUS_REJECTED, 'Rejected'),
+        (STATUS_CLOSED, 'Closed'),
+    ]
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    response = models.ForeignKey(
+        Response,
+        on_delete=models.CASCADE,
+        related_name='follow_ups',
+    )
+    opened_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='followups_opened',
+    )
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_PENDING_REPLY)
+    decision_reason = models.TextField(blank=True)
+    decided_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='followups_decided',
+    )
+    decided_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'surveys_response_followup'
+        verbose_name = 'Response Follow-up'
+        verbose_name_plural = 'Response Follow-ups'
+        ordering = ['-updated_at']
+        indexes = [
+            models.Index(fields=['response', 'status'], name='followup_response_status_idx'),
+            models.Index(fields=['status', 'updated_at'], name='followup_status_updated_idx'),
+        ]
+
+    def __str__(self):
+        return f"Follow-up on {self.response_id} [{self.status}]"
+
+
+class FollowUpMessage(models.Model):
+    """A single message within a ResponseFollowUp thread."""
+
+    SENDER_ADMIN = 'admin'
+    SENDER_RESPONDER = 'responder'
+    SENDER_ROLES = [
+        (SENDER_ADMIN, 'Admin'),
+        (SENDER_RESPONDER, 'Responder'),
+    ]
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    thread = models.ForeignKey(
+        ResponseFollowUp,
+        on_delete=models.CASCADE,
+        related_name='messages',
+    )
+    sender = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='followup_messages',
+    )
+    sender_role = models.CharField(max_length=20, choices=SENDER_ROLES)
+    body = models.TextField()
+    is_preset = models.BooleanField(default=False)
+    preset_key = models.CharField(max_length=50, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    read_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = 'surveys_followup_message'
+        verbose_name = 'Follow-up Message'
+        verbose_name_plural = 'Follow-up Messages'
+        ordering = ['created_at']
+        indexes = [
+            models.Index(fields=['thread', 'created_at'], name='followup_msg_thread_time_idx'),
+        ]
+
+    def __str__(self):
+        return f"{self.sender_role} message in thread {self.thread_id}"

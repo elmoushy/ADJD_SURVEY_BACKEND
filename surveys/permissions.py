@@ -109,6 +109,20 @@ class CanSubmitResponse(BasePermission):
         return False
 
 
+class IsFollowUpParticipant(BasePermission):
+    """Allow access to admin/staff who created the survey, or to the response's own respondent."""
+
+    def has_object_permission(self, request, view, obj):
+        from .models import ResponseFollowUp
+        thread = obj if isinstance(obj, ResponseFollowUp) else obj.thread
+        user = request.user
+        if not user.is_authenticated:
+            return False
+        if getattr(user, 'role', None) in ('super_admin', 'admin', 'manager'):
+            return True
+        return thread.response.respondent_id == user.id
+
+
 class IsCreatorOrStaff(BasePermission):
     """
     Permission for survey responses and analytics:

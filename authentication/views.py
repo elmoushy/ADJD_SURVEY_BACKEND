@@ -583,16 +583,18 @@ class GroupUserDetailView(APIView):
 
 class AllUsersView(APIView):
     """
-    API endpoint for listing all users (super_admin only).
+    API endpoint for listing all users.
+    Super admins see everyone; admins see everyone except super_admins.
     """
-    
-    permission_classes = [IsSuperAdmin]
-    
+
+    permission_classes = [IsAdminOrSuperAdmin]
+
     def get(self, request):
-        """List all users (super_admin only)."""
         users = User.objects.all().order_by('email')
+        if request.user.role != 'super_admin':
+            users = users.exclude(role='super_admin')
         serializer = UserSerializer(users, many=True)
-        
+
         return Response({
             'users': serializer.data,
             'count': users.count()

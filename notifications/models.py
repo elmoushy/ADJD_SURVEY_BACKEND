@@ -34,7 +34,11 @@ class Notification(models.Model):
     TYPE_USER_MENTION = 'user_mention'
     TYPE_GROUP_INVITATION = 'group_invitation'
     TYPE_RESPONSE_RECEIVED = 'response_received'
-    
+    TYPE_FOLLOWUP_OPENED   = 'followup_opened'
+    TYPE_FOLLOWUP_MESSAGE  = 'followup_message'
+    TYPE_FOLLOWUP_ACCEPTED = 'followup_accepted'
+    TYPE_FOLLOWUP_REJECTED = 'followup_rejected'
+
     NOTIFICATION_TYPES = [
         (TYPE_SURVEY_ASSIGNED, 'Survey Assigned'),
         (TYPE_SURVEY_COMPLETED, 'Survey Completed'),
@@ -46,6 +50,10 @@ class Notification(models.Model):
         (TYPE_USER_MENTION, 'User Mention'),
         (TYPE_GROUP_INVITATION, 'Group Invitation'),
         (TYPE_RESPONSE_RECEIVED, 'Response Received'),
+        (TYPE_FOLLOWUP_OPENED, 'Follow-up Opened'),
+        (TYPE_FOLLOWUP_MESSAGE, 'Follow-up Message'),
+        (TYPE_FOLLOWUP_ACCEPTED, 'Follow-up Accepted'),
+        (TYPE_FOLLOWUP_REJECTED, 'Follow-up Rejected'),
     ]
     
     # Priority Levels

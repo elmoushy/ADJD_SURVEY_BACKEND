@@ -8,9 +8,10 @@ with comprehensive error handling and logging.
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.db.models import Q, Count, Avg
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from rest_framework import status, generics, filters
 from rest_framework.decorators import api_view, permission_classes, action, authentication_classes
+from rest_framework.exceptions import PermissionDenied as DRFPermissionDenied, NotFound as DRFNotFound
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -1145,29 +1146,40 @@ class SurveyViewSet(ModelViewSet):
                     message="Survey ID is required and cannot be undefined",
                     status_code=status.HTTP_400_BAD_REQUEST
                 )
-            
-            survey = self.get_object()
+
+            # Fetch survey directly (bypasses object-level permission check so
+            # can_user_manage_survey below handles the fine-grained logic and
+            # returns a proper 403 instead of a 500 from an unhandled PermissionDenied)
+            try:
+                survey = Survey.objects.filter(deleted_at__isnull=True).get(pk=survey_id)
+            except Survey.DoesNotExist:
+                return uniform_response(
+                    success=False,
+                    message="Survey not found.",
+                    status_code=status.HTTP_404_NOT_FOUND
+                )
+
             user = request.user
-            
+
             # Check if user can delete the survey
             if not can_user_manage_survey(user, survey):
                 return uniform_response(
                     success=False,
-                    message="You can only delete surveys you created" + (" (orphaned surveys can be managed by admin/manager/super admin)" if survey.creator is None else ""),
+                    message="You do not have permission to delete this survey.",
                     status_code=status.HTTP_403_FORBIDDEN
                 )
-            
+
             # Perform soft delete
             survey.soft_delete()
-            
+
             logger.info(f"Survey {survey.id} deleted by {user.email} (role: {user.role})")
-            
+
             return uniform_response(
                 success=True,
                 message="Survey deleted successfully",
                 status_code=status.HTTP_204_NO_CONTENT
             )
-            
+
         except Exception as e:
             logger.error(f"Error deleting survey: {e}")
             return uniform_response(
@@ -1333,7 +1345,11 @@ class SurveyViewSet(ModelViewSet):
             visibility = request.data.get('visibility', survey.visibility)
             user_ids = request.data.get('user_ids', [])
             group_ids = request.data.get('group_ids', [])
-            
+
+            # Accept 'SELECTED' from the new unified UI (maps to PRIVATE in DB)
+            if visibility == 'SELECTED':
+                visibility = 'PRIVATE'
+
             # Validate visibility
             if visibility not in ['PRIVATE', 'AUTH', 'PUBLIC', 'GROUPS']:
                 return uniform_response(
@@ -1381,27 +1397,24 @@ class SurveyViewSet(ModelViewSet):
             survey.visibility = visibility
             survey.save(update_fields=['visibility', 'updated_at'])
             
-            # Handle sharing for private surveys
+            # Handle sharing based on visibility
             if visibility == 'PRIVATE':
-                if user_ids:
-                    # Validate user IDs
-                    valid_users = User.objects.filter(id__in=user_ids)
-                    survey.shared_with.set(valid_users)
-                else:
-                    survey.shared_with.clear()
-                # Clear groups when switching to PRIVATE
-                survey.shared_with_groups.clear()
+                # Mixed sharing: individual users AND/OR groups together
+                from authentication.models import Group as AuthGroup
+                valid_users = User.objects.filter(id__in=user_ids) if user_ids else User.objects.none()
+                valid_groups = AuthGroup.objects.filter(id__in=group_ids) if group_ids else AuthGroup.objects.none()
+                survey.shared_with.set(valid_users)
+                survey.shared_with_groups.set(valid_groups)
             elif visibility == 'GROUPS':
+                # Legacy groups-only mode (kept for backwards compat)
                 if not group_ids:
                     return uniform_response(
                         success=False,
-                        message="group_ids is required when visibility is GROUPS. Please provide at least one group ID.",
+                        message="group_ids is required when visibility is GROUPS.",
                         status_code=status.HTTP_400_BAD_REQUEST,
                     )
-                # Import Group model
-                from authentication.models import Group
-                # Validate group IDs
-                valid_groups = Group.objects.filter(id__in=group_ids)
+                from authentication.models import Group as AuthGroup
+                valid_groups = AuthGroup.objects.filter(id__in=group_ids)
                 if not valid_groups.exists():
                     return uniform_response(
                         success=False,
@@ -1409,10 +1422,9 @@ class SurveyViewSet(ModelViewSet):
                         status_code=status.HTTP_400_BAD_REQUEST,
                     )
                 survey.shared_with_groups.set(valid_groups)
-                # Clear user sharing when switching to GROUPS
                 survey.shared_with.clear()
             else:
-                # Clear sharing for non-private and non-groups surveys
+                # PUBLIC / AUTH — clear all sharing
                 survey.shared_with.clear()
                 survey.shared_with_groups.clear()
             
@@ -1424,7 +1436,8 @@ class SurveyViewSet(ModelViewSet):
             
             response_data = {'visibility': visibility}
             if visibility == 'PRIVATE':
-                response_data['shared_count'] = survey.shared_with.count()
+                response_data['shared_users_count'] = survey.shared_with.count()
+                response_data['shared_groups_count'] = survey.shared_with_groups.count()
             elif visibility == 'GROUPS':
                 response_data['shared_groups_count'] = survey.shared_with_groups.count()
             
@@ -4026,13 +4039,15 @@ class SurveyResponseSubmissionView(APIView):
     
     def _validate_survey_access(self, request, survey, token=None, password=None, email=None, phone=None):
         """
-        Validate access to survey based on visibility and provided credentials using UAE timezone
-        Returns tuple: (has_access, user_or_email_or_phone, error_message)
+        Validate access to survey based on visibility and provided credentials using UAE timezone.
+        Returns 4-tuple: (has_access, user_or_email_or_phone, match_kind, error_message)
+        match_kind values: 'token' | 'public' | 'auth' | 'creator' | 'shared_with' |
+                           'shared_with_groups' | 'anonymous_device' | None
         """
         # Check if survey is currently active based on dates using UAE timezone
         if not is_currently_active_uae(survey):
             status_message = f"Survey is {get_status_uae(survey)}"
-            return False, None, status_message
+            return False, None, None, status_message
         
         # Handle public token access first
         if token:
@@ -4047,100 +4062,136 @@ class SurveyResponseSubmissionView(APIView):
                     if access_token.is_password_protected():
                         # Password is required for password-protected tokens
                         if not password:
-                            return False, None, "Password is required for this token"
+                            return False, None, None, "Password is required for this token"
                         if not access_token.validate_password(password):
-                            return False, None, "Invalid password"
-                        
+                            return False, None, None, "Invalid password"
+
                         # Validate contact restrictions if any
                         if not access_token.validate_contact(email, phone):
                             restricted_emails = access_token.get_restricted_emails()
                             restricted_phones = access_token.get_restricted_phones()
                             if restricted_emails:
-                                return False, None, f"This token is restricted to emails: {', '.join(restricted_emails)}"
+                                return False, None, None, f"This token is restricted to emails: {', '.join(restricted_emails)}"
                             elif restricted_phones:
-                                return False, None, f"This token is restricted to phones: {', '.join(restricted_phones)}"
-                    
+                                return False, None, None, f"This token is restricted to phones: {', '.join(restricted_phones)}"
+
                     # Token is valid, determine user
                     if request.user.is_authenticated:
-                        return True, request.user, None
+                        return True, request.user, 'token', None
                     else:
                         # For anonymous users, check if token has contact restrictions first
                         restricted_emails = access_token.get_restricted_emails()
                         restricted_phones = access_token.get_restricted_phones()
                         if restricted_emails:
                             if email and email.lower() in [e.lower() for e in restricted_emails]:
-                                return True, email, None
+                                return True, email, 'token', None
                             else:
-                                return False, None, f"This token requires one of these emails: {', '.join(restricted_emails)}"
+                                return False, None, None, f"This token requires one of these emails: {', '.join(restricted_emails)}"
                         elif restricted_phones:
                             if phone and phone in restricted_phones:
-                                return True, phone, None
+                                return True, phone, 'token', None
                             else:
-                                return False, None, f"This token requires one of these phones: {', '.join(restricted_phones)}"
+                                return False, None, None, f"This token requires one of these phones: {', '.join(restricted_phones)}"
                         else:
                             # No contact restrictions, use survey's default requirement
                             required_method = getattr(survey, 'public_contact_method', 'email')
                             if required_method == 'email' and email:
-                                return True, email, None
+                                return True, email, 'token', None
                             elif required_method == 'phone' and phone:
-                                return True, phone, None
+                                return True, phone, 'token', None
                             elif email:
-                                return True, email, None
+                                return True, email, 'token', None
                             elif phone:
-                                return True, phone, None
+                                return True, phone, 'token', None
                             else:
-                                return False, None, "Email or phone is required for anonymous access"
+                                return False, None, None, "Email or phone is required for anonymous access"
             except PublicAccessToken.DoesNotExist:
-                return False, None, "Invalid or expired token"
-        
+                return False, None, None, "Invalid or expired token"
+
         # Handle different visibility levels
         if survey.visibility == "PUBLIC":
             # Check if survey uses per-device access
             if survey.per_device_access:
                 # For per-device access, no email/phone required but check device
                 from .models import DeviceResponse
-                
+
                 # Check if device has already submitted
                 if DeviceResponse.has_device_submitted(survey, request):
-                    return False, None, "This device has already submitted a response to this survey"
-                
+                    return False, None, None, "This device has already submitted a response to this survey"
+
                 # Allow access without email/phone requirement
                 if request.user.is_authenticated:
-                    return True, request.user, None
+                    return True, request.user, 'anonymous_device', None
                 else:
-                    return True, "anonymous_device", None
+                    return True, "anonymous_device", 'anonymous_device', None
             else:
                 # Standard PUBLIC survey - require email or phone for anonymous users
                 if request.user.is_authenticated:
-                    return True, request.user, None
+                    return True, request.user, 'public', None
                 else:
                     required_method = survey.public_contact_method
                     if required_method == 'email' and email:
-                        return True, email, None
+                        return True, email, 'public', None
                     elif required_method == 'phone' and phone:
-                        return True, phone, None
+                        return True, phone, 'public', None
                     else:
                         contact_type = "Email" if required_method == 'email' else "Phone"
-                        return False, None, f"{contact_type} is required for public survey responses"
-        
+                        return False, None, None, f"{contact_type} is required for public survey responses"
+
         elif survey.visibility == "AUTH":
             # Authentication required
             if not request.user.is_authenticated:
-                return False, None, "Authentication required for this survey"
-            return True, request.user, None
-        
+                return False, None, None, "Authentication required for this survey"
+            return True, request.user, 'auth', None
+
         elif survey.visibility == "PRIVATE":
-            # Private survey - must be authenticated and have permission
+            # Private survey — must be authenticated and have access via individual share OR group
             if not request.user.is_authenticated:
-                return False, None, "Authentication required for private survey"
-            
-            if (request.user == survey.creator or 
-                request.user in survey.shared_with.all()):
-                return True, request.user, None
-            else:
-                return False, None, "Access denied to private survey"
-        
-        return False, None, "Invalid survey access configuration"
+                return False, None, None, "Authentication required for private survey"
+
+            if request.user == survey.creator:
+                return True, request.user, 'creator', None
+
+            if survey.shared_with.filter(id=request.user.id).exists():
+                return True, request.user, 'shared_with', None
+
+            # Check group membership (fixes pre-existing bug: groups were never enforced for PRIVATE)
+            user_group_ids = request.user.user_groups.values_list('group_id', flat=True)
+            matched_group = (
+                survey.shared_with_groups
+                      .filter(id__in=user_group_ids)
+                      .order_by('id')
+                      .first()
+            )
+            if matched_group:
+                # Stash the matched group on the request so the caller can record it
+                request._matched_group = matched_group
+                return True, request.user, 'shared_with_groups', None
+
+            return False, None, None, "Access denied to private survey"
+
+        elif survey.visibility == "GROUPS":
+            # Legacy group-only visibility — enforce membership (was never enforced before, fixing the bug)
+            if not request.user.is_authenticated:
+                return False, None, None, "Authentication required for this survey"
+
+            if request.user == survey.creator:
+                return True, request.user, 'creator', None
+
+            user_group_ids = request.user.user_groups.values_list('group_id', flat=True)
+            matched_group = (
+                survey.shared_with_groups
+                      .filter(id__in=user_group_ids)
+                      .order_by('id')
+                      .first()
+            )
+            if matched_group:
+                request._matched_group = matched_group
+                return True, request.user, 'shared_with_groups', None
+
+            return False, None, None, "Access denied: not a member of any shared group"
+
+        return False, None, None, "Invalid survey access configuration"
     
     def post(self, request):
         """Submit survey response using the new format"""
@@ -4174,10 +4225,10 @@ class SurveyResponseSubmissionView(APIView):
                 )
             
             # Validate access
-            has_access, user_or_contact, error_msg = self._validate_survey_access(
+            has_access, user_or_contact, match_kind, error_msg = self._validate_survey_access(
                 request, survey, token, password, email, phone
             )
-            
+
             if not has_access:
                 return uniform_response(
                     success=False,
@@ -4234,12 +4285,18 @@ class SurveyResponseSubmissionView(APIView):
                         status_code=status.HTTP_409_CONFLICT
                     )
             
+            # Determine group-submission flag using match_kind from access check
+            is_group_submission = (match_kind == 'shared_with_groups')
+            submitted_via_group = getattr(request, '_matched_group', None) if is_group_submission else None
+
             # Create survey response
             survey_response = SurveyResponse.objects.create(
                 survey=survey,
                 respondent=respondent,
-                respondent_email=respondent_email,  # Store email for anonymous responses
-                respondent_phone=respondent_phone   # Store phone for anonymous responses
+                respondent_email=respondent_email,
+                respondent_phone=respondent_phone,
+                is_group_submission=is_group_submission,
+                submitted_via_group=submitted_via_group,
             )
             
             # Create device tracking record if per-device access is enabled
@@ -4486,7 +4543,12 @@ class SurveyResponsesView(generics.ListAPIView):
         if not IsCreatorOrStaff().has_object_permission(self.request, self, survey):
             return SurveyResponse.objects.none()
         
-        return survey.responses.all()
+        return (
+            survey.responses
+            .select_related('respondent', 'submitted_via_group')
+            .prefetch_related('answers__question', 'follow_ups')
+            .all()
+        )
     
     def list(self, request, *args, **kwargs):
         """List responses with uniform response format"""
@@ -7696,9 +7758,19 @@ class AdminSurveyResponsesView(generics.ListAPIView):
         
         # Allow access if user is admin, super_admin, or the survey creator
         if user.role in ['admin', 'super_admin'] or user == survey.creator:
-            return survey.responses.all().select_related(
-                'respondent'
-            ).prefetch_related('answers__question')
+            from django.db.models import OuterRef, Subquery
+            from .models import ResponseFollowUp
+            latest_follow_up_status = Subquery(
+                ResponseFollowUp.objects.filter(response=OuterRef('pk'))
+                                        .order_by('-updated_at')
+                                        .values('status')[:1]
+            )
+            return (
+                survey.responses.all()
+                      .select_related('respondent', 'submitted_via_group')
+                      .prefetch_related('answers__question', 'follow_ups')
+                      .annotate(latest_follow_up_status=latest_follow_up_status)
+            )
         
         return SurveyResponse.objects.none()
     
@@ -7739,21 +7811,45 @@ class AdminSurveyResponsesView(generics.ListAPIView):
             response_data = []
             responses_to_process = page if page is not None else queryset
             
+            def _initials(name: str) -> str:
+                if not name:
+                    return '??'
+                parts = [p for p in name.strip().split() if p]
+                if len(parts) >= 2:
+                    return (parts[0][0] + parts[1][0]).upper()
+                return parts[0][:2].upper() if parts else '??'
+
             for response in responses_to_process:
-                respondent_info = {}
-                if response.respondent:
+                if response.is_group_submission and response.respondent_id:
+                    # Respondent matched via a shared group — mask identity
+                    group_name = None
+                    if response.submitted_via_group:
+                        group_name = response.submitted_via_group.name
                     respondent_info = {
-                        'id': response.respondent.id,
-                        'email': response.respondent.email,
-                        'name': response.respondent.full_name,
-                        'type': 'authenticated'
+                        'type': 'group_member',
+                        'display_label': 'registered_user',
+                        'group_name': group_name,
+                    }
+                elif response.respondent_id:
+                    # Named authenticated user — show real email/name
+                    user_obj = response.respondent
+                    full_name = getattr(user_obj, 'full_name', '') or user_obj.email
+                    respondent_info = {
+                        'type': 'authenticated',
+                        'id': user_obj.id,
+                        'email': user_obj.email,
+                        'full_name': full_name,
+                        'avatar_initials': _initials(full_name),
+                        'role': getattr(user_obj, 'role', None),
+                        'department': getattr(user_obj, 'department', None),
+                        'joined_at': user_obj.date_joined.isoformat() if user_obj.date_joined else None,
                     }
                 else:
-                    # For anonymous users, prefer phone over email, or show email if available
+                    # Truly anonymous
                     contact_info = response.respondent_phone or response.respondent_email or 'Anonymous'
                     respondent_info = {
+                        'type': 'anonymous',
                         'email': contact_info,
-                        'type': 'anonymous'
                     }
                 
                 # Get all answers with question context
@@ -7778,14 +7874,16 @@ class AdminSurveyResponsesView(generics.ListAPIView):
                     
                     answers_with_context.append(answer_data)
                 
+                latest_thread = response.follow_ups.first()
                 response_item = {
                     'id': str(response.id),
                     'submitted_at': response.submitted_at.isoformat(),
                     'is_complete': response.is_complete,
-                    # IP address no longer tracked - use device_tracking for device info
-                    'respondent': respondent_info,
+                    'respondent_info': respondent_info,
+                    'latest_follow_up_status': getattr(response, 'latest_follow_up_status', None),
+                    'latest_follow_up_id': str(latest_thread.id) if latest_thread else None,
                     'answers': answers_with_context,
-                    'answer_count': len(answers_with_context)
+                    'answer_count': len(answers_with_context),
                 }
                 
                 response_data.append(response_item)

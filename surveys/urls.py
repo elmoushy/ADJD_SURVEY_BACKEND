@@ -8,12 +8,15 @@ as the authentication system.
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
+from .views_followup import FollowUpViewSet
+from .views_access_picker import AccessPickerSearchView
 
 app_name = 'surveys'
 
 # Router for ViewSets
 router = DefaultRouter()
 router.register('surveys', views.SurveyViewSet, basename='survey')
+router.register('follow-ups', FollowUpViewSet, basename='follow-ups')
 
 urlpatterns = [
     # ViewSet routes
@@ -168,4 +171,7 @@ urlpatterns = [
     
     # Health check
     path('health/', views.health_check, name='health-check'),
+
+    # Access picker search (users + groups combined, admin only)
+    path('access-picker/search/', AccessPickerSearchView.as_view(), name='access-picker-search'),
 ]
