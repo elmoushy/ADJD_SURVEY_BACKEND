@@ -2619,6 +2619,11 @@ class SurveyViewSet(ModelViewSet):
                 # Check if user is creator or explicitly shared
                 has_access = (user == survey.creator or 
                              user in survey.shared_with.all())
+            elif survey.visibility == 'GROUPS':
+                # Check if user is creator or belongs to one of the shared groups
+                user_group_ids = user.user_groups.values_list('group_id', flat=True)
+                has_access = (user == survey.creator or
+                              survey.shared_with_groups.filter(id__in=user_group_ids).exists())
             
             if not has_access:
                 return uniform_response(
@@ -3927,6 +3932,11 @@ class AuthenticatedSurveyResponseView(APIView):
                 # Check if user is creator or explicitly shared
                 has_access = (user == survey.creator or 
                              user in survey.shared_with.all())
+            elif survey.visibility == 'GROUPS':
+                # Check if user is creator or belongs to one of the shared groups
+                user_group_ids = user.user_groups.values_list('group_id', flat=True)
+                has_access = (user == survey.creator or
+                              survey.shared_with_groups.filter(id__in=user_group_ids).exists())
             
             if not has_access:
                 return uniform_response(
