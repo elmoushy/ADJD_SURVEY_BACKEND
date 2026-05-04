@@ -3489,7 +3489,8 @@ class MySharedSurveysView(generics.ListAPIView):
             try:
                 user_groups = user.user_groups.values_list('group', flat=True)
                 if user_groups.exists():
-                    group_shared_surveys = Q(visibility='GROUPS', shared_with_groups__in=user_groups) & ~Q(creator=user)
+                    # Include group surveys regardless of whether user is the creator
+                    group_shared_surveys = Q(visibility='GROUPS', shared_with_groups__in=user_groups)
                     base_query = base_query | group_shared_surveys
                     logger.debug(f"Added group shared surveys for {user.email}")
                 else:
