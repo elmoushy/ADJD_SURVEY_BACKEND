@@ -57,6 +57,7 @@ class FollowUpSerializer:
             }
             for m in thread.messages.all()
         ]
+        respondent = thread.response.respondent
         return {
             'id': str(thread.id),
             'response_id': str(thread.response_id),
@@ -65,6 +66,7 @@ class FollowUpSerializer:
                 'submitted_at': thread.response.submitted_at.isoformat(),
             },
             'opened_by': thread.opened_by.email if thread.opened_by else None,
+            'respondent_email': respondent.email if respondent else None,
             'status': thread.status,
             'decision_reason': thread.decision_reason,
             'decided_by': thread.decided_by.email if thread.decided_by else None,
@@ -115,7 +117,11 @@ class FollowUpViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
         if role == 'super_admin':
             pass
         elif role in ('admin', 'manager'):
-            qs = qs.filter(response__survey__creator=user)
+            # See threads on surveys they created AND threads on their own responses
+            from django.db.models import Q
+            qs = qs.filter(
+                Q(response__survey__creator=user) | Q(response__respondent=user)
+            )
         else:
             qs = qs.filter(response__respondent=user)
 
@@ -207,9 +213,14 @@ class FollowUpViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
         if not body:
             return DRFResponse({'error': 'message_required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        role = getattr(request.user, 'role', None)
-        is_admin = role in ADMIN_ROLES
-        sender_role = FollowUpMessage.SENDER_ADMIN if is_admin else FollowUpMessage.SENDER_RESPONDER
+        # Determine role in this thread by participation, not system role:
+        # If the sender is the person who submitted the response → they are the responder,
+        # regardless of their system role (e.g. an admin who also submitted a survey).
+        is_respondent = (
+            thread.response.respondent_id is not None
+            and thread.response.respondent_id == request.user.pk
+        )
+        sender_role = FollowUpMessage.SENDER_RESPONDER if is_respondent else FollowUpMessage.SENDER_ADMIN
 
         with transaction.atomic():
             msg = FollowUpMessage.objects.create(
@@ -218,19 +229,22 @@ class FollowUpViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
                 sender_role=sender_role,
                 body=body,
             )
+            # Update status when the respondent replies
             if sender_role == FollowUpMessage.SENDER_RESPONDER and thread.status == ResponseFollowUp.STATUS_PENDING_REPLY:
                 thread.status = ResponseFollowUp.STATUS_REPLIED
                 thread.save(update_fields=['status', 'updated_at'])
 
         # Notify the other party
-        if is_admin:
+        if is_respondent:
+            # Respondent replied → notify the thread opener (or survey creator as fallback)
+            recipient = thread.opened_by or thread.response.survey.creator
+            title_ar = 'رسالة جديدة في متابعة'
+            title_en = 'New message in follow-up thread'
+        else:
+            # Admin sent a message → notify the respondent
             recipient = thread.response.respondent
             title_ar = 'رسالة جديدة من فريق ADJD في متابعة'
             title_en = 'New message from ADJD Team in your follow-up'
-        else:
-            recipient = thread.response.survey.creator
-            title_ar = 'رسالة جديدة في متابعة'
-            title_en = 'New message in follow-up thread'
 
         if recipient:
             _notify(
@@ -257,6 +271,10 @@ class FollowUpViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
         role = getattr(request.user, 'role', None)
         if role not in ADMIN_ROLES:
             return DRFResponse({'error': 'forbidden'}, status=status.HTTP_403_FORBIDDEN)
+
+        # The respondent of the thread cannot make a decision, even if they have an admin role
+        if thread.response.respondent_id and thread.response.respondent_id == request.user.pk:
+            return DRFResponse({'error': 'respondent_cannot_decide'}, status=status.HTTP_403_FORBIDDEN)
 
         if thread.status not in (ResponseFollowUp.STATUS_REPLIED, ResponseFollowUp.STATUS_PENDING_REPLY):
             return DRFResponse(

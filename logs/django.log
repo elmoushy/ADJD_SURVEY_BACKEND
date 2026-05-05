@@ -2926,3 +2926,1314 @@ INFO 2026-05-05 01:16:11,004 dual_auth 3540 24456 User admin@test.com authentica
 INFO 2026-05-05 01:16:11,004 views 3540 24456 Building queryset for user admin@test.com
 INFO 2026-05-05 01:16:11,007 views 3540 24456 Successfully built queryset for user admin@test.com
 INFO 2026-05-05 01:16:20,912 dual_auth 3540 36000 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:50:53,260 serializers 21828 47716 Looking for user with email: superadmin@example.com
+INFO 2026-05-05 09:50:53,263 managers 21828 47716 Looking for user with email: superadmin@example.com
+INFO 2026-05-05 09:50:53,289 serializers 21828 47716 User found: superadmin@example.com
+INFO 2026-05-05 09:50:53,290 serializers 21828 47716 Authenticating with username: superadmin@example.com
+INFO 2026-05-05 09:50:54,489 serializers 21828 47716 Authentication result: Success
+INFO 2026-05-05 09:50:54,489 serializers 21828 47716 Validation successful
+INFO 2026-05-05 09:50:54,511 views 21828 47716 User logged in: superadmin@example.com
+INFO 2026-05-05 09:50:54,907 views 21828 47716 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 09:50:55,042 dual_auth 21828 47716 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:50:55,084 views 21828 47716 User profile accessed: superadmin@example.com
+INFO 2026-05-05 09:50:55,135 dual_auth 21828 9344 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:50:55,136 views 21828 9344 User profile accessed: superadmin@example.com
+INFO 2026-05-05 09:50:56,687 dual_auth 21828 9344 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:50:56,801 dual_auth 21828 47716 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:50:56,802 views 21828 47716 Building queryset for user superadmin@example.com
+INFO 2026-05-05 09:50:56,811 views 21828 47716 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 09:53:59,289 dual_auth 21828 3296 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:54:17,558 views 21828 3296 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 09:54:17,577 dual_auth 21828 3296 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:54:17,578 views 21828 3296 User profile accessed: superadmin@example.com
+INFO 2026-05-05 09:54:17,717 dual_auth 21828 3296 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:54:17,727 dual_auth 21828 31360 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:54:17,727 views 21828 31360 Building queryset for user superadmin@example.com
+INFO 2026-05-05 09:54:17,731 views 21828 31360 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 09:54:22,611 views 21828 31360 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 09:54:22,630 dual_auth 21828 31360 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:54:22,631 views 21828 31360 User profile accessed: superadmin@example.com
+INFO 2026-05-05 09:54:22,668 dual_auth 21828 31360 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:54:22,690 dual_auth 21828 31360 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:54:22,691 views 21828 31360 Building queryset for user superadmin@example.com
+INFO 2026-05-05 09:54:22,694 views 21828 31360 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 09:55:50,123 dual_auth 21828 31360 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:55:50,124 dual_auth 21828 3296 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:55:50,125 views 21828 31360 User profile accessed: superadmin@example.com
+INFO 2026-05-05 09:55:50,136 dual_auth 21828 42128 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:55:50,155 dual_auth 21828 31960 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:55:50,197 dual_auth 21828 3296 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:55:50,197 dual_auth 21828 31960 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:55:59,983 dual_auth 21828 31960 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 09:56:00,014 views 21828 31960 User deleted by admin superadmin@example.com: test_temp@example.com
+INFO 2026-05-05 10:08:48,859 dual_auth 5612 49928 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:08:48,862 dual_auth 5612 29136 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:08:48,863 dual_auth 5612 22008 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:08:48,866 views 5612 22008 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:08:48,867 dual_auth 5612 49352 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:08:48,916 dual_auth 5612 29136 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:08:48,919 dual_auth 5612 49352 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:09:07,959 dual_auth 5612 49352 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:09:07,988 views 5612 49352 User deleted by admin superadmin@example.com: user55@example.com
+INFO 2026-05-05 10:09:11,957 dual_auth 5612 49928 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:09:11,958 dual_auth 5612 49352 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:09:11,958 dual_auth 5612 22008 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:09:11,960 views 5612 22008 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:09:11,960 dual_auth 5612 29136 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:09:12,000 dual_auth 5612 49352 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:09:12,001 dual_auth 5612 29136 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:09:41,780 dual_auth 5612 29136 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:09:41,802 dual_auth 5612 29136 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:13:27,556 dual_auth 49464 49972 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:14:10,189 dual_auth 49464 49972 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:14:10,548 dual_auth 49464 49972 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:14:10,581 dual_auth 49464 49972 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:14:46,412 dual_auth 49464 49972 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:14:46,478 dual_auth 49464 49972 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:14:46,479 views 49464 49972 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:14:46,483 dual_auth 49464 52168 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:14:46,487 dual_auth 49464 47688 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:14:46,488 dual_auth 49464 31000 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:14:46,537 dual_auth 49464 52168 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:14:46,537 dual_auth 49464 31000 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:17:21,971 dual_auth 49464 31000 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:17:21,995 dual_auth 49464 31000 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:18:26,698 dual_auth 49464 31000 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:18:26,722 dual_auth 49464 31000 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:21:51,295 views 49464 11528 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 10:21:51,354 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:21:51,355 views 49464 11528 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:21:51,772 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:21:51,780 dual_auth 49464 504 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:21:51,780 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:21:51,780 dual_auth 49464 18604 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:21:51,783 views 49464 18604 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:21:51,783 dual_auth 49464 412 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:21:51,875 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:21:51,875 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:22:50,757 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:23:22,806 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:23:57,267 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:24:08,389 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:24:10,166 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:24:12,449 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:24:14,043 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:24:14,564 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:24:15,451 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:26:02,535 dual_auth 49464 412 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:26:02,535 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:26:02,538 views 49464 11528 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:26:02,547 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:26:02,547 dual_auth 49464 18604 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:26:02,621 dual_auth 49464 412 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:26:02,634 dual_auth 49464 18604 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:26:03,612 dual_auth 49464 18604 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:26:09,627 dual_auth 49464 18604 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:26:09,712 dual_auth 49464 18604 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:26:59,974 views 49464 18604 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 10:27:00,064 dual_auth 49464 18604 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:27:00,065 views 49464 18604 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:27:01,240 dual_auth 49464 18604 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:27:01,280 dual_auth 49464 412 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:27:01,282 views 49464 412 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:27:01,297 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:27:01,302 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:27:01,314 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:27:01,582 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:27:01,593 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:31:26,393 dual_auth 49464 18604 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:31:26,393 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:31:26,394 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:31:26,395 views 49464 46188 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:31:26,399 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:31:26,422 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:31:26,424 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:31:39,812 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:31:39,812 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:31:39,813 dual_auth 49464 18604 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:31:39,814 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:31:39,815 views 49464 11528 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:31:39,837 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:31:39,838 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:32:06,455 dual_auth 49464 11528 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:32:06,457 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:32:06,457 dual_auth 49464 18604 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:32:06,458 views 49464 18604 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:32:06,458 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:32:06,481 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:32:06,482 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:34:57,869 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:34:57,873 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:35:08,789 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:35:08,790 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:37:44,117 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:06,710 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:07,074 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:07,125 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:29,002 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:29,149 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:29,151 views 49464 46188 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:38:29,158 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:29,169 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:29,171 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:29,257 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:29,262 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:34,607 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:34,608 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:37,671 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:37,709 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:49,837 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:49,961 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:49,967 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:49,972 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:49,974 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:49,980 views 49464 15096 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:38:50,059 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:38:50,063 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:39:04,001 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:39:04,001 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:42:56,363 views 49464 15096 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 10:42:56,424 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:42:56,428 views 49464 15096 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:42:57,072 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:42:57,073 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:42:57,074 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:42:57,075 views 49464 46188 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:42:57,078 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:42:57,134 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:42:57,231 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:42:57,233 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:14,119 views 49464 15096 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 10:43:14,213 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:14,214 views 49464 15096 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:43:14,573 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:14,582 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:14,587 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:14,590 views 49464 15608 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:43:14,591 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:14,601 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:14,685 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:14,686 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:23,213 views 49464 15096 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 10:43:23,279 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:23,279 views 49464 15096 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:43:23,757 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:23,761 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:23,763 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:23,764 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:23,765 views 49464 15096 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:43:23,790 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:23,873 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:23,874 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:52,478 views 49464 19116 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 10:43:52,582 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:52,583 views 49464 19116 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:43:52,829 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:52,853 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:52,854 views 49464 15608 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:43:52,853 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:52,859 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:52,863 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:52,989 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:43:52,989 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:20,963 views 49464 19116 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 10:44:21,012 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:21,012 views 49464 19116 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:44:22,523 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:22,525 views 49464 19116 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:44:22,532 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:22,535 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:22,538 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:22,539 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:22,661 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:22,663 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:35,887 views 49464 17524 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 10:44:36,005 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:36,006 views 49464 17524 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:44:36,372 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:36,372 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:36,375 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:36,381 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:36,381 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:36,384 views 49464 46188 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:44:36,431 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:36,433 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:46,696 views 49464 17524 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 10:44:46,931 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:46,932 views 49464 17524 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:44:47,217 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:47,218 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:47,236 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:47,237 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:47,241 views 49464 19116 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:44:47,253 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:47,308 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:47,310 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:58,095 views 49464 17524 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 10:44:58,206 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:58,206 views 49464 17524 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:44:58,545 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:58,546 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:58,555 views 49464 15608 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:44:58,569 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:58,570 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:58,572 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:58,674 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:44:58,675 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:03,501 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:03,503 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:08,990 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:09,034 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:13,753 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:13,755 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:18,449 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:18,489 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:27,298 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:27,347 signals 49464 15096 Sent existing survey notification to user2@test.com for survey fc3b0d6a-e2a3-4636-a609-64e5a7a8d719 (joined group tarek)
+INFO 2026-05-05 10:45:27,353 signals 49464 15096 Sent existing survey notification to user2@test.com for survey f33cac35-9bff-4e2b-9351-15d4297b9ada (joined group tarek)
+INFO 2026-05-05 10:45:27,476 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:27,477 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:27,478 views 49464 15096 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:45:27,482 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:27,489 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:27,561 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:27,565 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:36,469 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:36,471 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:41,583 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:41,618 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:46,474 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:46,594 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:46,595 views 49464 19116 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:45:46,604 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:46,605 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:46,606 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:46,717 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:45:46,717 dual_auth 49464 17524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:46:27,980 views 49464 17524 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 10:46:29,249 views 49464 46188 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 10:46:29,983 views 49464 46188 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 10:46:30,075 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:46:30,075 views 49464 46188 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:46:30,467 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:46:30,467 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:46:30,471 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:46:30,477 dual_auth 49464 15448 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:46:30,479 views 49464 15448 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:46:30,478 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:46:31,080 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:46:31,081 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:49:19,095 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:50:05,997 views 49464 46188 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 10:50:06,118 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:50:06,119 views 49464 46188 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:50:06,424 dual_auth 49464 46188 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:50:06,434 dual_auth 49464 15096 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:50:06,455 views 49464 15096 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:50:06,478 dual_auth 49464 19116 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:50:06,482 dual_auth 49464 15448 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:50:06,483 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:50:07,297 dual_auth 49464 15448 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:50:07,298 dual_auth 49464 15608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:52:48,034 dual_auth 49464 50184 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:52:51,132 dual_auth 49464 50184 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:52:54,499 dual_auth 49464 27632 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:52:54,507 dual_auth 49464 16800 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:53:00,287 dual_auth 49464 27632 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:53:02,180 dual_auth 49464 12560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:53:04,654 dual_auth 49464 51792 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:53:05,440 dual_auth 49464 15580 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:53:06,678 dual_auth 49464 38636 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:53:09,414 dual_auth 49464 38636 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:53:12,773 dual_auth 49464 22256 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:53:12,774 views 49464 22256 Building queryset for user superadmin@example.com
+INFO 2026-05-05 10:53:12,777 views 49464 22256 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 10:53:15,808 dual_auth 49464 49424 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:53:15,808 views 49464 49424 Building queryset for user superadmin@example.com
+INFO 2026-05-05 10:53:15,810 views 49464 49424 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 10:53:18,958 dual_auth 49464 37608 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:53:18,958 views 49464 37608 Building queryset for user superadmin@example.com
+INFO 2026-05-05 10:53:18,960 views 49464 37608 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 10:53:20,125 dual_auth 49464 32132 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:53:20,125 views 49464 32132 Building queryset for user superadmin@example.com
+INFO 2026-05-05 10:53:20,127 views 49464 32132 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 10:53:24,759 dual_auth 49464 32132 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:53:24,760 views 49464 32132 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:53:24,765 dual_auth 49464 36412 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:53:24,767 dual_auth 49464 50028 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:53:24,769 dual_auth 49464 14204 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:53:24,799 dual_auth 49464 36412 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:53:24,804 dual_auth 49464 14204 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:54:58,970 dual_auth 49464 36412 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:55:01,598 dual_auth 49464 36412 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:55:03,170 dual_auth 49464 36412 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:55:04,949 dual_auth 49464 50028 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:55:04,952 dual_auth 49464 32132 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:55:22,557 dual_auth 49464 32132 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:55:25,093 dual_auth 49464 32132 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:55:25,148 dual_auth 49464 32132 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:55:39,698 dual_auth 49464 50028 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:55:39,699 views 49464 50028 Building queryset for user superadmin@example.com
+INFO 2026-05-05 10:55:39,707 views 49464 50028 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 10:55:53,701 dual_auth 49464 44880 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:55:53,701 dual_auth 49464 51088 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:56:50,789 dual_auth 49464 51088 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:56:50,790 views 49464 51088 Building queryset for user superadmin@example.com
+INFO 2026-05-05 10:56:50,793 views 49464 51088 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 10:59:09,183 dual_auth 49464 51088 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:59:09,185 views 49464 51088 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:59:09,194 dual_auth 49464 43508 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:59:09,198 dual_auth 49464 47592 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:59:09,200 dual_auth 49464 51100 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:59:09,229 dual_auth 49464 43508 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:59:09,230 dual_auth 49464 51100 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:59:40,349 views 49464 51100 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 10:59:40,390 dual_auth 49464 51100 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:59:40,390 views 49464 51100 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:59:41,532 dual_auth 49464 51100 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:59:41,533 views 49464 51100 User profile accessed: superadmin@example.com
+INFO 2026-05-05 10:59:41,532 dual_auth 49464 43508 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:59:41,533 dual_auth 49464 47592 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:59:41,539 dual_auth 49464 51088 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:59:41,544 dual_auth 49464 47484 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:59:41,625 dual_auth 49464 47592 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 10:59:41,626 dual_auth 49464 43508 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:01:58,637 views 49464 43508 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 11:01:58,711 dual_auth 49464 43508 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:01:58,713 views 49464 43508 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:01:58,892 dual_auth 49464 43508 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:01:58,892 dual_auth 49464 47592 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:01:58,893 dual_auth 49464 47484 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:01:58,897 views 49464 47592 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:01:58,911 dual_auth 49464 51100 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:01:58,913 dual_auth 49464 51088 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:01:59,014 dual_auth 49464 47484 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:01:59,015 dual_auth 49464 43508 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:04:40,115 views 49464 43508 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 11:04:40,207 dual_auth 49464 43508 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:04:40,208 views 49464 43508 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:04:40,333 dual_auth 49464 43508 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:04:40,339 dual_auth 49464 47484 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:04:40,344 views 49464 47484 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:04:40,354 dual_auth 49464 51088 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:04:40,357 dual_auth 49464 51100 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:04:40,360 dual_auth 49464 47592 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:04:40,504 dual_auth 49464 51088 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:04:40,508 dual_auth 49464 43508 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:20:42,603 views 49464 14760 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 11:20:42,745 dual_auth 49464 14760 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:20:42,747 views 49464 14760 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:20:42,976 dual_auth 49464 14760 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:20:43,054 dual_auth 49464 33872 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:20:43,055 dual_auth 49464 39720 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:20:43,059 dual_auth 49464 42736 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:20:43,058 dual_auth 49464 33368 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:20:43,080 views 49464 33368 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:20:43,275 dual_auth 49464 33872 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:20:43,276 dual_auth 49464 33368 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:20:57,046 dual_auth 49464 46288 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:20:57,049 dual_auth 49464 46200 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:21:18,721 dual_auth 49464 38748 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:21:18,734 dual_auth 49464 43712 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:21:22,221 dual_auth 49464 43712 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:21:25,207 dual_auth 49464 43712 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:21:25,218 views 49464 43712 Retrieved 5 predefined templates for superadmin@example.com
+INFO 2026-05-05 11:21:30,222 dual_auth 49464 43712 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:21:30,312 serializers 49464 43712 Serializer create - per_device_access: False
+INFO 2026-05-05 11:21:30,312 serializers 49464 43712 Serializer create - all validated_data keys: ['title', 'description', 'visibility', 'is_active', 'start_date', 'end_date', 'per_device_access', 'questions', 'status', 'creator']
+INFO 2026-05-05 11:21:30,313 serializers 49464 43712 About to create survey with data: {'title': 'معلومات التواصل22', 'description': 'يرجى تزويدنا بمعلومات الاتصال الخاصة بك حتى نتمكن من التواصل معك عند الحاجة أو لإرسال التحديثات المستقبلية.', 'visibility': 'AUTH', 'is_active': True, 'start_date': None, 'end_date': None, 'per_device_access': False, 'status': 'draft', 'creator': <User: superadmin@example.com (super_admin)>}
+INFO 2026-05-05 11:21:30,316 models 49464 43712 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-05 11:21:30,316 models 49464 43712 Survey.save() - per_device_access final value: False
+INFO 2026-05-05 11:21:30,336 serializers 49464 43712 Mapped temp ID 'temp-1777969285240-0' to question 237faafb-de7c-440d-b56e-abe524f9173a (order 1)
+INFO 2026-05-05 11:21:30,343 serializers 49464 43712 Mapped temp ID 'temp-1777969285240-1' to question 9c790af3-6beb-48fe-a6c3-c57428c81061 (order 2)
+INFO 2026-05-05 11:21:30,350 serializers 49464 43712 Mapped temp ID 'temp-1777969285240-2' to question 4ff8443c-3b6b-4f46-b085-c7e4f5b3b4ba (order 3)
+INFO 2026-05-05 11:21:30,350 serializers 49464 43712 Survey created: 20eb64e2-ebbb-456d-8e54-8295cb36c0f1 with 3 questions by superadmin@example.com
+INFO 2026-05-05 11:21:30,422 dual_auth 49464 40596 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:21:30,429 views 49464 40596 Successfully retrieved survey 20eb64e2-ebbb-456d-8e54-8295cb36c0f1: معلومات التواصل22
+INFO 2026-05-05 11:21:30,432 views 49464 40596 Successfully serialized survey 20eb64e2-ebbb-456d-8e54-8295cb36c0f1
+INFO 2026-05-05 11:21:30,436 dual_auth 49464 3304 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:21:30,440 dual_auth 49464 45272 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:21:36,411 dual_auth 49464 3304 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:21:49,005 dual_auth 49464 3304 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:21:57,800 dual_auth 49464 45272 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:21:57,800 dual_auth 49464 3304 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:21:57,800 views 49464 45272 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:21:57,804 dual_auth 49464 36292 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:21:57,806 dual_auth 49464 40596 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:21:57,840 dual_auth 49464 3304 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:21:57,842 dual_auth 49464 36292 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:21:59,675 dual_auth 49464 36292 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:22:02,180 dual_auth 49464 36292 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:22:08,178 dual_auth 49464 36292 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:22:08,178 views 49464 36292 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:22:08,183 dual_auth 49464 40596 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:22:08,184 dual_auth 49464 3304 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:22:08,186 dual_auth 49464 45272 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:22:08,215 dual_auth 49464 45272 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:22:08,216 dual_auth 49464 3304 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:22:09,659 dual_auth 49464 40596 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:22:09,660 dual_auth 49464 36292 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:22:13,362 dual_auth 49464 40596 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:22:13,362 views 49464 40596 Building queryset for user superadmin@example.com
+INFO 2026-05-05 11:22:13,366 views 49464 40596 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 11:22:16,005 dual_auth 49464 40596 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:22:17,885 dual_auth 49464 26716 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:22:17,888 dual_auth 49464 51640 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:23:30,213 dual_auth 49464 26716 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:23:30,213 views 49464 26716 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:23:30,223 dual_auth 49464 51640 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:23:30,225 dual_auth 49464 21240 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:23:30,232 dual_auth 49464 15464 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:23:30,262 dual_auth 49464 51640 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:23:30,264 dual_auth 49464 15464 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:23:37,781 dual_auth 49464 15464 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:23:37,783 dual_auth 49464 51640 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:23:40,659 dual_auth 49464 15464 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:23:40,690 dual_auth 49464 15464 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:23:44,754 dual_auth 49464 15464 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:23:44,778 dual_auth 49464 15464 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:23:46,738 dual_auth 49464 21240 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:23:46,740 dual_auth 49464 26716 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:24:09,137 dual_auth 49464 21240 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:25:12,950 views 49464 21240 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 11:25:12,998 dual_auth 49464 21240 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:25:12,998 views 49464 21240 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:25:13,207 dual_auth 49464 26716 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:25:13,229 dual_auth 49464 41616 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:25:13,278 dual_auth 49464 26716 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:25:20,304 dual_auth 49464 26716 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:27:15,783 serializers 49464 18392 Looking for user with email: superadmin@example.com
+INFO 2026-05-05 11:27:15,784 managers 49464 18392 Looking for user with email: superadmin@example.com
+INFO 2026-05-05 11:27:15,794 serializers 49464 18392 User found: superadmin@example.com
+INFO 2026-05-05 11:27:15,794 serializers 49464 18392 Authenticating with username: superadmin@example.com
+INFO 2026-05-05 11:27:16,557 serializers 49464 18392 Authentication result: Success
+INFO 2026-05-05 11:27:16,557 serializers 49464 18392 Validation successful
+INFO 2026-05-05 11:27:16,574 views 49464 18392 User logged in: superadmin@example.com
+INFO 2026-05-05 11:27:16,864 views 49464 18392 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 11:27:16,890 dual_auth 49464 18392 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:27:16,892 views 49464 18392 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:27:16,900 dual_auth 49464 43756 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:27:16,900 views 49464 43756 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:27:17,048 dual_auth 49464 18392 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:27:17,099 dual_auth 49464 18392 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:27:17,108 dual_auth 49464 44908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:27:20,419 dual_auth 49464 18392 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:30:29,830 views 49464 18392 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 11:30:29,949 dual_auth 49464 18392 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:30:29,950 views 49464 18392 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:30:30,590 dual_auth 49464 18392 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:30:30,633 dual_auth 49464 44908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:30:30,654 dual_auth 49464 38780 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:30:30,762 views 49464 51300 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 11:30:30,810 dual_auth 49464 51300 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:30:30,811 views 49464 51300 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:30:31,417 dual_auth 49464 51300 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:30:31,493 dual_auth 49464 51300 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:30:31,497 dual_auth 49464 21804 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:30:34,549 views 49464 44908 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 11:30:34,760 dual_auth 49464 51700 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:30:34,762 dual_auth 49464 44908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:30:34,773 views 49464 44908 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:30:34,778 views 49464 51700 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 11:30:34,807 dual_auth 49464 44908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:30:34,812 dual_auth 49464 38780 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:30:34,807 dual_auth 49464 51700 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:30:37,672 dual_auth 49464 44908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:31:46,705 dual_auth 49464 44908 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:31:46,706 views 49464 44908 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:31:46,716 dual_auth 49464 51700 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:31:46,717 dual_auth 49464 38780 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:31:46,717 dual_auth 49464 18392 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:31:46,753 dual_auth 49464 51700 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:31:46,755 dual_auth 49464 18392 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:32:20,626 dual_auth 49464 51700 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:32:20,645 dual_auth 49464 18392 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:33:39,569 dual_auth 49464 18392 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:33:39,576 dual_auth 49464 51700 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:33:42,389 dual_auth 49464 18392 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:33:49,306 dual_auth 49464 18392 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:33:51,090 dual_auth 49464 51700 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:33:51,091 views 49464 51700 Building queryset for user superadmin@example.com
+INFO 2026-05-05 11:33:51,101 views 49464 51700 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 11:34:21,638 dual_auth 49464 51700 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:34:21,642 dual_auth 49464 38780 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:34:24,220 dual_auth 49464 38780 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:37:15,510 views 49464 38780 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 11:37:15,552 dual_auth 49464 38780 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:37:15,554 views 49464 38780 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:37:15,678 dual_auth 49464 38780 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:37:15,723 dual_auth 49464 45940 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:37:15,806 dual_auth 49464 38780 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:40:24,885 views 49464 38780 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 11:40:24,906 dual_auth 49464 38780 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:40:24,906 views 49464 38780 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:40:25,056 dual_auth 49464 1904 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:40:25,119 dual_auth 49464 1904 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:40:25,122 dual_auth 49464 30856 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:41:42,081 views 49464 1904 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 11:41:42,107 dual_auth 49464 1904 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:41:42,109 views 49464 1904 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:41:42,294 dual_auth 49464 1904 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:41:42,315 dual_auth 49464 21524 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:41:42,318 dual_auth 49464 50140 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:48:39,859 views 49464 47624 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 11:48:40,004 dual_auth 49464 47624 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:48:40,005 views 49464 47624 User profile accessed: superadmin@example.com
+INFO 2026-05-05 11:48:40,020 dual_auth 49464 27532 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:48:40,024 views 49464 27532 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 11:48:40,074 dual_auth 49464 27532 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:48:40,081 dual_auth 49464 33944 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:48:40,106 views 49464 33944 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 11:48:40,111 dual_auth 49464 47624 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:48:40,155 dual_auth 49464 33944 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 11:48:58,990 dual_auth 49464 33944 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:20:57,545 views 49464 50784 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 12:20:57,829 dual_auth 49464 50784 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:20:57,830 views 49464 50784 User profile accessed: superadmin@example.com
+INFO 2026-05-05 12:20:59,414 views 49464 50784 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 12:20:59,662 dual_auth 49464 50784 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:20:59,662 views 49464 50784 User profile accessed: superadmin@example.com
+INFO 2026-05-05 12:21:01,253 views 49464 33604 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 12:21:01,326 dual_auth 49464 33604 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:21:01,326 views 49464 33604 User profile accessed: superadmin@example.com
+INFO 2026-05-05 12:21:04,320 dual_auth 49464 35496 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:21:04,321 dual_auth 49464 38996 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:21:04,810 dual_auth 49464 35496 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:21:04,819 dual_auth 49464 1028 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:21:05,107 dual_auth 49464 43748 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:21:05,318 dual_auth 49464 11556 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:22:24,914 dual_auth 49464 43748 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:22:24,916 views 49464 43748 Building queryset for user superadmin@example.com
+INFO 2026-05-05 12:22:24,926 views 49464 43748 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 12:22:29,477 dual_auth 49464 43748 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:22:30,546 dual_auth 49464 10884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:22:30,546 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:22:36,388 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:22:36,389 views 49464 44280 User profile accessed: superadmin@example.com
+INFO 2026-05-05 12:22:36,389 dual_auth 49464 10884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:22:36,394 dual_auth 49464 17736 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:22:36,397 dual_auth 49464 11976 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:22:36,448 dual_auth 49464 10884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:22:36,450 dual_auth 49464 17736 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:22:49,972 dual_auth 49464 17736 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:22:50,054 views 49464 17736 User deleted by admin superadmin@example.com: user2@test.com
+INFO 2026-05-05 12:22:51,003 dual_auth 49464 10884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:22:51,003 views 49464 10884 User profile accessed: superadmin@example.com
+INFO 2026-05-05 12:22:51,007 dual_auth 49464 11976 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:22:51,008 dual_auth 49464 17736 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:22:51,008 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:22:51,056 dual_auth 49464 17736 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:22:51,057 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:00,239 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:29,604 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:29,967 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:29,996 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:40,102 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:40,160 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:40,160 views 49464 44280 User profile accessed: superadmin@example.com
+INFO 2026-05-05 12:23:40,161 dual_auth 49464 11976 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:40,162 dual_auth 49464 17736 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:40,163 dual_auth 49464 10884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:40,199 dual_auth 49464 17736 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:40,203 dual_auth 49464 10884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:46,636 dual_auth 49464 10884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:46,638 dual_auth 49464 17736 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:53,238 dual_auth 49464 17736 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:53,274 dual_auth 49464 17736 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:58,543 dual_auth 49464 17736 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:58,604 dual_auth 49464 17736 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:58,604 dual_auth 49464 11976 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:58,605 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:58,604 views 49464 17736 User profile accessed: superadmin@example.com
+INFO 2026-05-05 12:23:58,604 dual_auth 49464 10884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:58,642 dual_auth 49464 10884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:23:58,642 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:24:03,310 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:24:10,175 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:24:11,541 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:24:17,091 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:24:48,029 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:24:50,869 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:24:52,342 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:24:53,357 dual_auth 49464 44280 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:30:06,812 dual_auth 49464 23596 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:30:41,098 dual_auth 49464 23596 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:30:43,458 views 49464 23596 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 12:30:43,503 dual_auth 49464 23596 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:30:43,504 views 49464 23596 User profile accessed: superadmin@example.com
+INFO 2026-05-05 12:30:43,674 dual_auth 49464 23596 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:30:43,683 dual_auth 49464 51356 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:30:45,330 dual_auth 49464 51356 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:30:46,953 dual_auth 49464 51356 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:30:48,113 dual_auth 49464 51356 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:32:29,114 dual_auth 49464 39304 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:32:29,114 dual_auth 49464 50588 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:32:29,863 dual_auth 49464 39304 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:32:31,081 dual_auth 49464 50588 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:32:31,082 views 49464 50588 Building queryset for user superadmin@example.com
+INFO 2026-05-05 12:32:31,089 views 49464 50588 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 12:32:43,434 dual_auth 49464 50588 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:32:48,195 dual_auth 49464 50588 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:32:48,213 dual_auth 49464 10712 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:32:48,213 views 49464 10712 Building queryset for user superadmin@example.com
+INFO 2026-05-05 12:32:48,216 views 49464 10712 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 12:34:29,044 dual_auth 49464 26192 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:34:29,044 dual_auth 49464 50928 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:34:37,462 dual_auth 49464 50928 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:35:10,611 dual_auth 49464 50928 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:35:10,627 models 49464 50928 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-05 12:35:10,627 models 49464 50928 Survey.save() - per_device_access final value: False
+INFO 2026-05-05 12:35:10,669 views 49464 50928 Survey 20eb64e2-ebbb-456d-8e54-8295cb36c0f1 audience updated by superadmin@example.com
+INFO 2026-05-05 12:35:10,683 dual_auth 49464 50928 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:35:10,686 models 49464 50928 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-05 12:35:10,686 models 49464 50928 Survey.save() - per_device_access final value: False
+INFO 2026-05-05 12:35:10,696 signals 49464 50928 Survey 20eb64e2-ebbb-456d-8e54-8295cb36c0f1 was published, sending availability notifications
+INFO 2026-05-05 12:35:10,737 views 49464 50928 Skipped sending survey availability notifications for survey 20eb64e2-ebbb-456d-8e54-8295cb36c0f1 as send_notifications was not requested
+INFO 2026-05-05 12:35:10,786 dual_auth 49464 26192 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:36:07,383 dual_auth 49464 26192 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:36:07,386 models 49464 26192 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-05 12:36:07,387 models 49464 26192 Survey.save() - per_device_access final value: False
+INFO 2026-05-05 12:36:07,400 views 49464 26192 Survey 20eb64e2-ebbb-456d-8e54-8295cb36c0f1 deleted by superadmin@example.com (role: super_admin)
+INFO 2026-05-05 12:36:07,487 dual_auth 49464 13368 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:36:07,488 dual_auth 49464 47668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:36:11,328 dual_auth 49464 47668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:36:15,556 dual_auth 49464 47668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:36:15,567 views 49464 47668 Retrieved 5 predefined templates for superadmin@example.com
+INFO 2026-05-05 12:36:22,976 dual_auth 49464 47668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:36:23,006 serializers 49464 47668 Serializer create - per_device_access: False
+INFO 2026-05-05 12:36:23,006 serializers 49464 47668 Serializer create - all validated_data keys: ['title', 'description', 'visibility', 'is_active', 'start_date', 'end_date', 'per_device_access', 'questions', 'status', 'creator']
+INFO 2026-05-05 12:36:23,007 serializers 49464 47668 About to create survey with data: {'title': 'تسجيل فعالية', 'description': 'يرجى تعبئة النموذج أدناه لتأكيد تسجيلك في الفعالية القادمة. تأكد من إدخال جميع المعلومات المطلوبة بدقة لضمان اكتمال التسجيل.', 'visibility': 'AUTH', 'is_active': True, 'start_date': None, 'end_date': None, 'per_device_access': False, 'status': 'draft', 'creator': <User: superadmin@example.com (super_admin)>}
+INFO 2026-05-05 12:36:23,009 models 49464 47668 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-05 12:36:23,009 models 49464 47668 Survey.save() - per_device_access final value: False
+INFO 2026-05-05 12:36:23,029 serializers 49464 47668 Mapped temp ID 'temp-1777973775614-0' to question 6bf0dcc4-7ccb-4406-8728-ae7f66374a5b (order 1)
+INFO 2026-05-05 12:36:23,038 serializers 49464 47668 Mapped temp ID 'temp-1777973775614-1' to question be8bd303-31e0-4c09-86a5-bb052b9b31ab (order 2)
+INFO 2026-05-05 12:36:23,045 serializers 49464 47668 Mapped temp ID 'temp-1777973775614-2' to question b6e55eb9-ffd0-427a-ad2c-3165449fc0d4 (order 3)
+INFO 2026-05-05 12:36:23,046 serializers 49464 47668 Survey created: 77bd2203-286a-4704-a1ed-1611e1263386 with 3 questions by superadmin@example.com
+INFO 2026-05-05 12:36:23,153 dual_auth 49464 48768 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:36:23,160 views 49464 48768 Successfully retrieved survey 77bd2203-286a-4704-a1ed-1611e1263386: تسجيل فعالية
+INFO 2026-05-05 12:36:23,164 views 49464 48768 Successfully serialized survey 77bd2203-286a-4704-a1ed-1611e1263386
+INFO 2026-05-05 12:36:23,168 dual_auth 49464 15324 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:36:23,172 dual_auth 49464 33088 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:36:26,316 dual_auth 49464 15324 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:36:36,149 dual_auth 49464 15324 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:36:36,155 models 49464 15324 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-05 12:36:36,155 models 49464 15324 Survey.save() - per_device_access final value: False
+INFO 2026-05-05 12:36:36,187 views 49464 15324 Survey 77bd2203-286a-4704-a1ed-1611e1263386 audience updated by superadmin@example.com
+INFO 2026-05-05 12:36:36,198 dual_auth 49464 15324 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:36:36,200 models 49464 15324 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-05 12:36:36,201 models 49464 15324 Survey.save() - per_device_access final value: False
+INFO 2026-05-05 12:36:36,208 signals 49464 15324 Survey 77bd2203-286a-4704-a1ed-1611e1263386 was published, sending availability notifications
+INFO 2026-05-05 12:36:36,225 views 49464 15324 Skipped sending survey availability notifications for survey 77bd2203-286a-4704-a1ed-1611e1263386 as send_notifications was not requested
+INFO 2026-05-05 12:36:36,280 dual_auth 49464 33088 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:37:43,294 dual_auth 49464 33088 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:37:44,699 dual_auth 49464 33088 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:37:44,713 views 49464 33088 Retrieved 5 predefined templates for superadmin@example.com
+INFO 2026-05-05 12:37:45,965 dual_auth 49464 33088 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:37:45,969 serializers 49464 33088 Serializer create - per_device_access: False
+INFO 2026-05-05 12:37:45,969 serializers 49464 33088 Serializer create - all validated_data keys: ['title', 'description', 'visibility', 'is_active', 'start_date', 'end_date', 'per_device_access', 'questions', 'status', 'creator']
+INFO 2026-05-05 12:37:45,970 serializers 49464 33088 About to create survey with data: {'title': 'ee', 'description': 'قالب تم إنشاؤه من بنية الاستطلاع', 'visibility': 'AUTH', 'is_active': True, 'start_date': None, 'end_date': None, 'per_device_access': False, 'status': 'draft', 'creator': <User: superadmin@example.com (super_admin)>}
+INFO 2026-05-05 12:37:45,970 models 49464 33088 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-05 12:37:45,971 models 49464 33088 Survey.save() - per_device_access final value: False
+INFO 2026-05-05 12:37:45,993 serializers 49464 33088 Mapped temp ID 'temp-1777973864726-0' to question c33257c4-026d-4dfa-ba5b-fc20d9c23dc3 (order 1)
+INFO 2026-05-05 12:37:45,993 serializers 49464 33088 Survey created: 55b24269-b384-43d1-b29d-7a1e37095967 with 1 questions by superadmin@example.com
+INFO 2026-05-05 12:37:46,069 dual_auth 49464 30636 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:37:46,076 views 49464 30636 Successfully retrieved survey 55b24269-b384-43d1-b29d-7a1e37095967: ee
+INFO 2026-05-05 12:37:46,077 views 49464 30636 Successfully serialized survey 55b24269-b384-43d1-b29d-7a1e37095967
+INFO 2026-05-05 12:37:46,082 dual_auth 49464 18200 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:37:46,086 dual_auth 49464 52184 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:37:47,578 dual_auth 49464 52184 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:37:47,583 serializers 49464 52184 UPDATE: questions_data is None: True, len=0
+INFO 2026-05-05 12:37:47,583 models 49464 52184 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-05 12:37:47,584 models 49464 52184 Survey.save() - per_device_access final value: False
+INFO 2026-05-05 12:37:47,594 serializers 49464 52184 Survey updated: 55b24269-b384-43d1-b29d-7a1e37095967 with 0 questions
+INFO 2026-05-05 12:37:47,596 views 49464 52184 Survey 55b24269-b384-43d1-b29d-7a1e37095967 updated by superadmin@example.com (role: super_admin)
+INFO 2026-05-05 12:37:47,616 dual_auth 49464 52184 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:37:47,617 models 49464 52184 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-05 12:37:47,618 models 49464 52184 Survey.save() - per_device_access final value: False
+INFO 2026-05-05 12:37:47,634 signals 49464 52184 Survey 55b24269-b384-43d1-b29d-7a1e37095967 was published, sending availability notifications
+INFO 2026-05-05 12:37:47,702 views 49464 52184 Skipped sending survey availability notifications for survey 55b24269-b384-43d1-b29d-7a1e37095967 as send_notifications was not requested
+INFO 2026-05-05 12:37:47,756 dual_auth 49464 18200 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:37:55,423 dual_auth 49464 18200 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:37:55,426 models 49464 18200 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-05 12:37:55,427 models 49464 18200 Survey.save() - per_device_access final value: False
+INFO 2026-05-05 12:37:55,436 views 49464 18200 Survey 55b24269-b384-43d1-b29d-7a1e37095967 deleted by superadmin@example.com (role: super_admin)
+INFO 2026-05-05 12:37:55,496 dual_auth 49464 47544 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:37:55,499 dual_auth 49464 16204 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:51:56,095 views 27272 24776 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 12:51:56,185 dual_auth 27272 24776 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:51:56,186 views 27272 24776 User profile accessed: superadmin@example.com
+INFO 2026-05-05 12:51:56,362 dual_auth 27272 24776 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:51:56,481 dual_auth 27272 38148 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:51:56,482 views 27272 38148 Building queryset for user superadmin@example.com
+INFO 2026-05-05 12:51:56,488 views 27272 38148 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 12:51:58,937 dual_auth 27272 38148 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:54:45,344 views 14024 47544 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 12:54:45,383 dual_auth 14024 47544 User superadmin@example.com authenticated with regular JWT (universal)
+ERROR 2026-05-05 12:54:45,394 views 14024 47544 Error getting survey object 20eb64e2-ebbb-456d-8e54-8295cb36c0f1: No Survey matches the given query.
+INFO 2026-05-05 12:54:46,646 dual_auth 14024 1028 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:54:46,653 dual_auth 14024 52008 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:54:50,833 dual_auth 14024 1028 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:54:52,849 dual_auth 14024 1028 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:54:52,883 views 14024 1028 Retrieved 5 predefined templates for superadmin@example.com
+INFO 2026-05-05 12:54:55,011 dual_auth 14024 1028 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:54:55,036 serializers 14024 1028 Serializer create - per_device_access: False
+INFO 2026-05-05 12:54:55,037 serializers 14024 1028 Serializer create - all validated_data keys: ['title', 'description', 'visibility', 'is_active', 'start_date', 'end_date', 'per_device_access', 'questions', 'status', 'creator']
+INFO 2026-05-05 12:54:55,037 serializers 14024 1028 About to create survey with data: {'title': 'ص', 'description': 'قالب تم إنشاؤه من بنية الاستطلاع', 'visibility': 'AUTH', 'is_active': True, 'start_date': None, 'end_date': None, 'per_device_access': False, 'status': 'draft', 'creator': <User: superadmin@example.com (super_admin)>}
+INFO 2026-05-05 12:54:55,038 models 14024 1028 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-05 12:54:55,038 models 14024 1028 Survey.save() - per_device_access final value: False
+INFO 2026-05-05 12:54:55,068 serializers 14024 1028 Mapped temp ID 'temp-1777974892915-0' to question 9acbe6bf-e0c4-429d-9b3b-6fb63fdf113f (order 1)
+INFO 2026-05-05 12:54:55,069 serializers 14024 1028 Survey created: 94f4abf1-5f1a-4e93-bbad-258cc21bb12b with 1 questions by superadmin@example.com
+INFO 2026-05-05 12:54:55,193 dual_auth 14024 50656 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:54:55,202 views 14024 50656 Successfully retrieved survey 94f4abf1-5f1a-4e93-bbad-258cc21bb12b: ص
+INFO 2026-05-05 12:54:55,203 views 14024 50656 Successfully serialized survey 94f4abf1-5f1a-4e93-bbad-258cc21bb12b
+INFO 2026-05-05 12:54:55,213 dual_auth 14024 49844 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:54:55,222 dual_auth 14024 38896 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 12:54:56,240 dual_auth 14024 49844 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:07,031 views 37316 39916 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 13:23:07,192 dual_auth 37316 39916 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:07,208 views 37316 39916 User profile accessed: superadmin@example.com
+INFO 2026-05-05 13:23:07,219 dual_auth 37316 11380 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:07,222 views 37316 11380 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 13:23:07,241 dual_auth 37316 11380 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:07,330 views 37316 28516 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 13:23:07,369 dual_auth 37316 11380 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:07,369 dual_auth 37316 37300 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:07,406 dual_auth 37316 28516 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:07,409 views 37316 28516 User profile accessed: superadmin@example.com
+INFO 2026-05-05 13:23:07,800 dual_auth 37316 28516 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:14,592 dual_auth 37316 37300 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:14,593 views 37316 37300 User logged out without token blacklisting: superadmin@example.com
+INFO 2026-05-05 13:23:35,780 dual_auth 37316 28516 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:35,796 dual_auth 37316 44428 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:35,797 views 37316 44428 Building queryset for user superadmin@example.com
+INFO 2026-05-05 13:23:35,802 views 37316 44428 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 13:23:37,728 dual_auth 37316 9408 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:37,731 dual_auth 37316 18460 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:38,153 dual_auth 37316 18460 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:38,163 dual_auth 37316 9408 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:38,164 views 37316 9408 User profile accessed: superadmin@example.com
+INFO 2026-05-05 13:23:38,165 dual_auth 37316 6268 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:38,170 dual_auth 37316 16620 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:38,216 dual_auth 37316 18460 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:38,217 dual_auth 37316 16620 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:23:48,373 serializers 37316 24492 Looking for user with email: test@example.com
+INFO 2026-05-05 13:23:48,374 managers 37316 24492 Looking for user with email: test@example.com
+INFO 2026-05-05 13:23:48,379 serializers 37316 24492 User found: test@example.com
+INFO 2026-05-05 13:23:48,379 serializers 37316 24492 Authenticating with username: test@example.com
+INFO 2026-05-05 13:23:49,116 serializers 37316 24492 Authentication result: Failed
+WARNING 2026-05-05 13:23:49,116 serializers 37316 24492 Authentication failed for username: test@example.com
+INFO 2026-05-05 13:23:54,280 serializers 37316 24492 Looking for user with email: test@example.com
+INFO 2026-05-05 13:23:54,280 managers 37316 24492 Looking for user with email: test@example.com
+INFO 2026-05-05 13:23:54,283 serializers 37316 24492 User found: test@example.com
+INFO 2026-05-05 13:23:54,284 serializers 37316 24492 Authenticating with username: test@example.com
+INFO 2026-05-05 13:23:55,158 serializers 37316 24492 Authentication result: Failed
+WARNING 2026-05-05 13:23:55,158 serializers 37316 24492 Authentication failed for username: test@example.com
+INFO 2026-05-05 13:24:01,273 serializers 37316 24492 Looking for user with email: test@example.com
+INFO 2026-05-05 13:24:01,273 managers 37316 24492 Looking for user with email: test@example.com
+INFO 2026-05-05 13:24:01,276 serializers 37316 24492 User found: test@example.com
+INFO 2026-05-05 13:24:01,277 serializers 37316 24492 Authenticating with username: test@example.com
+INFO 2026-05-05 13:24:02,081 serializers 37316 24492 Authentication result: Failed
+WARNING 2026-05-05 13:24:02,082 serializers 37316 24492 Authentication failed for username: test@example.com
+INFO 2026-05-05 13:24:50,372 dual_auth 37316 18460 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:24:50,372 views 37316 18460 User logged out without token blacklisting: superadmin@example.com
+INFO 2026-05-05 13:26:53,239 serializers 17756 40168 Looking for user with email: superadmin@example.com
+INFO 2026-05-05 13:26:53,239 managers 17756 40168 Looking for user with email: superadmin@example.com
+INFO 2026-05-05 13:26:53,243 serializers 17756 40168 User found: superadmin@example.com
+INFO 2026-05-05 13:26:53,243 serializers 17756 40168 Authenticating with username: superadmin@example.com
+INFO 2026-05-05 13:26:53,984 serializers 17756 40168 Authentication result: Success
+INFO 2026-05-05 13:26:53,985 serializers 17756 40168 Validation successful
+INFO 2026-05-05 13:26:53,993 views 17756 40168 User logged in: superadmin@example.com
+INFO 2026-05-05 13:26:54,478 views 17756 40168 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 13:26:54,505 dual_auth 17756 40168 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:26:54,508 views 17756 40168 User profile accessed: superadmin@example.com
+INFO 2026-05-05 13:26:54,514 dual_auth 17756 19832 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:26:54,514 views 17756 19832 User profile accessed: superadmin@example.com
+INFO 2026-05-05 13:26:54,710 dual_auth 17756 40168 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:26:54,735 dual_auth 17756 12476 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:26:54,735 views 17756 12476 Building queryset for user superadmin@example.com
+INFO 2026-05-05 13:26:54,740 views 17756 12476 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 13:27:11,477 dual_auth 17756 40168 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:27:11,478 dual_auth 17756 12476 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:27:11,478 views 17756 40168 User profile accessed: superadmin@example.com
+INFO 2026-05-05 13:27:11,483 dual_auth 17756 12152 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:27:11,483 dual_auth 17756 44152 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:27:11,509 dual_auth 17756 12476 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:27:11,513 dual_auth 17756 44152 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:27:22,961 dual_auth 17756 44152 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:27:22,962 dual_auth 17756 12476 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:30:08,699 serializers 17756 43416 Looking for user with email: admin@test.com
+INFO 2026-05-05 13:30:08,699 managers 17756 43416 Looking for user with email: admin@test.com
+INFO 2026-05-05 13:30:08,706 serializers 17756 43416 User found: admin@test.com
+INFO 2026-05-05 13:30:08,706 serializers 17756 43416 Authenticating with username: admin@test.com
+INFO 2026-05-05 13:30:09,506 serializers 17756 43416 Authentication result: Failed
+WARNING 2026-05-05 13:30:09,507 serializers 17756 43416 Authentication failed for username: admin@test.com
+INFO 2026-05-05 13:30:28,084 serializers 17756 43416 Looking for user with email: admin@test.com
+INFO 2026-05-05 13:30:28,085 managers 17756 43416 Looking for user with email: admin@test.com
+INFO 2026-05-05 13:30:28,088 serializers 17756 43416 User found: admin@test.com
+INFO 2026-05-05 13:30:28,089 serializers 17756 43416 Authenticating with username: admin@test.com
+INFO 2026-05-05 13:30:28,792 serializers 17756 43416 Authentication result: Failed
+WARNING 2026-05-05 13:30:28,793 serializers 17756 43416 Authentication failed for username: admin@test.com
+INFO 2026-05-05 13:30:51,282 serializers 17756 43416 Looking for user with email: admin@test.com
+INFO 2026-05-05 13:30:51,282 managers 17756 43416 Looking for user with email: admin@test.com
+INFO 2026-05-05 13:30:51,287 serializers 17756 43416 User found: admin@test.com
+INFO 2026-05-05 13:30:51,287 serializers 17756 43416 Authenticating with username: admin@test.com
+INFO 2026-05-05 13:30:51,992 serializers 17756 43416 Authentication result: Failed
+WARNING 2026-05-05 13:30:51,993 serializers 17756 43416 Authentication failed for username: admin@test.com
+INFO 2026-05-05 13:33:03,834 serializers 1404 49372 Looking for user with email: admin@test.com
+INFO 2026-05-05 13:33:03,834 managers 1404 49372 Looking for user with email: admin@test.com
+INFO 2026-05-05 13:33:03,838 serializers 1404 49372 User found: admin@test.com
+INFO 2026-05-05 13:33:03,838 serializers 1404 49372 Authenticating with username: admin@test.com
+INFO 2026-05-05 13:33:04,509 serializers 1404 49372 Authentication result: Success
+INFO 2026-05-05 13:33:04,510 serializers 1404 49372 Validation successful
+INFO 2026-05-05 13:33:04,522 views 1404 49372 User logged in: admin@test.com
+INFO 2026-05-05 13:33:04,899 views 1404 49372 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-05 13:33:04,949 dual_auth 1404 49372 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:33:04,949 views 1404 49372 User profile accessed: admin@test.com
+INFO 2026-05-05 13:33:04,956 dual_auth 1404 49372 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:33:04,957 views 1404 49372 User profile accessed: admin@test.com
+INFO 2026-05-05 13:33:05,088 dual_auth 1404 49372 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:33:05,113 dual_auth 1404 49372 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:33:05,114 views 1404 49372 Building queryset for user admin@test.com
+INFO 2026-05-05 13:33:05,118 views 1404 49372 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:33:34,092 dual_auth 25832 17152 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:33:34,112 dual_auth 25832 15296 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:33:40,602 dual_auth 25832 15296 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:34:29,338 dual_auth 25832 15296 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:34:29,344 models 25832 15296 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-05 13:34:29,344 models 25832 15296 Survey.save() - per_device_access final value: False
+INFO 2026-05-05 13:34:29,378 views 25832 15296 Survey 94f4abf1-5f1a-4e93-bbad-258cc21bb12b audience updated by superadmin@example.com
+INFO 2026-05-05 13:34:29,387 email_service 25832 15296 Started background email notification for survey 94f4abf1-5f1a-4e93-bbad-258cc21bb12b to 1 recipients
+INFO 2026-05-05 13:34:29,401 dual_auth 25832 15296 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:34:29,403 models 25832 15296 Survey.save() - per_device_access before check: False (type: <class 'bool'>)
+INFO 2026-05-05 13:34:29,403 models 25832 15296 Survey.save() - per_device_access final value: False
+INFO 2026-05-05 13:34:29,411 signals 25832 15296 Survey 94f4abf1-5f1a-4e93-bbad-258cc21bb12b was published, sending availability notifications
+INFO 2026-05-05 13:34:29,426 views 25832 15296 Skipped sending survey availability notifications for survey 94f4abf1-5f1a-4e93-bbad-258cc21bb12b as send_notifications was not requested
+ERROR 2026-05-05 13:34:29,474 email_service 25832 17692 Failed to send survey notification to admin@test.com: [Errno 11001] getaddrinfo failed
+INFO 2026-05-05 13:34:29,474 email_service 25832 17692 Survey share notification for 'ص' (ID: 94f4abf1-5f1a-4e93-bbad-258cc21bb12b): sent=0, failed=1, total=1
+INFO 2026-05-05 13:34:29,487 dual_auth 25832 17152 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:34:31,999 dual_auth 25832 520 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:34:40,362 dual_auth 25832 17152 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:34:40,362 views 25832 17152 Building queryset for user superadmin@example.com
+INFO 2026-05-05 13:34:40,365 views 25832 17152 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 13:37:46,724 dual_auth 25832 49788 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:37:46,726 views 25832 49788 User profile accessed: admin@test.com
+INFO 2026-05-05 13:37:46,727 dual_auth 25832 15540 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:37:46,734 dual_auth 25832 41444 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:37:46,747 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:37:46,782 dual_auth 25832 41444 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:37:46,782 dual_auth 25832 15540 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:37:48,669 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:37:48,673 dual_auth 25832 49788 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:37:54,807 dual_auth 25832 49788 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:37:54,807 views 25832 49788 Building queryset for user admin@test.com
+INFO 2026-05-05 13:37:54,810 views 25832 49788 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:38:03,654 dual_auth 25832 49788 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:38:03,656 views 25832 49788 User profile accessed: admin@test.com
+INFO 2026-05-05 13:38:03,656 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:38:03,663 dual_auth 25832 26224 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:38:03,664 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:38:03,693 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:38:03,694 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:38:55,994 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:38:56,480 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:38:56,481 views 25832 39760 Building queryset for user admin@test.com
+INFO 2026-05-05 13:38:56,483 views 25832 39760 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:38:57,974 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:39:04,407 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:39:04,432 signals 25832 39760 Sent survey completed notification to superadmin@example.com for response eed054eb-48e9-494e-b955-90d74d660e2d to survey 94f4abf1-5f1a-4e93-bbad-258cc21bb12b
+ERROR 2026-05-05 13:39:04,434 signals 25832 39760 Failed to send survey completed notification to shared user admin@test.com for response eed054eb-48e9-494e-b955-90d74d660e2d to survey 94f4abf1-5f1a-4e93-bbad-258cc21bb12b: 'NotificationPreference' object has no attribute 'survey_completed'
+INFO 2026-05-05 13:39:04,460 views 25832 39760 Authenticated survey response submitted: eed054eb-48e9-494e-b955-90d74d660e2d for survey 94f4abf1-5f1a-4e93-bbad-258cc21bb12b by admin@test.com
+INFO 2026-05-05 13:39:09,620 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:39:09,625 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:39:09,626 views 25832 21924 Building queryset for user admin@test.com
+INFO 2026-05-05 13:39:09,633 views 25832 21924 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:39:17,390 dual_auth 25832 17152 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:39:18,492 dual_auth 25832 37728 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:39:18,492 views 25832 37728 Building queryset for user superadmin@example.com
+INFO 2026-05-05 13:39:18,495 views 25832 37728 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 13:39:20,017 dual_auth 25832 33616 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:39:20,020 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:39:25,106 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:39:30,161 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:39:52,184 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:39:52,225 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:39:59,094 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:40:01,358 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:40:01,358 views 25832 21924 Building queryset for user admin@test.com
+INFO 2026-05-05 13:40:01,361 views 25832 21924 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:40:04,600 views 25832 21924 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-05 13:40:04,614 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:40:04,615 views 25832 21924 User profile accessed: admin@test.com
+INFO 2026-05-05 13:40:04,662 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:40:04,751 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:40:04,751 views 25832 21924 Building queryset for user admin@test.com
+INFO 2026-05-05 13:40:04,754 views 25832 21924 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:40:06,091 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:40:08,594 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:40:08,629 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:40:12,582 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:40:17,238 views 25832 21924 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-05 13:40:17,255 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:40:17,255 views 25832 21924 User profile accessed: admin@test.com
+INFO 2026-05-05 13:40:17,277 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:40:17,304 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:40:19,292 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:40:19,293 views 25832 21924 Building queryset for user admin@test.com
+INFO 2026-05-05 13:40:19,295 views 25832 21924 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:40:38,727 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:12,631 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:12,681 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:16,501 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:20,755 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:20,783 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:23,886 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:24,692 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:24,709 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:29,405 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:30,903 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:30,920 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:32,956 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:37,949 views 25832 21924 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-05 13:41:37,965 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:37,967 views 25832 21924 User profile accessed: admin@test.com
+INFO 2026-05-05 13:41:38,006 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:38,026 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:38,028 views 25832 39760 Building queryset for user admin@test.com
+INFO 2026-05-05 13:41:38,035 views 25832 39760 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:41:39,489 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:41,435 views 25832 39760 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-05 13:41:41,447 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:41,447 views 25832 39760 User profile accessed: admin@test.com
+INFO 2026-05-05 13:41:41,467 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:41,492 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:42,890 views 25832 39760 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-05 13:41:42,906 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:42,906 views 25832 39760 User profile accessed: admin@test.com
+INFO 2026-05-05 13:41:42,926 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:42,951 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:44,765 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:44,765 views 25832 39760 Building queryset for user admin@test.com
+INFO 2026-05-05 13:41:44,767 views 25832 39760 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:41:52,981 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:53,811 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:53,812 views 25832 39760 Building queryset for user admin@test.com
+INFO 2026-05-05 13:41:53,814 views 25832 39760 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:41:56,732 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:58,173 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:41:58,173 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:01,341 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:11,948 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:20,722 views 25832 21924 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-05 13:42:20,759 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:20,760 views 25832 21924 User profile accessed: admin@test.com
+INFO 2026-05-05 13:42:20,830 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:20,833 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:34,847 dual_auth 25832 39760 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:36,670 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:36,671 views 25832 21924 Building queryset for user admin@test.com
+INFO 2026-05-05 13:42:36,674 views 25832 21924 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:42:40,855 dual_auth 25832 21924 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:43,111 dual_auth 25832 49788 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:43,113 dual_auth 25832 42312 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:44,992 dual_auth 25832 42312 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:44,993 views 25832 42312 Building queryset for user admin@test.com
+INFO 2026-05-05 13:42:44,995 views 25832 42312 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:42:47,260 dual_auth 25832 42312 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:47,260 views 25832 42312 User logged out without token blacklisting: admin@test.com
+INFO 2026-05-05 13:42:51,992 serializers 25832 42312 Looking for user with email: test@example.com
+INFO 2026-05-05 13:42:51,993 managers 25832 42312 Looking for user with email: test@example.com
+INFO 2026-05-05 13:42:51,997 serializers 25832 42312 User found: test@example.com
+INFO 2026-05-05 13:42:51,997 serializers 25832 42312 Authenticating with username: test@example.com
+INFO 2026-05-05 13:42:52,687 serializers 25832 42312 Authentication result: Success
+INFO 2026-05-05 13:42:52,687 serializers 25832 42312 Validation successful
+INFO 2026-05-05 13:42:52,695 views 25832 42312 User logged in: test@example.com
+INFO 2026-05-05 13:42:53,156 views 25832 42312 JWT tokens refreshed with rotation for user: test@example.com
+INFO 2026-05-05 13:42:53,187 dual_auth 25832 42312 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:53,188 views 25832 42312 User profile accessed: test@example.com
+INFO 2026-05-05 13:42:53,191 dual_auth 25832 40592 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:53,191 views 25832 40592 User profile accessed: test@example.com
+INFO 2026-05-05 13:42:53,317 dual_auth 25832 40592 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:53,330 dual_auth 25832 40592 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:53,330 views 25832 40592 Building queryset for user test@example.com
+INFO 2026-05-05 13:42:53,333 views 25832 40592 Successfully built queryset for user test@example.com
+INFO 2026-05-05 13:42:57,324 dual_auth 25832 40592 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:58,774 dual_auth 25832 51348 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:58,774 views 25832 51348 Building queryset for user test@example.com
+INFO 2026-05-05 13:42:58,776 views 25832 51348 Successfully built queryset for user test@example.com
+INFO 2026-05-05 13:42:59,592 dual_auth 25832 22580 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:42:59,598 dual_auth 25832 46644 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:43:15,147 dual_auth 25832 46644 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:43:17,724 dual_auth 25832 46644 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:43:19,769 dual_auth 25832 46644 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:43:21,699 dual_auth 25832 22580 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:43:21,700 views 25832 22580 Building queryset for user test@example.com
+INFO 2026-05-05 13:43:21,702 views 25832 22580 Successfully built queryset for user test@example.com
+INFO 2026-05-05 13:43:25,500 dual_auth 25832 22580 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:43:25,507 views 25832 22580 User profile accessed: test@example.com
+INFO 2026-05-05 13:43:25,515 dual_auth 25832 31992 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:43:25,519 dual_auth 25832 26176 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:43:25,521 dual_auth 25832 24936 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:43:25,553 dual_auth 25832 31992 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:43:25,555 dual_auth 25832 24936 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:43:31,445 dual_auth 25832 24936 User test@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:43:31,445 views 25832 24936 User logged out without token blacklisting: test@example.com
+INFO 2026-05-05 13:43:37,853 serializers 25832 24936 Looking for user with email: admin@test.com
+INFO 2026-05-05 13:43:37,853 managers 25832 24936 Looking for user with email: admin@test.com
+INFO 2026-05-05 13:43:37,856 serializers 25832 24936 User found: admin@test.com
+INFO 2026-05-05 13:43:37,857 serializers 25832 24936 Authenticating with username: admin@test.com
+INFO 2026-05-05 13:43:38,546 serializers 25832 24936 Authentication result: Success
+INFO 2026-05-05 13:43:38,546 serializers 25832 24936 Validation successful
+INFO 2026-05-05 13:43:38,555 views 25832 24936 User logged in: admin@test.com
+INFO 2026-05-05 13:43:39,111 views 25832 24936 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-05 13:43:39,142 dual_auth 25832 24936 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:43:39,142 views 25832 24936 User profile accessed: admin@test.com
+INFO 2026-05-05 13:43:39,143 dual_auth 25832 31992 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:43:39,144 views 25832 31992 User profile accessed: admin@test.com
+INFO 2026-05-05 13:43:39,294 dual_auth 25832 31992 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:43:39,315 dual_auth 25832 26176 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:43:39,316 views 25832 26176 Building queryset for user admin@test.com
+INFO 2026-05-05 13:43:39,320 views 25832 26176 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:43:40,356 dual_auth 25832 26176 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:45:01,351 dual_auth 25832 31992 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:45:01,351 views 25832 31992 Building queryset for user admin@test.com
+INFO 2026-05-05 13:45:01,355 views 25832 31992 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:45:08,984 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:45:09,011 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:45:12,575 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:45:14,537 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:45:14,554 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:45:16,840 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:45:17,873 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:45:17,892 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:45:23,606 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:47:37,687 dual_auth 25832 31992 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:47:39,132 dual_auth 25832 31992 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:47:39,157 dual_auth 25832 31992 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:48:43,134 dual_auth 25832 31992 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:48:51,977 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:48:52,003 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:48:55,160 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:48:56,436 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:48:56,454 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:49:03,398 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:49:08,158 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:49:08,177 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:49:34,360 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:49:34,403 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:49:40,259 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:49:42,765 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:49:42,781 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:49:45,548 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:49:46,281 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:49:46,301 dual_auth 25832 9668 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:09,769 dual_auth 25832 9784 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:09,770 views 25832 9784 Building queryset for user admin@test.com
+INFO 2026-05-05 13:51:09,774 views 25832 9784 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:51:12,682 views 25832 9784 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-05 13:51:12,715 dual_auth 25832 9784 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:12,716 views 25832 9784 User profile accessed: admin@test.com
+INFO 2026-05-05 13:51:12,872 dual_auth 25832 9784 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:12,889 dual_auth 25832 2908 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:12,889 views 25832 2908 Building queryset for user admin@test.com
+INFO 2026-05-05 13:51:12,893 views 25832 2908 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:51:14,497 dual_auth 25832 2908 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:15,558 dual_auth 25832 9784 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:15,558 views 25832 9784 Building queryset for user admin@test.com
+INFO 2026-05-05 13:51:15,561 views 25832 9784 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:51:21,127 dual_auth 25832 9784 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:21,127 views 25832 9784 User profile accessed: admin@test.com
+INFO 2026-05-05 13:51:21,129 dual_auth 25832 37840 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:21,135 dual_auth 25832 18800 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:21,137 dual_auth 25832 48564 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:21,186 dual_auth 25832 37840 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:21,191 dual_auth 25832 48564 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:23,319 dual_auth 25832 18800 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:23,321 dual_auth 25832 9784 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:31,772 dual_auth 25832 18800 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:32,591 dual_auth 25832 18800 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:34,152 dual_auth 25832 18800 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:34,893 dual_auth 25832 18800 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:35,796 dual_auth 25832 18800 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:36,567 dual_auth 25832 18800 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:37,040 dual_auth 25832 18800 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:37,476 dual_auth 25832 18800 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:51:45,820 dual_auth 25832 16432 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:52:00,576 dual_auth 25832 16432 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:52:04,039 dual_auth 25832 16432 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:52:11,464 dual_auth 25832 16432 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:52:12,464 dual_auth 25832 16432 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:52:15,339 dual_auth 25832 16432 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:52:15,406 dual_auth 25832 9784 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:52:15,406 views 25832 9784 Building queryset for user admin@test.com
+INFO 2026-05-05 13:52:15,410 views 25832 9784 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:52:17,618 dual_auth 25832 9784 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:52:19,482 dual_auth 25832 980 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:52:19,482 views 25832 980 Building queryset for user admin@test.com
+INFO 2026-05-05 13:52:19,485 views 25832 980 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 13:52:22,957 dual_auth 25832 980 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:57:26,033 views 45928 43728 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-05 13:57:26,117 dual_auth 45928 4976 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:57:26,117 views 45928 4976 User profile accessed: admin@test.com
+INFO 2026-05-05 13:57:26,122 dual_auth 45928 43728 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:57:26,128 views 45928 43728 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-05 13:57:26,149 dual_auth 45928 43728 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:57:26,156 dual_auth 45928 4976 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:57:28,108 dual_auth 45928 4976 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:57:28,148 dual_auth 45928 4976 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:57:36,037 dual_auth 45928 4976 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:57:36,081 dual_auth 45928 4976 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:57:43,124 dual_auth 45928 4976 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:57:44,072 dual_auth 45928 4976 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:57:44,090 dual_auth 45928 4976 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:57:48,616 dual_auth 45928 4976 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:57:48,649 dual_auth 45928 4976 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:57:57,922 dual_auth 45928 4976 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:57:59,940 dual_auth 45928 4976 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:58:00,035 dual_auth 45928 4976 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:58:27,401 views 45928 35260 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 13:58:27,419 dual_auth 45928 35260 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:58:28,670 dual_auth 45928 35260 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:58:28,690 dual_auth 45928 35260 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 13:58:32,572 dual_auth 45928 35260 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:25:29,367 views 16824 42920 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-05 14:25:29,394 dual_auth 16824 42920 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:25:29,394 views 16824 42920 User profile accessed: admin@test.com
+INFO 2026-05-05 14:25:30,107 dual_auth 16824 42920 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:25:30,124 dual_auth 16824 44964 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:25:30,264 dual_auth 16824 44964 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:25:34,560 dual_auth 16824 44964 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:25:34,561 dual_auth 16824 42920 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:25:34,562 views 16824 44964 User profile accessed: admin@test.com
+INFO 2026-05-05 14:25:34,569 dual_auth 16824 43396 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:25:34,570 dual_auth 16824 44548 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:25:34,763 dual_auth 16824 42920 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:25:34,780 dual_auth 16824 43396 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:26:00,034 views 16824 2564 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 14:26:00,125 dual_auth 16824 2564 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:26:00,125 views 16824 2564 User profile accessed: superadmin@example.com
+INFO 2026-05-05 14:26:00,447 dual_auth 16824 48236 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:26:00,447 dual_auth 16824 20544 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:26:00,452 dual_auth 16824 2564 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:26:00,454 dual_auth 16824 3068 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:26:00,464 views 16824 3068 User profile accessed: superadmin@example.com
+INFO 2026-05-05 14:26:00,469 dual_auth 16824 29440 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:26:00,525 dual_auth 16824 20544 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:26:00,525 dual_auth 16824 2564 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:27:13,974 dual_auth 16824 2564 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:27:17,394 dual_auth 16824 2564 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:27:17,432 dual_auth 16824 2564 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:28:26,504 dual_auth 16824 43396 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:28:27,603 dual_auth 16824 43396 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:28:27,631 dual_auth 16824 43396 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:29:15,386 dual_auth 21780 47088 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:29:16,287 dual_auth 21780 47088 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:29:16,330 dual_auth 21780 47088 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:29:56,899 dual_auth 21780 47088 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:29:58,055 dual_auth 21780 47088 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:29:58,087 dual_auth 21780 47088 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:30:13,885 dual_auth 21780 47088 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:34:41,756 dual_auth 21252 9988 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:34:41,757 dual_auth 21252 41452 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:34:41,758 views 21252 9988 User profile accessed: admin@test.com
+INFO 2026-05-05 14:34:41,757 dual_auth 21252 484 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:34:41,767 dual_auth 21252 27396 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:34:41,849 dual_auth 21252 41452 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:34:41,850 dual_auth 21252 27396 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:34:48,008 dual_auth 21252 8216 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:34:48,014 dual_auth 21252 37828 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:34:54,190 dual_auth 21252 37828 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:36:05,031 dual_auth 21252 37828 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:36:06,023 dual_auth 21252 37828 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:36:06,053 dual_auth 21252 37828 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:36:54,759 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:36:54,814 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:37:02,735 dual_auth 40596 39752 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:37:04,415 dual_auth 40596 39752 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:37:04,444 dual_auth 40596 39752 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:37:11,809 dual_auth 40596 39752 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:37:11,856 dual_auth 40596 39752 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:38:10,944 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:38:13,131 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:38:13,704 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:38:16,572 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:38:18,852 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:38:19,646 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:38:21,620 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:38:28,385 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:38:30,034 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:38:30,059 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:38:35,314 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:38:37,094 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:38:37,198 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:38:43,256 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:38:44,518 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:38:44,548 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:39:09,309 dual_auth 40596 39752 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:39:10,461 dual_auth 40596 39752 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:39:10,486 dual_auth 40596 39752 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:39:21,931 dual_auth 40596 39752 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:39:21,991 dual_auth 40596 39752 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:39:28,366 views 40596 47772 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 14:39:28,444 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:39:28,445 views 40596 47772 User profile accessed: superadmin@example.com
+INFO 2026-05-05 14:39:28,598 dual_auth 40596 47772 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:39:28,609 dual_auth 40596 31100 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:39:28,697 dual_auth 40596 31100 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:39:37,139 dual_auth 40596 39752 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:39:43,098 dual_auth 40596 39752 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:39:45,031 dual_auth 40596 39752 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:39:45,059 dual_auth 40596 39752 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:47:52,009 views 30864 36560 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-05-05 14:47:52,068 dual_auth 30864 36560 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:47:52,069 views 30864 36560 User profile accessed: admin@test.com
+INFO 2026-05-05 14:47:52,206 dual_auth 30864 36560 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:47:52,212 dual_auth 30864 26896 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:47:52,278 dual_auth 30864 36560 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:47:57,388 views 30864 17392 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-05-05 14:47:57,436 dual_auth 30864 17392 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:47:57,438 views 30864 17392 User profile accessed: superadmin@example.com
+INFO 2026-05-05 14:47:57,555 dual_auth 30864 17392 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:47:57,558 dual_auth 30864 16620 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:47:57,622 dual_auth 30864 16620 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:48:01,797 dual_auth 30864 16620 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:48:02,700 dual_auth 30864 16620 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:48:02,734 dual_auth 30864 16620 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:48:13,759 dual_auth 30864 16620 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:48:17,755 dual_auth 30864 17392 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:48:17,755 views 30864 17392 Building queryset for user superadmin@example.com
+INFO 2026-05-05 14:48:17,758 views 30864 17392 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 14:48:23,380 dual_auth 30864 26896 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:48:23,381 views 30864 26896 Building queryset for user admin@test.com
+INFO 2026-05-05 14:48:23,383 views 30864 26896 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 14:48:25,876 dual_auth 30864 26896 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:48:37,250 dual_auth 30864 26896 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:48:37,301 signals 30864 26896 Sent survey completed notification to seif778811@gmail.com for response ba9ecc0f-5be4-42e9-8195-40061e65829b to survey 4977f932-f9f6-4b7b-a43f-0294abbd50ec
+INFO 2026-05-05 14:48:37,337 views 30864 26896 Authenticated survey response submitted: ba9ecc0f-5be4-42e9-8195-40061e65829b for survey 4977f932-f9f6-4b7b-a43f-0294abbd50ec by admin@test.com
+INFO 2026-05-05 14:48:40,251 dual_auth 30864 26896 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:48:40,267 dual_auth 30864 47516 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:48:40,268 views 30864 47516 Building queryset for user admin@test.com
+INFO 2026-05-05 14:48:40,270 views 30864 47516 Successfully built queryset for user admin@test.com
+INFO 2026-05-05 14:48:44,399 dual_auth 30864 17392 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:48:46,314 dual_auth 30864 17392 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:48:46,332 dual_auth 30864 43992 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:48:46,333 views 30864 43992 Building queryset for user superadmin@example.com
+INFO 2026-05-05 14:48:46,336 views 30864 43992 Successfully built queryset for user superadmin@example.com
+INFO 2026-05-05 14:48:48,620 dual_auth 30864 3884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:48:48,622 dual_auth 30864 26424 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:48:55,402 dual_auth 30864 3884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:48:59,301 dual_auth 30864 3884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:49:16,253 dual_auth 30864 3884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:49:16,321 dual_auth 30864 3884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:49:22,755 dual_auth 30864 47516 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:49:24,049 dual_auth 30864 47516 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:49:24,066 dual_auth 30864 47516 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:49:37,079 dual_auth 30864 47516 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:49:37,110 dual_auth 30864 47516 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:49:48,853 dual_auth 30864 3884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:49:50,177 dual_auth 30864 3884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:49:50,197 dual_auth 30864 3884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:49:54,931 dual_auth 30864 3884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:49:58,734 dual_auth 30864 3884 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:50:02,220 dual_auth 30864 26424 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-05-05 14:50:02,220 views 30864 26424 Building queryset for user superadmin@example.com
+INFO 2026-05-05 14:50:02,223 views 30864 26424 Successfully built queryset for user superadmin@example.com

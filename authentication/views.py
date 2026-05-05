@@ -1676,67 +1676,98 @@ class BulkDeleteUsersView(APIView):
             successful_deletions = []
             failed_deletions = []
             
-            with transaction.atomic():
-                for user_id in user_ids:
-                    try:
-                        # Get user
-                        user = User.objects.get(id=user_id)
+            for user_id in user_ids:
+                try:
+                    # Get user outside the savepoint so DoesNotExist is handled cleanly
+                    user = User.objects.get(id=user_id)
+                    
+                    # Gather info before deletion
+                    user_info = {
+                        'id': user.id,
+                        'email': user.email,
+                        'username': user.username,
+                        'role': user.role
+                    }
+                    
+                    # Check if this is a protected super admin
+                    if user.role == 'super_admin':
+                        # Count remaining super admins
+                        super_admin_count = User.objects.filter(
+                            role='super_admin',
+                            is_active=True
+                        ).exclude(id=user.id).count()
                         
-                        # Check if user exists and gather info before deletion
-                        user_info = {
-                            'id': user.id,
-                            'email': user.email,
-                            'username': user.username,
-                            'role': user.role
-                        }
+                        if super_admin_count < 1:
+                            failed_deletions.append({
+                                'user_id': user_id,
+                                'email': user.email,
+                                'error': 'Cannot delete the last super admin account'
+                            })
+                            continue
+                    
+                    # Each user deletion gets its own atomic savepoint so that an
+                    # Oracle exception (e.g. ORA-00942 from a missing migration table)
+                    # is isolated and does not poison the surrounding transaction,
+                    # allowing the remaining users in the batch to still be processed.
+                    with transaction.atomic():
+                        # Pre-delete PasswordResetCode records inside a nested savepoint.
+                        # If the auth_password_reset_code table does not yet exist on
+                        # Oracle (migration not applied), the inner savepoint is rolled
+                        # back silently.  This prevents Django's Collector from then
+                        # issuing a SELECT on that non-existent table during user.delete(),
+                        # which would otherwise raise ORA-00942 and abort everything.
+                        try:
+                            with transaction.atomic():
+                                from .models import PasswordResetCode
+                                PasswordResetCode.objects.filter(user=user).delete()
+                        except Exception as prc_err:
+                            # Savepoint rolled back – table likely missing in Oracle.
+                            # Log once, then carry on; user.delete() will still work
+                            # for all other related objects.
+                            logger.warning(
+                                f"Could not pre-delete PasswordResetCode for user "
+                                f"{user.id} (migration may be pending on Oracle): {prc_err}"
+                            )
                         
-                        # Check if this is a protected super admin
-                        if user.role == 'super_admin':
-                            # Count remaining super admins
-                            super_admin_count = User.objects.filter(
-                                role='super_admin',
-                                is_active=True
-                            ).exclude(id=user.id).count()
-                            
-                            if super_admin_count < 1:
-                                failed_deletions.append({
-                                    'user_id': user_id,
-                                    'email': user.email,
-                                    'error': 'Cannot delete the last super admin account'
-                                })
-                                continue
-                        
-                        # Delete the user (surveys will be preserved due to SET_NULL)
+                        # Delete the user (surveys preserved via SET_NULL)
                         user.delete()
-                        
-                        successful_deletions.append(user_info)
-                        
-                        # Log the deletion
-                        log_security_event(
-                            event_type='user_deletion',
-                            user=request.user,
-                            details={
-                                'deleted_user_id': user_id,
-                                'deleted_user_email': user_info['email'],
-                                'deleted_user_role': user_info['role']
-                            }
+                    
+                    successful_deletions.append(user_info)
+                    
+                    # Log the deletion
+                    log_security_event(
+                        event_type='user_deletion',
+                        user=request.user,
+                        details={
+                            'deleted_user_id': user_id,
+                            'deleted_user_email': user_info['email'],
+                            'deleted_user_role': user_info['role']
+                        }
+                    )
+                    
+                    logger.info(f"User deleted by admin {request.user.email}: {user_info['email']}")
+                    
+                except User.DoesNotExist:
+                    failed_deletions.append({
+                        'user_id': user_id,
+                        'email': 'Unknown',
+                        'error': 'User does not exist'
+                    })
+                    
+                except Exception as e:
+                    error_msg = str(e)
+                    # Give an actionable message for the most common Oracle deployment issue
+                    if 'ORA-00942' in error_msg:
+                        error_msg = (
+                            'ORA-00942: A required database table is missing on the Oracle '
+                            'server. Please run "python manage.py migrate" on the production '
+                            'server to apply pending migrations, then retry.'
                         )
-                        
-                        logger.info(f"User deleted by admin {request.user.email}: {user_info['email']}")
-                        
-                    except User.DoesNotExist:
-                        failed_deletions.append({
-                            'user_id': user_id,
-                            'email': 'Unknown',
-                            'error': 'User does not exist'
-                        })
-                        
-                    except Exception as e:
-                        failed_deletions.append({
-                            'user_id': user_id,
-                            'email': 'Unknown',
-                            'error': f'Unexpected error: {str(e)}'
-                        })
+                    failed_deletions.append({
+                        'user_id': user_id,
+                        'email': user_info.get('email', 'Unknown') if 'user_info' in dir() else 'Unknown',
+                        'error': error_msg
+                    })
             
             # Prepare response
             response_data = {

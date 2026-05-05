@@ -1434,6 +1434,16 @@ class SurveyViewSet(ModelViewSet):
             
             logger.info(f"Survey {survey.id} audience updated by {request.user.email}")
             
+            # Send email notifications to shared users (background thread - non-blocking)
+            if visibility in ('PRIVATE', 'GROUPS'):
+                from .email_service import notify_survey_shared
+                notify_survey_shared(
+                    survey=survey,
+                    sender_user=user,
+                    user_ids=user_ids if visibility == 'PRIVATE' else None,
+                    group_ids=group_ids if visibility in ('PRIVATE', 'GROUPS') else None,
+                )
+            
             response_data = {'visibility': visibility}
             if visibility == 'PRIVATE':
                 response_data['shared_users_count'] = survey.shared_with.count()
