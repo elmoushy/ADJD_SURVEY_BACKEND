@@ -859,6 +859,7 @@ class BulkAddUsersView(APIView):
                     }, status=status.HTTP_403_FORBIDDEN)
             
             added_users = []
+            updated_users = []
             already_in_group = []
             
             with transaction.atomic():
@@ -866,9 +867,28 @@ class BulkAddUsersView(APIView):
                     try:
                         target_user = User.objects.get(id=user_id)
                         
-                        # Check if user is already in group
-                        if UserGroup.objects.filter(user=target_user, group=group).exists():
-                            already_in_group.append(target_user.email)
+                        existing_membership = UserGroup.objects.filter(
+                            user=target_user, group=group
+                        ).first()
+                        
+                        if existing_membership:
+                            # User is already in the group — update role if it changed
+                            if existing_membership.is_group_admin != is_group_admin:
+                                existing_membership.is_group_admin = is_group_admin
+                                existing_membership.save(update_fields=['is_group_admin'])
+                                updated_users.append({
+                                    'id': target_user.id,
+                                    'email': target_user.email,
+                                    'full_name': target_user.full_name,
+                                    'is_group_admin': is_group_admin,
+                                })
+                            else:
+                                already_in_group.append({
+                                    'id': target_user.id,
+                                    'email': target_user.email,
+                                    'full_name': target_user.full_name,
+                                    'is_group_admin': existing_membership.is_group_admin,
+                                })
                             continue
                         
                         # Add user to group
@@ -881,15 +901,21 @@ class BulkAddUsersView(APIView):
                         added_users.append({
                             'id': target_user.id,
                             'email': target_user.email,
-                            'full_name': target_user.full_name
+                            'full_name': target_user.full_name,
+                            'is_group_admin': is_group_admin,
                         })
                         
                     except User.DoesNotExist:
                         continue
             
-            message = f"{len(added_users)} users added to group successfully"
+            parts = []
+            if added_users:
+                parts.append(f"{len(added_users)} user(s) added to group")
+            if updated_users:
+                parts.append(f"{len(updated_users)} user(s) role updated")
             if already_in_group:
-                message += f". {len(already_in_group)} users were already in the group."
+                parts.append(f"{len(already_in_group)} user(s) already in group with same role")
+            message = ". ".join(parts) + "." if parts else "No changes made."
             
             return Response({
                 'group': {
@@ -899,6 +925,7 @@ class BulkAddUsersView(APIView):
                     'admin_count': group.admin_count
                 },
                 'added_users': added_users,
+                'updated_users': updated_users,
                 'already_in_group': already_in_group,
                 'message': message
             }, status=status.HTTP_201_CREATED)
