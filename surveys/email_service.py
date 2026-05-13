@@ -30,18 +30,18 @@ def _build_survey_email_html(survey_title: str, survey_url: str, sender_name: st
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <style type="text/css">
-body {{ direction: rtl; font-family: 'Segoe UI', Tahoma, Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }}
-.container {{ max-width: 600px; margin: 30px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }}
-.header {{ background-color: #1a5276; padding: 24px; text-align: center; }}
+body {{ direction: rtl; font-family: 'Cairo', 'Noto Kufi Arabic', 'Segoe UI', Tahoma, Arial, sans-serif; margin: 0; padding: 0; background-color: #F5F7FA; }}
+.container {{ max-width: 620px; margin: 30px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(35,31,32,0.12); border: 1px solid #E5E8E1; }}
+.header {{ background: linear-gradient(135deg, #B78A41 0%, #A17D23 100%); padding: 24px; text-align: center; }}
 .header h1 {{ color: #ffffff; margin: 0; font-size: 22px; }}
 .content {{ padding: 32px 24px; text-align: right; }}
-.content p {{ color: #333333; font-size: 15px; line-height: 1.8; margin: 12px 0; }}
-.survey-title {{ background-color: #f0f4f8; border-right: 4px solid #1a5276; padding: 12px 16px; border-radius: 4px; margin: 20px 0; }}
-.survey-title span {{ font-weight: bold; color: #1a5276; font-size: 16px; }}
+.content p {{ color: #4D4D4F; font-size: 15px; line-height: 1.8; margin: 12px 0; }}
+.survey-title {{ background-color: #F8F6F0; border-right: 4px solid #B78A41; padding: 12px 16px; border-radius: 8px; margin: 20px 0; }}
+.survey-title span {{ font-weight: bold; color: #231F20; font-size: 16px; }}
 .btn-container {{ text-align: center; margin: 32px 0; }}
-.btn {{ display: inline-block; background-color: #1a5276; color: #ffffff; text-decoration: none; padding: 14px 40px; border-radius: 6px; font-size: 16px; font-weight: bold; }}
-.footer {{ background-color: #f8f9fa; padding: 16px 24px; text-align: center; border-top: 1px solid #e0e0e0; }}
-.footer p {{ color: #888888; font-size: 12px; margin: 4px 0; }}
+.btn {{ display: inline-block; background: linear-gradient(135deg, #B78A41 0%, #A17D23 100%); color: #ffffff; text-decoration: none; padding: 14px 40px; border-radius: 8px; font-size: 16px; font-weight: bold; }}
+.footer {{ background-color: #F8F6F0; padding: 16px 24px; text-align: center; border-top: 1px solid #E5E8E1; }}
+.footer p {{ color: #808285; font-size: 12px; margin: 4px 0; }}
 </style>
 </head>
 <body>
@@ -51,17 +51,25 @@ body {{ direction: rtl; font-family: 'Segoe UI', Tahoma, Arial, sans-serif; marg
     </div>
     <div class="content">
         <p>مرحباً،</p>
-        <p>تمت مشاركة ايضاح جديد معك بواسطة <strong>{sender_name}</strong>.</p>
+        <p>تمت مشاركة ايضاح جديد معك بواسطة <strong>قسم التخطيط والموازنة - إدارة المالية</strong>.</p>
         <div class="survey-title">
             <span>{survey_title}</span>
         </div>
         <p>يرجى الضغط على الزر أدناه للبدء:</p>
         <div class="btn-container">
-            <a href="{survey_url}" class="btn">بدء الايضاح</a>
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: 0 auto; border-collapse: separate;">
+                <tr>
+                    <td align="center" bgcolor="#B78A41" style="border-radius: 8px; mso-padding-alt: 0;">
+                        <a href="{survey_url}" class="btn" style="display: inline-block; padding: 14px 40px; font-size: 16px; font-weight: bold; color: #ffffff; text-decoration: none; background: #B78A41; border: 1px solid #A17D23; border-radius: 8px; line-height: 1.2;">
+                            بدء الإيضاح
+                        </a>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
     <div class="footer">
-        <p>هذه رسالة آلية من نظام الايضاحات - دائرة القضاء</p>
+        <p>هذه رسالة آلية من نظام الايضاحات - إدارة المالية - دائرة القضاء</p>
     </div>
 </div>
 </body>
@@ -76,7 +84,7 @@ def _build_survey_email_plain(survey_title: str, survey_url: str, sender_name: s
         f"عنوان الايضاح: {survey_title}\n\n"
         f"للبدء، يرجى زيارة الرابط التالي:\n{survey_url}\n\n"
         f"---\n"
-        f"نظام الايضاحات - دائرة القضاء"
+        f"نظام الايضاحات - إدارة المالية-دائرة القضاء"
     )
 
 
@@ -145,7 +153,6 @@ def notify_survey_shared(survey, sender_user, user_ids=None, group_ids=None):
 
         # Group member shares
         if group_ids:
-            from authentication.models import UserGroup
             group_member_emails = User.objects.filter(
                 user_groups__group_id__in=group_ids,
                 is_active=True
