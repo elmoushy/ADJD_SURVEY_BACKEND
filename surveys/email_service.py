@@ -14,10 +14,12 @@ from django.contrib.auth import get_user_model
 logger = logging.getLogger(__name__)
 User = get_user_model()
 
-# Frontend base URL (configurable via settings or env)
-FRONTEND_BASE_URL = getattr(
-    settings, 'FRONTEND_BASE_URL',
-    settings.CORS_ALLOWED_ORIGINS[0] if settings.CORS_ALLOWED_ORIGINS else 'http://localhost:5173'
+import os
+
+# Frontend base URL (configurable via env first, then settings)
+FRONTEND_BASE_URL = os.environ.get(
+    'FRONTEND_BASE_URL', 
+    getattr(settings, 'FRONTEND_BASE_URL', 'http://localhost:5173')
 )
 
 
