@@ -16,6 +16,7 @@ from .models import Response as SurveyResponse, ResponseFollowUp, FollowUpMessag
 from .permissions import IsFollowUpParticipant
 from .followup_presets import PRESETS
 from .views import can_user_manage_survey
+from .email_service import notify_followup_opened, notify_followup_reply, notify_followup_decision
 
 logger = logging.getLogger(__name__)
 
@@ -190,7 +191,10 @@ class FollowUpViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
             sender=request.user,
         )
 
+        # Send email notification to the respondent
         thread.refresh_from_db()
+        notify_followup_opened(thread, request.user)
+
         return DRFResponse(FollowUpSerializer.thread(thread), status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=['post'], url_path='messages')
@@ -257,6 +261,9 @@ class FollowUpViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
                 sender=request.user,
             )
 
+        # Send email notification to the other party
+        notify_followup_reply(thread, msg, request.user)
+
         return DRFResponse(FollowUpSerializer.message(msg), status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=['post'], url_path='decision')
@@ -309,7 +316,10 @@ class FollowUpViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
                 sender=request.user,
             )
 
+        # Send email notification to the respondent about the decision
         thread.refresh_from_db()
+        notify_followup_decision(thread)
+
         return DRFResponse(FollowUpSerializer.thread(thread))
 
     @action(detail=True, methods=['post'], url_path='mark-read')
