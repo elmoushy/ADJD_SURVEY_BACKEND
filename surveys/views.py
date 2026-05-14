@@ -123,9 +123,15 @@ def can_user_access_survey(user, survey):
     elif survey.visibility == 'AUTH':
         return True  # Any authenticated user
     elif survey.visibility == 'PRIVATE':
-        # Check if user is the creator or in shared_with list
-        return (survey.creator == user or 
-                user in survey.shared_with.all())
+        # Check if user is the creator, in shared_with list, or in shared groups
+        if survey.creator == user or user in survey.shared_with.all():
+            return True
+        # Also check group-based sharing for PRIVATE surveys
+        user_groups = user.user_groups.all()
+        shared_groups = survey.shared_with_groups.all()
+        if shared_groups.exists() and any(ug.group in shared_groups for ug in user_groups):
+            return True
+        return False
     elif survey.visibility == 'GROUPS':
         # Check if user is in any of the shared groups
         user_groups = user.user_groups.all()
@@ -160,7 +166,13 @@ def can_user_access_survey(user, survey):
     elif survey.visibility == 'AUTH':
         return True  # Any authenticated user
     elif survey.visibility == 'PRIVATE':
-        return survey.shared_with.filter(id=user.id).exists()
+        if survey.shared_with.filter(id=user.id).exists():
+            return True
+        # Also check group-based sharing for PRIVATE surveys
+        user_groups = user.user_groups.values_list('group_id', flat=True)
+        if survey.shared_with_groups.filter(id__in=user_groups).exists():
+            return True
+        return False
     elif survey.visibility == 'GROUPS':
         user_groups = user.user_groups.values_list('group_id', flat=True)
         return survey.shared_with_groups.filter(id__in=user_groups).exists()
@@ -2428,6 +2440,18 @@ class SurveyViewSet(ModelViewSet):
                     if (request.user == survey.creator or 
                         request.user in survey.shared_with.all()):
                         has_access = True
+                    else:
+                        # Check group-based sharing for PRIVATE surveys
+                        user_group_ids = request.user.user_groups.values_list('group_id', flat=True)
+                        if survey.shared_with_groups.filter(id__in=user_group_ids).exists():
+                            has_access = True
+                elif survey.visibility == 'GROUPS' and request.user.is_authenticated:
+                    if request.user == survey.creator:
+                        has_access = True
+                    else:
+                        user_group_ids = request.user.user_groups.values_list('group_id', flat=True)
+                        if survey.shared_with_groups.filter(id__in=user_group_ids).exists():
+                            has_access = True
             
             if has_access:
                 # Get first 3-5 questions for preview
@@ -2639,9 +2663,11 @@ class SurveyViewSet(ModelViewSet):
             elif survey.visibility == 'AUTH':
                 has_access = True  # All authenticated users can access
             elif survey.visibility == 'PRIVATE':
-                # Check if user is creator or explicitly shared
+                # Check if user is creator, explicitly shared, or in shared groups
+                user_group_ids = user.user_groups.values_list('group_id', flat=True)
                 has_access = (user == survey.creator or 
-                             user in survey.shared_with.all())
+                             user in survey.shared_with.all() or
+                             survey.shared_with_groups.filter(id__in=user_group_ids).exists())
             elif survey.visibility == 'GROUPS':
                 # Check if user is creator or belongs to one of the shared groups
                 user_group_ids = user.user_groups.values_list('group_id', flat=True)
@@ -3517,9 +3543,11 @@ class MySharedSurveysView(generics.ListAPIView):
             try:
                 user_groups = user.user_groups.values_list('group', flat=True)
                 if user_groups.exists():
-                    # Include group surveys regardless of whether user is the creator
+                    # Include GROUPS visibility surveys shared via groups
                     group_shared_surveys = Q(visibility='GROUPS', shared_with_groups__in=user_groups)
-                    base_query = base_query | group_shared_surveys
+                    # Also include PRIVATE visibility surveys shared via groups
+                    private_group_shared_surveys = Q(visibility='PRIVATE', shared_with_groups__in=user_groups) & ~Q(creator=user)
+                    base_query = base_query | group_shared_surveys | private_group_shared_surveys
                     logger.debug(f"Added group shared surveys for {user.email}")
                 else:
                     logger.debug(f"User {user.email} has no groups")
@@ -3684,8 +3712,13 @@ class MySharedSurveysView(generics.ListAPIView):
                         'access_type': survey.visibility,
                         'can_submit': not has_submitted and is_currently_active_uae(survey) and not survey.is_locked,
                         'has_submitted': has_submitted,
-                        'is_shared_explicitly': survey.visibility == 'PRIVATE',
-                        'is_shared_via_group': survey.visibility == 'GROUPS',
+                        'is_shared_explicitly': survey.shared_with.filter(id=request.user.id).exists() if survey.visibility == 'PRIVATE' else False,
+                        'is_shared_via_group': (
+                            survey.visibility == 'GROUPS' or 
+                            (survey.visibility == 'PRIVATE' and survey.shared_with_groups.filter(
+                                id__in=request.user.user_groups.values_list('group_id', flat=True)
+                            ).exists())
+                        ),
                         'is_creator': survey.creator == request.user if survey.creator is not None else False
                     }
                 }
@@ -3952,9 +3985,11 @@ class AuthenticatedSurveyResponseView(APIView):
             elif survey.visibility == 'AUTH':
                 has_access = True  # All authenticated users can access
             elif survey.visibility == 'PRIVATE':
-                # Check if user is creator or explicitly shared
+                # Check if user is creator, explicitly shared, or in shared groups
+                user_group_ids = user.user_groups.values_list('group_id', flat=True)
                 has_access = (user == survey.creator or 
-                             user in survey.shared_with.all())
+                             user in survey.shared_with.all() or
+                             survey.shared_with_groups.filter(id__in=user_group_ids).exists())
             elif survey.visibility == 'GROUPS':
                 # Check if user is creator or belongs to one of the shared groups
                 user_group_ids = user.user_groups.values_list('group_id', flat=True)
@@ -4422,14 +4457,20 @@ class SurveySubmissionView(APIView):
         if survey.visibility == "AUTH":
             return request.user.is_authenticated
         
-        # Private survey
+        # Private or Groups survey
         if not request.user.is_authenticated:
             return False
         
-        return (
-            request.user == survey.creator or
-            request.user in survey.shared_with.all()
-        )
+        if request.user == survey.creator or request.user in survey.shared_with.all():
+            return True
+        
+        # Check group-based sharing for PRIVATE and GROUPS visibility
+        if survey.visibility in ('PRIVATE', 'GROUPS'):
+            user_group_ids = request.user.user_groups.values_list('group_id', flat=True)
+            if survey.shared_with_groups.filter(id__in=user_group_ids).exists():
+                return True
+        
+        return False
     
     def post(self, request, survey_id):
         """Submit survey response"""

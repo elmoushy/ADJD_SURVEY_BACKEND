@@ -35,6 +35,11 @@ class IsCreatorOrVisible(BasePermission):
                     return True
                 if request.user.is_authenticated and request.user in obj.shared_with.all():
                     return True
+                # Also check group-based sharing for PRIVATE surveys
+                if request.user.is_authenticated:
+                    user_group_ids = request.user.user_groups.values_list('group_id', flat=True)
+                    if obj.shared_with_groups.filter(id__in=user_group_ids).exists():
+                        return True
             
             if obj.visibility == "GROUPS":
                 if request.user == obj.creator:
@@ -93,10 +98,11 @@ class CanSubmitResponse(BasePermission):
             if not request.user.is_authenticated:
                 return False
             
-            return (
-                request.user == obj.creator or
-                request.user in obj.shared_with.all()
-            )
+            if request.user == obj.creator or request.user in obj.shared_with.all():
+                return True
+            # Also check group-based sharing for PRIVATE surveys
+            user_group_ids = request.user.user_groups.values_list('group_id', flat=True)
+            return obj.shared_with_groups.filter(id__in=user_group_ids).exists()
         
         if obj.visibility == "GROUPS":
             if not request.user.is_authenticated:
