@@ -248,6 +248,22 @@ class Survey(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
     
+    # Attachments setting
+    ATTACHMENT_NONE = 'none'
+    ATTACHMENT_OPTIONAL = 'optional'
+    ATTACHMENT_REQUIRED = 'required'
+    ATTACHMENT_CHOICES = [
+        (ATTACHMENT_NONE, 'None'),
+        (ATTACHMENT_OPTIONAL, 'Optional'),
+        (ATTACHMENT_REQUIRED, 'Required'),
+    ]
+    allow_attachments = models.CharField(
+        max_length=10,
+        choices=ATTACHMENT_CHOICES,
+        default=ATTACHMENT_NONE,
+        help_text='Whether respondents can/must upload attachments: none, optional, required'
+    )
+    
     # Use Oracle-compatible manager
     objects = OracleCompatibleSurveyManager()
     
@@ -1554,3 +1570,144 @@ class FollowUpMessage(models.Model):
 
     def __str__(self):
         return f"{self.sender_role} message in thread {self.thread_id}"
+
+
+# =============================================================================
+# Attachments — BLOB Storage for Response and Follow-Up Message Attachments
+# =============================================================================
+
+class ResponseAttachment(models.Model):
+    """
+    BLOB-based storage for survey response attachments.
+    
+    Supports: PDF, Word, Excel, JPEG, PNG, GIF (max 10MB each, max 5 per response).
+    Files stored as binary data directly in the database.
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    response = models.ForeignKey(
+        Response,
+        on_delete=models.CASCADE,
+        related_name='attachments',
+        help_text='Parent response (CASCADE deletes attachments when response deleted)',
+    )
+
+    file_data = models.BinaryField(
+        help_text='File content stored as BLOB (max 10MB)',
+    )
+
+    original_filename = models.CharField(
+        max_length=255,
+        help_text='Sanitized original filename',
+    )
+
+    file_size = models.IntegerField(
+        help_text='File size in bytes',
+    )
+
+    mime_type = models.CharField(
+        max_length=150,
+        help_text='Validated MIME type',
+    )
+
+    description = models.CharField(
+        max_length=500,
+        blank=True,
+        help_text='Optional description of the attachment',
+    )
+
+    uploaded_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='uploaded_response_attachments',
+        help_text='User who uploaded (null for anonymous responses)',
+    )
+
+    uploaded_at = models.DateTimeField(
+        auto_now_add=True,
+        help_text='Upload timestamp',
+    )
+
+    class Meta:
+        db_table = 'surveys_response_attachment'
+        verbose_name = 'Response Attachment'
+        verbose_name_plural = 'Response Attachments'
+        ordering = ['uploaded_at']
+        indexes = [
+            models.Index(fields=['response', 'uploaded_at'], name='resp_att_uploaded_idx'),
+        ]
+
+    def __str__(self):
+        return f"{self.original_filename} ({self.response_id})"
+
+
+class FollowUpMessageAttachment(models.Model):
+    """
+    BLOB-based storage for follow-up message attachments.
+    
+    Supports: PDF, Word, Excel, JPEG, PNG, GIF (max 10MB each, max 5 per message).
+    Files stored as binary data directly in the database.
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    message = models.ForeignKey(
+        FollowUpMessage,
+        on_delete=models.CASCADE,
+        related_name='attachments',
+        help_text='Parent message (CASCADE deletes attachments when message deleted)',
+    )
+
+    file_data = models.BinaryField(
+        help_text='File content stored as BLOB (max 10MB)',
+    )
+
+    original_filename = models.CharField(
+        max_length=255,
+        help_text='Sanitized original filename',
+    )
+
+    file_size = models.IntegerField(
+        help_text='File size in bytes',
+    )
+
+    mime_type = models.CharField(
+        max_length=150,
+        help_text='Validated MIME type',
+    )
+
+    description = models.CharField(
+        max_length=500,
+        blank=True,
+        help_text='Optional description of the attachment',
+    )
+
+    uploaded_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='uploaded_followup_attachments',
+        help_text='User who uploaded this attachment',
+    )
+
+    uploaded_at = models.DateTimeField(
+        auto_now_add=True,
+        help_text='Upload timestamp',
+    )
+
+    class Meta:
+        db_table = 'surveys_fu_msg_attachment'  # ≤30 chars for Oracle 11g/12.1 compat
+        verbose_name = 'Follow-Up Message Attachment'
+        verbose_name_plural = 'Follow-Up Message Attachments'
+        ordering = ['uploaded_at']
+        indexes = [
+            models.Index(fields=['message', 'uploaded_at'], name='followup_att_uploaded_idx'),
+        ]
+
+    def __str__(self):
+        return f"{self.original_filename} ({self.message_id})"
+

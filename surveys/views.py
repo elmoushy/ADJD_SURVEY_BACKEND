@@ -603,7 +603,7 @@ class SurveyViewSet(ModelViewSet):
         return queryset
     
     def _apply_custom_filters(self, queryset):
-        """Apply custom filters for survey status"""
+        """Apply custom filters for survey status, group, and lifecycle status"""
         survey_status_filter = safe_get_query_params(self.request, 'survey_status')
         
         if survey_status_filter:
@@ -623,6 +623,28 @@ class SurveyViewSet(ModelViewSet):
                 # العامة - Public surveys
                 queryset = queryset.filter(visibility='PUBLIC')
             # 'all' or any other value returns all surveys (no additional filter)
+
+        # Filter by shared group (admin/super_admin only)
+        shared_group = safe_get_query_params(self.request, 'shared_group')
+        if shared_group:
+            user = self.request.user
+            if user.is_authenticated and user.role in ('super_admin', 'admin'):
+                queryset = queryset.filter(shared_with_groups__id=shared_group)
+
+        # Filter by lifecycle status: draft / submitted / expired (admin/super_admin only)
+        lifecycle_status = safe_get_query_params(self.request, 'lifecycle_status')
+        if lifecycle_status:
+            user = self.request.user
+            if user.is_authenticated and user.role in ('super_admin', 'admin'):
+                if lifecycle_status == 'draft':
+                    queryset = queryset.filter(status='draft')
+                elif lifecycle_status == 'submitted':
+                    queryset = queryset.filter(
+                        Q(status='submitted', end_date__isnull=True) |
+                        Q(status='submitted', end_date__gte=timezone.now())
+                    )
+                elif lifecycle_status == 'expired':
+                    queryset = queryset.filter(status='submitted', end_date__lt=timezone.now())
         
         return queryset
     
@@ -864,6 +886,8 @@ class SurveyViewSet(ModelViewSet):
             'visibility': safe_get_query_params(self.request, 'visibility', ''),
             'is_active': safe_get_query_params(self.request, 'is_active', ''),
             'status': safe_get_query_params(self.request, 'status', ''),
+            'shared_group': safe_get_query_params(self.request, 'shared_group', ''),
+            'lifecycle_status': safe_get_query_params(self.request, 'lifecycle_status', ''),
         }
         return filters_info
     
@@ -1173,11 +1197,11 @@ class SurveyViewSet(ModelViewSet):
 
             user = request.user
 
-            # Check if user can delete the survey
-            if not can_user_manage_survey(user, survey):
+            # Only super_admin can delete a survey
+            if getattr(user, 'role', None) != 'super_admin':
                 return uniform_response(
                     success=False,
-                    message="You do not have permission to delete this survey.",
+                    message="Only super admins can delete surveys.",
                     status_code=status.HTTP_403_FORBIDDEN
                 )
 
@@ -2592,6 +2616,7 @@ class SurveyViewSet(ModelViewSet):
                     'description': survey.description,
                     'public_contact_method': survey.public_contact_method,
                     'per_device_access': survey.per_device_access,
+                    'allow_attachments': survey.allow_attachments,
                     'estimated_time': max(survey.questions.count() * 1, 5),  # 1 min per question, min 5 min
                     'questions_count': survey.questions.count(),
                     'questions': question_serializer.data
@@ -2694,6 +2719,7 @@ class SurveyViewSet(ModelViewSet):
                 'is_currently_active': is_currently_active_uae(survey),
                 'start_date': serialize_datetime_uae(survey.start_date),
                 'end_date': serialize_datetime_uae(survey.end_date),
+                'allow_attachments': survey.allow_attachments,
                 'estimated_time': max(survey.questions.count() * 1, 5),  # 1 min per question, min 5 min
                 'questions_count': survey.questions.count(),
                 'questions': question_serializer.data
@@ -2792,6 +2818,68 @@ class SurveyViewSet(ModelViewSet):
             return uniform_response(
                 success=False,
                 message="Failed to share survey",
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    @action(detail=True, methods=['get'], permission_classes=[IsCreatorOrReadOnly], url_path='shared-users')
+    def get_shared_users(self, request, pk=None):
+        """
+        List all users a survey is shared with.
+
+        GET /api/surveys/surveys/{survey_id}/shared-users/
+        """
+        try:
+            survey = self.get_object()
+            shared_users = [
+                {'id': u.id, 'email': u.email, 'name': u.full_name}
+                for u in survey.shared_with.all()
+            ]
+            return uniform_response(
+                success=True,
+                message="Shared users retrieved successfully",
+                data={
+                    'shared_users': shared_users,
+                    'total_shared': len(shared_users)
+                }
+            )
+        except Exception as e:
+            logger.error(f"Error getting shared users for survey {pk}: {e}")
+            return uniform_response(
+                success=False,
+                message="Failed to retrieve shared users",
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    @action(detail=True, methods=['delete'], permission_classes=[IsCreatorOrReadOnly],
+            url_path=r'shared-users/(?P<user_id>[^/.]+)')
+    def remove_shared_user(self, request, pk=None, user_id=None):
+        """
+        Remove a user from the survey's shared_with list.
+
+        DELETE /api/surveys/surveys/{survey_id}/shared-users/{user_id}/
+        """
+        try:
+            survey = self.get_object()
+            try:
+                user = User.objects.get(pk=user_id)
+            except (User.DoesNotExist, ValueError):
+                return uniform_response(
+                    success=False,
+                    message="User not found.",
+                    status_code=status.HTTP_404_NOT_FOUND
+                )
+            survey.shared_with.remove(user)
+            logger.info(f"User {user.email} removed from survey {survey.id} shared list by {request.user.email}")
+            return uniform_response(
+                success=True,
+                message="User removed from shared list successfully",
+                data={'total_shared': survey.shared_with.count()}
+            )
+        except Exception as e:
+            logger.error(f"Error removing shared user {user_id} from survey {pk}: {e}")
+            return uniform_response(
+                success=False,
+                message="Failed to remove shared user",
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
@@ -3708,6 +3796,7 @@ class MySharedSurveysView(generics.ListAPIView):
                     },
                     'questions_count': survey.questions.count(),
                     'estimated_time': max(survey.questions.count() * 1, 5),
+                    'allow_attachments': survey.allow_attachments,
                     'access_info': {
                         'access_type': survey.visibility,
                         'can_submit': not has_submitted and is_currently_active_uae(survey) and not survey.is_locked,
@@ -7819,7 +7908,7 @@ class AdminSurveyResponsesView(generics.ListAPIView):
             return (
                 survey.responses.all()
                       .select_related('respondent', 'submitted_via_group')
-                      .prefetch_related('answers__question', 'follow_ups')
+                      .prefetch_related('answers__question', 'follow_ups', 'attachments__uploaded_by')
                       .annotate(latest_follow_up_status=latest_follow_up_status)
             )
         
@@ -7926,6 +8015,29 @@ class AdminSurveyResponsesView(generics.ListAPIView):
                     answers_with_context.append(answer_data)
                 
                 latest_thread = response.follow_ups.first()
+
+                # Build attachments list
+                is_superadmin = request.user.role == 'super_admin'
+                is_survey_creator = survey.creator_id is not None and survey.creator_id == request.user.id
+                attachments_data = []
+                for att in response.attachments.all():
+                    try:
+                        download_url = request.build_absolute_uri(
+                            '/api/surveys/response-attachments/{}/download/'.format(att.pk)
+                        )
+                    except Exception:
+                        download_url = None
+                    attachments_data.append({
+                        'id': str(att.id),
+                        'original_filename': att.original_filename,
+                        'file_size': att.file_size,
+                        'mime_type': att.mime_type,
+                        'uploaded_at': att.uploaded_at.isoformat(),
+                        'uploaded_by_email': att.uploaded_by.email if att.uploaded_by else None,
+                        'download_url': download_url,
+                        'can_delete': is_superadmin or is_survey_creator,
+                    })
+
                 response_item = {
                     'id': str(response.id),
                     'submitted_at': response.submitted_at.isoformat(),
@@ -7935,6 +8047,8 @@ class AdminSurveyResponsesView(generics.ListAPIView):
                     'latest_follow_up_id': str(latest_thread.id) if latest_thread else None,
                     'answers': answers_with_context,
                     'answer_count': len(answers_with_context),
+                    'attachments': attachments_data,
+                    'attachment_count': len(attachments_data),
                 }
                 
                 response_data.append(response_item)
@@ -8042,6 +8156,7 @@ class TokenSurveysView(APIView):
                 'description': survey.description,
                 'public_contact_method': survey.public_contact_method,
                 'per_device_access': survey.per_device_access,
+                'allow_attachments': survey.allow_attachments,
                 'estimated_time': max(survey.questions.count() * 1, 5),
                 'questions_count': survey.questions.count(),
                 'visibility': survey.visibility,
@@ -8160,6 +8275,7 @@ class TokenSurveyDetailView(APIView):
                 'is_locked': survey.is_locked,
                 'public_contact_method': survey.public_contact_method,
                 'per_device_access': survey.per_device_access,
+                'allow_attachments': survey.allow_attachments,
                 'estimated_time': max(survey.questions.count() * 1, 5),
                 'questions_count': survey.questions.count(),
                 'created_at': survey.created_at.isoformat(),
@@ -8443,6 +8559,7 @@ class PasswordProtectedSurveyView(APIView):
                 'is_locked': survey.is_locked,
                 'public_contact_method': survey.public_contact_method,
                 'per_device_access': survey.per_device_access,
+                'allow_attachments': survey.allow_attachments,
                 'estimated_time': max(survey.questions.count() * 1, 5),
                 'questions_count': survey.questions.count(),
                 'created_at': survey.created_at.isoformat(),

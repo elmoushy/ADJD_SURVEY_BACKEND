@@ -7,7 +7,7 @@ with comprehensive validation and encryption support.
 
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Survey, Question, Response, Answer, SurveyTemplate, TemplateQuestion
+from .models import Survey, Question, Response, Answer, SurveyTemplate, TemplateQuestion, ResponseAttachment, FollowUpMessageAttachment
 from .timezone_utils import (
     serialize_datetime_uae, get_status_uae, is_currently_active_uae,
     ensure_gregorian_from_hijri, convert_hijri_string_to_gregorian
@@ -560,6 +560,7 @@ class ResponseSerializer(serializers.ModelSerializer):
     respondent_info = serializers.SerializerMethodField()
     latest_follow_up_status = serializers.SerializerMethodField()
     answer_count = serializers.SerializerMethodField()
+    attachments = serializers.SerializerMethodField()
 
     submitted_at = UAEDateTimeField(read_only=True)
     created_at = UAEDateTimeField(read_only=True)
@@ -570,9 +571,17 @@ class ResponseSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'survey', 'respondent', 'respondent_email',
             'respondent_info', 'latest_follow_up_status', 'answer_count',
-            'submitted_at', 'is_complete', 'answers',
+            'submitted_at', 'is_complete', 'answers', 'attachments',
         ]
         read_only_fields = ['id', 'submitted_at', 'respondent_email']
+
+    def get_attachments(self, obj):
+        """Return list of attachments for this response."""
+        from .serializers import ResponseAttachmentSerializer
+        atts = obj.attachments.all()
+        if not atts.exists():
+            return []
+        return ResponseAttachmentSerializer(atts, many=True, context=self.context).data
 
     def get_respondent_email(self, obj):
         if obj.respondent:
@@ -655,7 +664,8 @@ class SurveySerializer(serializers.ModelSerializer):
             'id', 'title', 'description', 'visibility', 'shared_with',
             'creator', 'creator_email', 'is_locked', 'is_active',
             'start_date', 'end_date', 'status', 'status_display', 'is_currently_active',
-            'can_be_edited', 'public_contact_method', 'per_device_access', 'questions', 'response_count',
+            'can_be_edited', 'public_contact_method', 'per_device_access', 'allow_attachments',
+            'questions', 'response_count',
             'shared_with_emails', 'shared_with_groups', 'created_at', 'updated_at'
         ]
         read_only_fields = ['id', 'creator', 'created_at', 'updated_at', 'status_display', 'is_currently_active', 'can_be_edited']
@@ -1597,3 +1607,138 @@ class RecentSurveySerializer(serializers.ModelSerializer):
         """Check if survey can be used as template"""
         # Only draft or submitted surveys can be used as templates
         return obj.status in ['draft', 'submitted']
+
+
+# =============================================================================
+# Attachment Serializers
+# =============================================================================
+
+class AttachmentUploadSerializer(serializers.Serializer):
+    """Serializer for uploading an attachment file."""
+
+    file = serializers.FileField(required=True)
+    description = serializers.CharField(max_length=500, required=False, allow_blank=True)
+
+    def validate_file(self, value):
+        """Validate attachment file (type, size, extension)."""
+        from .attachment_utils import validate_attachment_file
+        validate_attachment_file(value)
+        return value
+
+
+class ResponseAttachmentSerializer(serializers.ModelSerializer):
+    """Read serializer for response attachments."""
+
+    download_url = serializers.SerializerMethodField()
+    format_name = serializers.SerializerMethodField()
+    uploaded_by_name = serializers.SerializerMethodField()
+    uploaded_by_email = serializers.SerializerMethodField()
+    is_image = serializers.SerializerMethodField()
+    can_delete = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ResponseAttachment
+        fields = [
+            'id', 'original_filename', 'file_size', 'mime_type',
+            'format_name', 'is_image', 'description',
+            'uploaded_by', 'uploaded_by_name', 'uploaded_by_email', 'uploaded_at',
+            'download_url', 'can_delete',
+        ]
+        read_only_fields = ['id', 'uploaded_at', 'file_size', 'mime_type', 'uploaded_by']
+
+    def get_download_url(self, obj):
+        """Generate download URL."""
+        request = self.context.get('request')
+        if request:
+            from django.urls import reverse
+            url = reverse('surveys:response-attachment-download', kwargs={'pk': str(obj.pk)})
+            return request.build_absolute_uri(url)
+        return None
+
+    def get_format_name(self, obj):
+        """Return human-readable format name."""
+        from .attachment_utils import MIME_TO_FORMAT
+        return MIME_TO_FORMAT.get(obj.mime_type, obj.mime_type)
+
+    def get_is_image(self, obj):
+        """Return True if attachment is an image."""
+        return obj.mime_type.startswith('image/')
+
+    def get_uploaded_by_name(self, obj):
+        """Return uploader's name."""
+        if obj.uploaded_by:
+            name = f"{obj.uploaded_by.first_name} {obj.uploaded_by.last_name}".strip()
+            return name or obj.uploaded_by.email
+        return None
+
+    def get_uploaded_by_email(self, obj):
+        """Return uploader's email."""
+        return obj.uploaded_by.email if obj.uploaded_by else None
+
+    def get_can_delete(self, obj):
+        """Return True if current user can delete this attachment."""
+        request = self.context.get('request')
+        if not request or not request.user or not request.user.is_authenticated:
+            return False
+        is_superadmin = getattr(request.user, 'role', None) == 'super_admin'
+        survey_creator_id = obj.response.survey.creator_id
+        is_survey_creator = survey_creator_id is not None and survey_creator_id == request.user.id
+        return is_superadmin or is_survey_creator
+
+
+class FollowUpMessageAttachmentSerializer(serializers.ModelSerializer):
+    """Read serializer for follow-up message attachments."""
+
+    download_url = serializers.SerializerMethodField()
+    format_name = serializers.SerializerMethodField()
+    uploaded_by_name = serializers.SerializerMethodField()
+    uploaded_by_email = serializers.SerializerMethodField()
+    is_image = serializers.SerializerMethodField()
+    can_delete = serializers.SerializerMethodField()
+
+    class Meta:
+        model = FollowUpMessageAttachment
+        fields = [
+            'id', 'original_filename', 'file_size', 'mime_type',
+            'format_name', 'is_image', 'description',
+            'uploaded_by', 'uploaded_by_name', 'uploaded_by_email', 'uploaded_at',
+            'download_url', 'can_delete',
+        ]
+        read_only_fields = ['id', 'uploaded_at', 'file_size', 'mime_type', 'uploaded_by']
+
+    def get_download_url(self, obj):
+        """Generate download URL."""
+        request = self.context.get('request')
+        if request:
+            from django.urls import reverse
+            url = reverse('surveys:followup-attachment-download', kwargs={'pk': str(obj.pk)})
+            return request.build_absolute_uri(url)
+        return None
+
+    def get_format_name(self, obj):
+        """Return human-readable format name."""
+        from .attachment_utils import MIME_TO_FORMAT
+        return MIME_TO_FORMAT.get(obj.mime_type, obj.mime_type)
+
+    def get_is_image(self, obj):
+        """Return True if attachment is an image."""
+        return obj.mime_type.startswith('image/')
+
+    def get_uploaded_by_name(self, obj):
+        """Return uploader's name."""
+        if obj.uploaded_by:
+            name = f"{obj.uploaded_by.first_name} {obj.uploaded_by.last_name}".strip()
+            return name or obj.uploaded_by.email
+        return None
+
+    def get_uploaded_by_email(self, obj):
+        """Return uploader's email."""
+        return obj.uploaded_by.email if obj.uploaded_by else None
+
+    def get_can_delete(self, obj):
+        """Return True if current user can delete this follow-up attachment."""
+        request = self.context.get('request')
+        if not request or not request.user or not request.user.is_authenticated:
+            return False
+        # Only the uploader can delete their follow-up attachments
+        return obj.uploaded_by_id == request.user.id

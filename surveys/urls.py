@@ -10,6 +10,15 @@ from rest_framework.routers import DefaultRouter
 from . import views
 from .views_followup import FollowUpViewSet
 from .views_access_picker import AccessPickerSearchView
+from .views_attachments import (
+    ResponseAttachmentUploadView,
+    ResponseAttachmentListView,
+    ResponseAttachmentDownloadView,
+    ResponseAttachmentDeleteView,
+    FollowUpAttachmentUploadView,
+    FollowUpAttachmentDownloadView,
+    FollowUpAttachmentDeleteView,
+)
 
 app_name = 'surveys'
 
@@ -174,4 +183,27 @@ urlpatterns = [
 
     # Access picker search (users + groups combined, admin only)
     path('access-picker/search/', AccessPickerSearchView.as_view(), name='access-picker-search'),
+
+    # ─── Response Attachments ─────────────────────────────────────────────────
+    path('responses/<uuid:response_id>/attachments/upload/',
+         ResponseAttachmentUploadView.as_view(), name='response-attachment-upload'),
+
+    path('responses/<uuid:response_id>/attachments/',
+         ResponseAttachmentListView.as_view(), name='response-attachment-list'),
+
+    path('response-attachments/<uuid:pk>/download/',
+         ResponseAttachmentDownloadView.as_view(), name='response-attachment-download'),
+
+    path('response-attachments/<uuid:pk>/',
+         ResponseAttachmentDeleteView.as_view(), name='response-attachment-delete'),
+
+    # ─── Follow-Up Message Attachments ────────────────────────────────────────
+    path('follow-ups/<uuid:thread_id>/messages/<uuid:message_id>/attachments/upload/',
+         FollowUpAttachmentUploadView.as_view(), name='followup-attachment-upload'),
+
+    path('follow-up-attachments/<uuid:pk>/download/',
+         FollowUpAttachmentDownloadView.as_view(), name='followup-attachment-download'),
+
+    path('follow-up-attachments/<uuid:pk>/',
+         FollowUpAttachmentDeleteView.as_view(), name='followup-attachment-delete'),
 ]

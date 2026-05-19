@@ -7,12 +7,13 @@ import logging
 from django.db import transaction
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response as DRFResponse
 
-from .models import Response as SurveyResponse, ResponseFollowUp, FollowUpMessage
+from .models import Response as SurveyResponse, ResponseFollowUp, FollowUpMessage, FollowUpMessageAttachment
 from .permissions import IsFollowUpParticipant
 from .followup_presets import PRESETS
 from .views import can_user_manage_survey
@@ -44,7 +45,28 @@ class FollowUpSerializer:
     """Lightweight dict-based serializer (avoids importing DRF serializers at module level)."""
 
     @staticmethod
-    def thread(thread: ResponseFollowUp) -> dict:
+    def _serialize_attachments(msg, request=None):
+        """Serialize attachments for a message."""
+        attachments = []
+        for att in msg.attachments.all():
+            download_url = None
+            if request:
+                url = reverse('surveys:followup-attachment-download', kwargs={'pk': str(att.pk)})
+                download_url = request.build_absolute_uri(url)
+            attachments.append({
+                'id': str(att.id),
+                'original_filename': att.original_filename,
+                'file_size': att.file_size,
+                'mime_type': att.mime_type,
+                'uploaded_by': att.uploaded_by_id,
+                'uploaded_by_email': att.uploaded_by.email if att.uploaded_by else None,
+                'uploaded_at': att.uploaded_at.isoformat(),
+                'download_url': download_url,
+            })
+        return attachments
+
+    @staticmethod
+    def thread(thread: ResponseFollowUp, request=None) -> dict:
         messages = [
             {
                 'id': str(m.id),
@@ -55,8 +77,9 @@ class FollowUpSerializer:
                 'preset_key': m.preset_key,
                 'created_at': m.created_at.isoformat(),
                 'read_at': m.read_at.isoformat() if m.read_at else None,
+                'attachments': FollowUpSerializer._serialize_attachments(m, request),
             }
-            for m in thread.messages.all()
+            for m in thread.messages.prefetch_related('attachments__uploaded_by').all()
         ]
         respondent = thread.response.respondent
         return {
@@ -78,7 +101,7 @@ class FollowUpSerializer:
         }
 
     @staticmethod
-    def message(msg: FollowUpMessage) -> dict:
+    def message(msg: FollowUpMessage, request=None) -> dict:
         return {
             'id': str(msg.id),
             'sender_email': msg.sender.email if msg.sender else None,
@@ -88,6 +111,7 @@ class FollowUpSerializer:
             'preset_key': msg.preset_key,
             'created_at': msg.created_at.isoformat(),
             'read_at': msg.read_at.isoformat() if msg.read_at else None,
+            'attachments': FollowUpSerializer._serialize_attachments(msg, request),
         }
 
 
@@ -134,13 +158,13 @@ class FollowUpViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
 
     def list(self, request, *args, **kwargs):
         qs = self.get_queryset()
-        data = [FollowUpSerializer.thread(t) for t in qs]
+        data = [FollowUpSerializer.thread(t, request) for t in qs]
         return DRFResponse({'results': data, 'count': len(data)})
 
     def retrieve(self, request, *args, **kwargs):
         thread = get_object_or_404(self.get_queryset(), pk=kwargs['pk'])
         self.check_object_permissions(request, thread)
-        return DRFResponse(FollowUpSerializer.thread(thread))
+        return DRFResponse(FollowUpSerializer.thread(thread, request))
 
     @action(detail=False, methods=['post'], url_path=r'open-on-response/(?P<response_id>[^/.]+)')
     def open_on_response(self, request, response_id=None):
@@ -195,7 +219,7 @@ class FollowUpViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
         thread.refresh_from_db()
         notify_followup_opened(thread, request.user)
 
-        return DRFResponse(FollowUpSerializer.thread(thread), status=status.HTTP_201_CREATED)
+        return DRFResponse(FollowUpSerializer.thread(thread, request), status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=['post'], url_path='messages')
     def post_message(self, request, pk=None):
@@ -264,7 +288,7 @@ class FollowUpViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
         # Send email notification to the other party
         notify_followup_reply(thread, msg, request.user)
 
-        return DRFResponse(FollowUpSerializer.message(msg), status=status.HTTP_201_CREATED)
+        return DRFResponse(FollowUpSerializer.message(msg, request), status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=['post'], url_path='decision')
     def decision(self, request, pk=None):
@@ -320,7 +344,7 @@ class FollowUpViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
         thread.refresh_from_db()
         notify_followup_decision(thread)
 
-        return DRFResponse(FollowUpSerializer.thread(thread))
+        return DRFResponse(FollowUpSerializer.thread(thread, request))
 
     @action(detail=True, methods=['post'], url_path='mark-read')
     def mark_read(self, request, pk=None):
