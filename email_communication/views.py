@@ -35,6 +35,7 @@ from .permissions import (
     CanSendEmail,
     CanManageCostCenters,
     CanCreateTemplates,
+    CanManageDrafts,
     IsDraftOwner,
     CanViewEmailLog,
     IsRecipient
@@ -119,7 +120,7 @@ class EmailDraftViewSet(viewsets.ModelViewSet):
     UPDATE: PUT/PATCH /api/email/drafts/{id}/
     DELETE: DELETE /api/email/drafts/{id}/
     """
-    permission_classes = [IsAuthenticated, IsDraftOwner]
+    permission_classes = [IsAuthenticated, CanManageDrafts, IsDraftOwner]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['send_type']
     search_fields = ['subject', 'draft_name']
@@ -173,7 +174,7 @@ class SendDraftView(APIView):
     Send email from saved draft
     POST /api/email/send-draft/{draft_id}/
     """
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, CanSendEmail]
     
     def post(self, request, draft_id):
         serializer = SendDraftSerializer(data=request.data)
