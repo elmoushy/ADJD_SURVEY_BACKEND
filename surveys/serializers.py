@@ -385,7 +385,12 @@ class QuestionSerializer(serializers.ModelSerializer):
         # Extract write-only fields before creating the question
         satisfaction_values = validated_data.pop('set_satisfaction_values', None) or validated_data.pop('options_satisfaction_values', None)
         set_conditional_on = validated_data.pop('set_conditional_on', None)
-        
+
+        # Create path: never reuse a client-supplied primary key, otherwise a
+        # duplicate id collides with an existing row
+        # ("UNIQUE constraint failed: surveys_question.id" / ORA-00001).
+        validated_data.pop('id', None)
+
         # Create the question
         question = Question.objects.create(**validated_data)
         
@@ -953,7 +958,13 @@ class SurveySerializer(serializers.ModelSerializer):
             
             # Extract temp ID if present
             temp_id = question_data.pop('_temp_id', None)
-            
+
+            # CRITICAL: This is a CREATE path - every question must get a brand-new
+            # primary key. Never reuse a client-supplied id (e.g. when cloning a
+            # survey, the payload carries the SOURCE survey's question UUIDs). Reusing
+            question_data.pop('id', None)
+            question_data.pop('_saved_id', None)
+
             question = Question.objects.create(survey=survey, **question_data)
             
             # Store by real UUID
