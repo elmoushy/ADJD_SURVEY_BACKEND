@@ -7311,3 +7311,296 @@ INFO 2026-06-08 08:48:09,694 dual_auth 24356 7640 User mibrahim@lightidea.org au
 INFO 2026-06-08 08:48:11,054 dual_auth 24356 7640 User mibrahim@lightidea.org authenticated with regular JWT (universal)
 INFO 2026-06-08 08:48:12,140 dual_auth 24356 7640 User mibrahim@lightidea.org authenticated with regular JWT (universal)
 INFO 2026-06-08 08:48:12,579 dual_auth 24356 7640 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 09:28:18,927 views 27952 17240 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-06-09 09:28:18,945 dual_auth 27952 17240 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 09:28:18,947 views 27952 17240 User profile accessed: admin@test.com
+INFO 2026-06-09 09:28:18,960 dual_auth 27952 944 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 09:28:18,962 views 27952 944 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-06-09 09:28:18,963 dual_auth 27952 17644 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 09:28:19,021 dual_auth 27952 17240 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 09:28:19,025 views 27952 17240 Building queryset for user admin@test.com
+INFO 2026-06-09 09:28:19,031 views 27952 17240 Successfully built queryset for user admin@test.com
+INFO 2026-06-09 09:28:20,375 dual_auth 27952 17644 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 09:28:20,376 dual_auth 27952 3312 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 09:28:20,377 dual_auth 27952 25996 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 09:28:20,377 views 27952 17644 User profile accessed: admin@test.com
+INFO 2026-06-09 09:28:20,376 dual_auth 27952 17240 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 09:28:20,431 dual_auth 27952 17240 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 09:28:20,432 dual_auth 27952 17644 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 09:29:21,023 dual_auth 27952 3312 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 09:29:21,037 dual_auth 27952 3312 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 09:29:21,042 dual_auth 27952 25996 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 09:29:23,292 dual_auth 27952 25996 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 09:29:27,992 dual_auth 27952 25996 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 09:29:28,000 views 27952 25996 Retrieved 5 predefined templates for admin@test.com
+INFO 2026-06-09 10:28:09,077 views 19612 28556 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-06-09 10:28:10,781 dual_auth 19612 28556 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 10:28:10,785 dual_auth 19612 9560 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 10:28:10,819 views 19612 9560 Retrieved 5 predefined templates for admin@test.com
+INFO 2026-06-09 10:28:13,172 dual_auth 19612 28556 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 10:28:13,173 views 19612 28556 User logged out without token blacklisting: admin@test.com
+INFO 2026-06-09 10:28:17,152 serializers 19612 28556 Looking for user with email: admin@test.com
+INFO 2026-06-09 10:28:17,153 managers 19612 28556 Looking for user with email: admin@test.com
+INFO 2026-06-09 10:28:17,156 serializers 19612 28556 User found: admin@test.com
+INFO 2026-06-09 10:28:17,156 serializers 19612 28556 Authenticating with username: admin@test.com
+INFO 2026-06-09 10:28:17,915 serializers 19612 28556 Authentication result: Success
+INFO 2026-06-09 10:28:17,915 serializers 19612 28556 Validation successful
+INFO 2026-06-09 10:28:17,924 views 19612 28556 User logged in: admin@test.com
+INFO 2026-06-09 10:28:18,134 views 19612 28556 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-06-09 10:28:18,160 dual_auth 19612 28556 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 10:28:18,161 views 19612 28556 User profile accessed: admin@test.com
+INFO 2026-06-09 10:28:18,177 dual_auth 19612 9560 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 10:28:18,178 views 19612 9560 User profile accessed: admin@test.com
+INFO 2026-06-09 10:28:18,340 dual_auth 19612 9560 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 10:28:18,363 dual_auth 19612 28556 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 10:28:18,364 views 19612 28556 Building queryset for user admin@test.com
+INFO 2026-06-09 10:28:18,370 views 19612 28556 Successfully built queryset for user admin@test.com
+INFO 2026-06-09 10:28:19,940 views 19612 28556 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-06-09 10:28:19,993 dual_auth 19612 28556 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 10:28:20,013 dual_auth 19612 9560 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 10:28:20,015 views 19612 9560 Building queryset for user admin@test.com
+INFO 2026-06-09 10:28:20,020 views 19612 9560 Successfully built queryset for user admin@test.com
+INFO 2026-06-09 10:28:23,930 views 19612 9560 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-06-09 10:28:24,023 dual_auth 19612 9560 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 10:28:24,023 dual_auth 19612 28556 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 10:28:24,058 views 19612 28556 Retrieved 5 predefined templates for admin@test.com
+INFO 2026-06-09 10:28:25,321 dual_auth 19612 9560 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 10:28:25,322 views 19612 9560 User logged out without token blacklisting: admin@test.com
+INFO 2026-06-09 10:46:23,816 managers 19612 26060 Looking for user with email: mibrahim@gmail.com
+INFO 2026-06-09 10:46:23,876 views 19612 26060 Forgot-password request for unknown email: mibrahim@gmail.com
+INFO 2026-06-09 10:46:35,087 serializers 19612 26060 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 10:46:35,087 managers 19612 26060 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 10:46:35,093 serializers 19612 26060 User found: mibrahim@lightidea.org
+INFO 2026-06-09 10:46:35,093 serializers 19612 26060 Authenticating with username: mibrahim
+INFO 2026-06-09 10:46:35,814 serializers 19612 26060 Authentication result: Success
+INFO 2026-06-09 10:46:35,814 serializers 19612 26060 Validation successful
+INFO 2026-06-09 10:46:35,827 views 19612 26060 User logged in: mibrahim@lightidea.org
+INFO 2026-06-09 10:46:36,065 views 19612 26060 JWT tokens refreshed with rotation for user: mibrahim@lightidea.org
+INFO 2026-06-09 10:46:36,082 dual_auth 19612 26060 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 10:46:36,083 views 19612 26060 User profile accessed: mibrahim@lightidea.org
+INFO 2026-06-09 10:46:36,091 dual_auth 19612 26060 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 10:46:36,092 views 19612 26060 User profile accessed: mibrahim@lightidea.org
+INFO 2026-06-09 10:46:36,392 dual_auth 19612 26060 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 10:46:36,449 dual_auth 19612 17528 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 10:46:36,451 views 19612 17528 Building queryset for user mibrahim@lightidea.org
+INFO 2026-06-09 10:46:36,457 views 19612 17528 Successfully built queryset for user mibrahim@lightidea.org
+INFO 2026-06-09 10:46:37,209 views 19612 17528 JWT tokens refreshed with rotation for user: mibrahim@lightidea.org
+INFO 2026-06-09 10:46:37,219 dual_auth 19612 17528 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 10:46:37,220 views 19612 17528 User profile accessed: mibrahim@lightidea.org
+INFO 2026-06-09 10:46:37,233 dual_auth 19612 17528 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 10:46:37,250 dual_auth 19612 26060 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 10:46:37,252 views 19612 26060 Building queryset for user mibrahim@lightidea.org
+INFO 2026-06-09 10:46:37,256 views 19612 26060 Successfully built queryset for user mibrahim@lightidea.org
+INFO 2026-06-09 10:46:38,986 dual_auth 19612 26060 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 10:46:38,987 views 19612 26060 User logged out without token blacklisting: mibrahim@lightidea.org
+INFO 2026-06-09 10:46:57,957 managers 19612 26060 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 10:47:00,006 email_utils 19612 26060 Password reset email sent to mibrahim@lightidea.org
+INFO 2026-06-09 10:47:00,008 views 19612 26060 Password reset code sent to mibrahim@lightidea.org
+INFO 2026-06-09 11:31:30,430 serializers 3848 10280 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 11:31:30,431 managers 3848 10280 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 11:31:30,438 serializers 3848 10280 User found: mibrahim@lightidea.org
+INFO 2026-06-09 11:31:30,438 serializers 3848 10280 Authenticating with username: mibrahim
+INFO 2026-06-09 11:31:31,202 serializers 3848 10280 Authentication result: Success
+INFO 2026-06-09 11:31:31,202 serializers 3848 10280 Validation successful
+INFO 2026-06-09 11:31:31,210 views 3848 10280 User logged in: mibrahim@lightidea.org
+INFO 2026-06-09 11:31:31,444 views 3848 10280 JWT tokens refreshed with rotation for user: mibrahim@lightidea.org
+INFO 2026-06-09 11:31:31,461 dual_auth 3848 10280 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 11:31:31,462 views 3848 10280 User profile accessed: mibrahim@lightidea.org
+INFO 2026-06-09 11:31:31,470 dual_auth 3848 10280 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 11:31:31,470 views 3848 10280 User profile accessed: mibrahim@lightidea.org
+INFO 2026-06-09 11:31:31,655 dual_auth 3848 10280 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 11:31:31,692 dual_auth 3848 284 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 11:31:31,695 views 3848 284 Building queryset for user mibrahim@lightidea.org
+INFO 2026-06-09 11:31:31,700 views 3848 284 Successfully built queryset for user mibrahim@lightidea.org
+INFO 2026-06-09 11:31:33,721 dual_auth 3848 284 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 11:31:33,721 views 3848 284 User logged out without token blacklisting: mibrahim@lightidea.org
+INFO 2026-06-09 11:31:37,585 managers 3848 284 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 11:31:39,463 email_utils 3848 284 Password reset email sent to mibrahim@lightidea.org
+INFO 2026-06-09 11:31:39,467 views 3848 284 Password reset code sent to mibrahim@lightidea.org
+INFO 2026-06-09 11:34:52,839 managers 3848 284 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 11:34:58,737 managers 3848 284 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 11:34:58,742 views 3848 284 Password reset code verified for mibrahim@lightidea.org
+INFO 2026-06-09 11:38:11,668 managers 3848 284 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 11:38:13,548 email_utils 3848 284 Password reset email sent to mibrahim@lightidea.org
+INFO 2026-06-09 11:38:13,550 views 3848 284 Password reset code sent to mibrahim@lightidea.org
+INFO 2026-06-09 11:38:32,611 managers 3848 284 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 11:38:32,620 views 3848 284 Password reset code verified for mibrahim@lightidea.org
+INFO 2026-06-09 11:38:54,297 views 3848 284 Password successfully reset for mibrahim@lightidea.org
+INFO 2026-06-09 11:39:04,460 serializers 3848 284 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 11:39:04,460 managers 3848 284 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 11:39:04,482 serializers 3848 284 User found: mibrahim@lightidea.org
+INFO 2026-06-09 11:39:04,482 serializers 3848 284 Authenticating with username: mibrahim
+INFO 2026-06-09 11:39:05,657 serializers 3848 284 Authentication result: Success
+INFO 2026-06-09 11:39:05,658 serializers 3848 284 Validation successful
+INFO 2026-06-09 11:39:06,305 views 3848 284 User logged in: mibrahim@lightidea.org
+INFO 2026-06-09 11:39:06,797 views 3848 284 JWT tokens refreshed with rotation for user: mibrahim@lightidea.org
+INFO 2026-06-09 11:39:06,810 dual_auth 3848 284 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 11:39:06,811 views 3848 284 User profile accessed: mibrahim@lightidea.org
+INFO 2026-06-09 11:39:06,826 dual_auth 3848 284 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 11:39:06,830 views 3848 284 User profile accessed: mibrahim@lightidea.org
+INFO 2026-06-09 11:39:06,898 dual_auth 3848 284 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 11:39:06,921 dual_auth 3848 10072 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 11:39:06,922 views 3848 10072 Building queryset for user mibrahim@lightidea.org
+INFO 2026-06-09 11:39:06,966 views 3848 10072 Successfully built queryset for user mibrahim@lightidea.org
+INFO 2026-06-09 11:41:57,904 dual_auth 3848 10072 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 11:41:57,921 views 3848 10072 User logged out without token blacklisting: mibrahim@lightidea.org
+INFO 2026-06-09 11:42:00,074 serializers 3848 10072 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 11:42:00,077 managers 3848 10072 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 11:42:00,086 serializers 3848 10072 User found: mibrahim@lightidea.org
+INFO 2026-06-09 11:42:00,086 serializers 3848 10072 Authenticating with username: mibrahim
+INFO 2026-06-09 11:42:01,144 serializers 3848 10072 Authentication result: Failed
+WARNING 2026-06-09 11:42:01,144 serializers 3848 10072 Authentication failed for username: mibrahim
+INFO 2026-06-09 11:57:00,086 serializers 28936 27812 Looking for user with email: admin@test.com
+INFO 2026-06-09 11:57:00,087 managers 28936 27812 Looking for user with email: admin@test.com
+INFO 2026-06-09 11:57:00,094 serializers 28936 27812 User found: admin@test.com
+INFO 2026-06-09 11:57:00,094 serializers 28936 27812 Authenticating with username: admin@test.com
+INFO 2026-06-09 11:57:00,838 serializers 28936 27812 Authentication result: Success
+INFO 2026-06-09 11:57:00,839 serializers 28936 27812 Validation successful
+INFO 2026-06-09 11:57:00,848 views 28936 27812 User logged in: admin@test.com
+INFO 2026-06-09 11:57:01,415 views 28936 27812 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-06-09 11:57:01,500 dual_auth 28936 27812 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 11:57:01,501 views 28936 27812 User profile accessed: admin@test.com
+INFO 2026-06-09 11:57:01,508 dual_auth 28936 5388 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 11:57:01,508 views 28936 5388 User profile accessed: admin@test.com
+INFO 2026-06-09 11:57:01,609 dual_auth 28936 5388 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 11:57:01,651 dual_auth 28936 27812 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 11:57:01,653 views 28936 27812 Building queryset for user admin@test.com
+INFO 2026-06-09 11:57:01,658 views 28936 27812 Successfully built queryset for user admin@test.com
+INFO 2026-06-09 11:57:04,805 dual_auth 28936 27812 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 11:57:04,806 views 28936 27812 User profile accessed: admin@test.com
+INFO 2026-06-09 11:57:04,816 dual_auth 28936 5388 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 11:57:04,818 dual_auth 28936 16324 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 11:57:04,818 dual_auth 28936 29364 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 11:57:04,876 dual_auth 28936 16324 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 11:57:04,877 dual_auth 28936 29364 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 11:57:16,682 dual_auth 28936 16324 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 11:57:17,440 views 28936 16324 Password reset by admin admin@test.com for user: mibrahim@lightidea.org
+INFO 2026-06-09 11:57:23,594 serializers 28936 28196 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 11:57:23,594 managers 28936 28196 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 11:57:23,597 serializers 28936 28196 User found: mibrahim@lightidea.org
+INFO 2026-06-09 11:57:23,597 serializers 28936 28196 Authenticating with username: mibrahim
+INFO 2026-06-09 11:57:24,389 serializers 28936 28196 Authentication result: Failed
+WARNING 2026-06-09 11:57:24,390 serializers 28936 28196 Authentication failed for username: mibrahim
+INFO 2026-06-09 11:57:28,391 serializers 28936 28196 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 11:57:28,391 managers 28936 28196 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 11:57:28,393 serializers 28936 28196 User found: mibrahim@lightidea.org
+INFO 2026-06-09 11:57:28,394 serializers 28936 28196 Authenticating with username: mibrahim
+INFO 2026-06-09 11:57:29,215 serializers 28936 28196 Authentication result: Failed
+WARNING 2026-06-09 11:57:29,215 serializers 28936 28196 Authentication failed for username: mibrahim
+INFO 2026-06-09 11:57:48,080 dual_auth 28936 16324 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 11:57:48,809 views 28936 16324 Password reset by admin admin@test.com for user: mibrahim@lightidea.org
+INFO 2026-06-09 11:57:56,506 serializers 28936 28196 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 11:57:56,507 managers 28936 28196 Looking for user with email: mibrahim@lightidea.org
+INFO 2026-06-09 11:57:56,511 serializers 28936 28196 User found: mibrahim@lightidea.org
+INFO 2026-06-09 11:57:56,511 serializers 28936 28196 Authenticating with username: mibrahim
+INFO 2026-06-09 11:57:57,249 serializers 28936 28196 Authentication result: Success
+INFO 2026-06-09 11:57:57,250 serializers 28936 28196 Validation successful
+INFO 2026-06-09 11:57:57,255 views 28936 28196 User logged in: mibrahim@lightidea.org
+INFO 2026-06-09 11:57:57,493 views 28936 28196 JWT tokens refreshed with rotation for user: mibrahim@lightidea.org
+INFO 2026-06-09 11:57:57,505 dual_auth 28936 28196 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 11:57:57,505 views 28936 28196 User profile accessed: mibrahim@lightidea.org
+INFO 2026-06-09 11:57:57,521 dual_auth 28936 28196 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 11:57:57,522 views 28936 28196 User profile accessed: mibrahim@lightidea.org
+INFO 2026-06-09 11:57:57,579 dual_auth 28936 28196 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 11:57:57,607 dual_auth 28936 28656 User mibrahim@lightidea.org authenticated with regular JWT (universal)
+INFO 2026-06-09 11:57:57,608 views 28936 28656 Building queryset for user mibrahim@lightidea.org
+INFO 2026-06-09 11:57:57,611 views 28936 28656 Successfully built queryset for user mibrahim@lightidea.org
+INFO 2026-06-09 11:58:05,046 dual_auth 28936 16324 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 11:59:09,742 dual_auth 28936 16324 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:05:36,673 dual_auth 28936 26392 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:44:02,983 views 20040 15676 JWT tokens refreshed with rotation for user: admin@test.com
+INFO 2026-06-09 12:44:03,120 dual_auth 20040 15676 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:44:03,121 views 20040 15676 User profile accessed: admin@test.com
+INFO 2026-06-09 12:44:04,905 dual_auth 20040 15676 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:44:04,912 dual_auth 20040 5504 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:44:04,913 views 20040 5504 User profile accessed: admin@test.com
+INFO 2026-06-09 12:44:04,963 dual_auth 20040 23928 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:44:04,978 dual_auth 20040 25708 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:44:05,011 dual_auth 20040 23416 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:44:05,143 dual_auth 20040 25708 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:44:05,145 dual_auth 20040 23416 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:44:08,224 dual_auth 20040 23416 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:44:08,256 dual_auth 20040 15676 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:48:02,352 dual_auth 20040 6560 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:48:04,798 dual_auth 20040 6560 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:48:12,814 dual_auth 20040 6560 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:48:35,062 dual_auth 20040 6560 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:48:35,102 dual_auth 20040 6560 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:48:37,992 dual_auth 20040 6560 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:48:37,996 dual_auth 20040 26156 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:48:52,907 dual_auth 20040 26156 User admin@test.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:48:52,909 views 20040 26156 User logged out without token blacklisting: admin@test.com
+INFO 2026-06-09 12:48:57,448 serializers 20040 26156 Looking for user with email: superadmin@example.com
+INFO 2026-06-09 12:48:57,449 managers 20040 26156 Looking for user with email: superadmin@example.com
+INFO 2026-06-09 12:48:57,453 serializers 20040 26156 User found: superadmin@example.com
+INFO 2026-06-09 12:48:57,454 serializers 20040 26156 Authenticating with username: superadmin@example.com
+INFO 2026-06-09 12:48:58,192 serializers 20040 26156 Authentication result: Success
+INFO 2026-06-09 12:48:58,193 serializers 20040 26156 Validation successful
+INFO 2026-06-09 12:48:58,205 views 20040 26156 User logged in: superadmin@example.com
+INFO 2026-06-09 12:48:58,615 views 20040 26156 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-06-09 12:48:58,723 dual_auth 20040 26156 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:48:58,723 dual_auth 20040 6560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:48:58,724 views 20040 26156 User profile accessed: superadmin@example.com
+INFO 2026-06-09 12:48:58,724 views 20040 6560 User profile accessed: superadmin@example.com
+INFO 2026-06-09 12:48:58,980 dual_auth 20040 6560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:48:59,030 dual_auth 20040 19632 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:48:59,032 views 20040 19632 Building queryset for user superadmin@example.com
+INFO 2026-06-09 12:48:59,036 views 20040 19632 Successfully built queryset for user superadmin@example.com
+INFO 2026-06-09 12:49:00,841 dual_auth 20040 6560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:49:00,842 dual_auth 20040 19632 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:49:00,843 views 20040 19632 User profile accessed: superadmin@example.com
+INFO 2026-06-09 12:49:00,844 dual_auth 20040 28172 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:49:00,850 dual_auth 20040 27144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:49:00,876 dual_auth 20040 6560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:49:00,877 dual_auth 20040 27144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:49:08,374 dual_auth 20040 27144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:49:08,374 dual_auth 20040 6560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:49:13,391 dual_auth 20040 6560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:49:13,394 dual_auth 20040 27144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:49:27,803 dual_auth 20040 27144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:49:27,815 views 20040 27144 User user@example.com role changed from admin to user by superadmin@example.com
+INFO 2026-06-09 12:49:41,070 dual_auth 20040 27144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:49:41,071 dual_auth 20040 6560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:49:56,694 dual_auth 20040 6560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:49:56,713 signals 20040 6560 Sent existing survey notification to mibrahim@lightidea.org for survey f33cac35-9bff-4e2b-9351-15d4297b9ada (joined group tarek)
+INFO 2026-06-09 12:49:56,731 dual_auth 20040 6560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:50:00,495 views 20040 6560 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-06-09 12:50:00,620 dual_auth 20040 6560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:50:00,621 views 20040 6560 User profile accessed: superadmin@example.com
+INFO 2026-06-09 12:50:00,862 dual_auth 20040 27144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:50:00,862 views 20040 27144 User profile accessed: superadmin@example.com
+INFO 2026-06-09 12:50:00,875 dual_auth 20040 26952 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:50:00,878 dual_auth 20040 6560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:50:00,890 dual_auth 20040 19632 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:50:00,890 dual_auth 20040 28172 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:50:00,967 dual_auth 20040 28172 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:50:00,968 dual_auth 20040 19632 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:50:06,567 dual_auth 20040 6560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:50:06,576 views 20040 6560 User mibrahim@lightidea.org role changed from admin to user by superadmin@example.com
+INFO 2026-06-09 12:50:22,418 dual_auth 20040 6560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:50:22,426 views 20040 6560 User admin@test.com role changed from admin to user by superadmin@example.com
+INFO 2026-06-09 12:50:27,496 dual_auth 20040 6560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:50:27,505 views 20040 6560 User admin@test.com role changed from user to admin by superadmin@example.com
+INFO 2026-06-09 12:51:05,289 views 20040 6560 JWT tokens refreshed with rotation for user: superadmin@example.com
+INFO 2026-06-09 12:51:05,409 dual_auth 20040 6560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:51:05,410 views 20040 6560 User profile accessed: superadmin@example.com
+INFO 2026-06-09 12:51:05,661 dual_auth 20040 6560 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:51:05,663 views 20040 6560 User profile accessed: superadmin@example.com
+INFO 2026-06-09 12:51:05,670 dual_auth 20040 19632 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:51:05,671 dual_auth 20040 26952 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:51:05,673 dual_auth 20040 28172 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:51:05,686 dual_auth 20040 27144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:51:05,769 dual_auth 20040 28172 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:51:05,771 dual_auth 20040 27144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:51:22,742 dual_auth 20040 19632 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:51:22,743 dual_auth 20040 27144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:51:27,879 dual_auth 20040 27144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:51:27,880 dual_auth 20040 19632 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:51:30,820 dual_auth 20040 27144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:51:30,820 dual_auth 20040 19632 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:51:44,434 dual_auth 20040 27144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:51:44,434 dual_auth 20040 19632 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:51:47,157 dual_auth 20040 27144 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:51:47,158 dual_auth 20040 19632 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:52:33,324 dual_auth 20040 19632 User superadmin@example.com authenticated with regular JWT (universal)
+INFO 2026-06-09 12:52:33,339 views 20040 19632 User mibrahim@lightidea.org role changed from user to admin by superadmin@example.com

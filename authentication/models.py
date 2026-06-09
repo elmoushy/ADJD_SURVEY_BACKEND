@@ -318,27 +318,10 @@ class UserGroup(models.Model):
         return f"{self.user.email} - {self.group.name}{admin_status}"
     
     def save(self, *args, **kwargs):
-        """
-        Override save to handle role assignment logic.
-        """
-        # If user is not super_admin and being added to a group, make them admin
-        if self.user.role != 'super_admin' and self.user.role != 'admin':
-            self.user.role = 'admin'
-            self.user.save()
-        
         super().save(*args, **kwargs)
-    
+
     def delete(self, *args, **kwargs):
-        """
-        Override delete to handle role downgrade logic.
-        """
-        user = self.user
         super().delete(*args, **kwargs)
-        
-        # Check if user is still in any groups
-        if user.role != 'super_admin' and not user.user_groups.exists():
-            user.role = 'user'
-            user.save()
 
 
 # Add groups property to User model
