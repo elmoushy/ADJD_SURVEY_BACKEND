@@ -49,130 +49,57 @@ def send_password_reset_email(user, code: str) -> bool:
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {{
-      font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-      background-color: #f5f5f5;
-      margin: 0; padding: 0;
-      direction: rtl;
-    }}
-    .wrapper {{
-      max-width: 560px;
-      margin: 40px auto;
-      background: #ffffff;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    }}
-    .header {{
-      background: linear-gradient(135deg, #AE5D5A, #CFA365);
-      padding: 32px 24px;
-      text-align: center;
-    }}
-    .header h1 {{
-      color: #ffffff;
-      margin: 0;
-      font-size: 22px;
-      letter-spacing: 0.5px;
-    }}
-    .body {{
-      padding: 32px 28px;
-      color: #333333;
-    }}
-    .greeting {{
-      font-size: 16px;
-      margin-bottom: 16px;
-    }}
-    .code-box {{
-      background: #f9f1e8;
-      border: 2px dashed #CFA365;
-      border-radius: 10px;
-      text-align: center;
-      padding: 20px;
-      margin: 24px 0;
-    }}
-    .code-label {{
-      font-size: 13px;
-      color: #888888;
-      margin-bottom: 8px;
-    }}
-    .code {{
-      font-size: 42px;
-      font-weight: 700;
-      letter-spacing: 10px;
-      color: #AE5D5A;
-    }}
-    .expiry {{
-      font-size: 13px;
-      color: #888888;
-      margin-top: 10px;
-    }}
-    .warning {{
-      background: #fff8e1;
-      border-left: 4px solid #CFA365;
-      border-right: 4px solid #CFA365;
-      padding: 12px 16px;
-      border-radius: 6px;
-      font-size: 13px;
-      color: #666;
-      margin-top: 20px;
-    }}
-    .divider {{
-      border: none;
-      border-top: 1px solid #eeeeee;
-      margin: 28px 0;
-    }}
-    .en-section {{
-      direction: ltr;
-      text-align: left;
-      color: #555555;
-      font-size: 14px;
-    }}
-    .footer {{
-      background: #f5f5f5;
-      text-align: center;
-      padding: 16px;
-      font-size: 12px;
-      color: #999999;
-    }}
+  <style type="text/css">
+    body {{ direction: rtl; font-family: 'Cairo', 'Noto Kufi Arabic', 'Segoe UI', Tahoma, Arial, sans-serif; margin: 0; padding: 0; background-color: #F5F7FA; }}
+    .container {{ max-width: 620px; margin: 30px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(35,31,32,0.12); border: 1px solid #E5E8E1; }}
+    .header {{ background: linear-gradient(135deg, #B78A41 0%, #A17D23 100%); padding: 24px; text-align: center; }}
+    .header h1 {{ color: #ffffff; margin: 0; font-size: 22px; }}
+    .content {{ padding: 32px 24px; text-align: right; }}
+    .content p {{ color: #4D4D4F; font-size: 15px; line-height: 1.8; margin: 12px 0; }}
+    .code-box {{ background-color: #F8F6F0; border-right: 4px solid #B78A41; padding: 20px 16px; border-radius: 8px; margin: 20px 0; text-align: center; }}
+    .code-label {{ font-size: 13px; color: #808285; margin-bottom: 10px; }}
+    .code {{ font-size: 42px; font-weight: 700; letter-spacing: 10px; color: #B78A41; font-family: 'Courier New', monospace; }}
+    .code-expiry {{ font-size: 13px; color: #808285; margin-top: 10px; }}
+    .warning-box {{ background-color: #F8F6F0; border-right: 4px solid #B78A41; padding: 12px 16px; border-radius: 8px; margin: 20px 0; color: #4D4D4F; font-size: 14px; line-height: 1.8; }}
+    .divider {{ border: none; border-top: 1px solid #E5E8E1; margin: 28px 0; }}
+    .en-section {{ direction: ltr; text-align: left; color: #4D4D4F; font-size: 14px; line-height: 1.8; }}
+    .footer {{ background-color: #F8F6F0; padding: 16px 24px; text-align: center; border-top: 1px solid #E5E8E1; }}
+    .footer p {{ color: #808285; font-size: 12px; margin: 4px 0; }}
   </style>
 </head>
 <body>
-  <div class="wrapper">
+  <div class="container">
 
     <div class="header">
-      <h1>🔐 إعادة تعيين كلمة المرور</h1>
+      <h1>إعادة تعيين كلمة المرور</h1>
     </div>
 
-    <div class="body">
-      <!-- Arabic section -->
-      <p class="greeting">مرحباً <strong>{display_name}</strong>،</p>
-      <p>لقد تلقينا طلباً لإعادة تعيين كلمة المرور الخاصة بحسابك. استخدم الرمز التالي:</p>
+    <div class="content">
+      <p>مرحباً <strong>{display_name}</strong>،</p>
+      <p>تلقينا طلباً لإعادة تعيين كلمة المرور الخاصة بحسابك في نظام الإيضاحات. استخدم الرمز أدناه:</p>
 
       <div class="code-box">
-        <div class="code-label">رمز التحقق</div>
+        <div class="code-label">رمز التحقق / Verification Code</div>
         <div class="code">{code}</div>
-        <div class="expiry">⏱ صالح لمدة <strong>10 دقائق</strong> فقط</div>
+        <div class="code-expiry">صالح لمدة <strong>10 دقائق</strong> فقط &nbsp;|&nbsp; Valid for <strong>10 minutes</strong> only</div>
       </div>
 
-      <div class="warning">
-        ⚠️ إذا لم تطلب إعادة تعيين كلمة المرور، يرجى تجاهل هذا البريد الإلكتروني.
-        لن يتم تغيير أي شيء في حسابك.
+      <div class="warning-box">
+        إذا لم تطلب إعادة تعيين كلمة المرور، يرجى تجاهل هذا البريد الإلكتروني. لن يتم إجراء أي تغيير على حسابك.
       </div>
 
       <hr class="divider">
 
-      <!-- English section -->
       <div class="en-section">
         <p>Hello <strong>{display_name}</strong>,</p>
-        <p>We received a request to reset the password for your account. Use the code above.</p>
-        <p>⚠️ If you did not request a password reset, please ignore this email. Your account remains secure.</p>
+        <p>We received a request to reset your account password. Use the code above to proceed.</p>
+        <p>If you did not request this, please ignore this email — your account remains secure.</p>
       </div>
     </div>
 
     <div class="footer">
-      هذا البريد الإلكتروني مرسل تلقائياً — يرجى عدم الرد عليه<br>
-      This is an automated email — please do not reply
+      <p>هذه رسالة آلية من نظام الايضاحات - إدارة المالية - دائرة القضاء</p>
+      <p>This is an automated email — please do not reply</p>
     </div>
 
   </div>
