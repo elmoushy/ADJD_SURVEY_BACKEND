@@ -61,9 +61,14 @@ urlpatterns = [
          name='survey-submit'),
     
     # Response management
-    path('surveys/<uuid:survey_id>/responses/', 
-         views.SurveyResponsesView.as_view(), 
+    path('surveys/<uuid:survey_id>/responses/',
+         views.SurveyResponsesView.as_view(),
          name='survey-responses'),
+
+    # User's own response for a survey (read-only, authenticated)
+    path('surveys/<uuid:survey_id>/my-response/',
+         views.MyResponseView.as_view(),
+         name='my-survey-response'),
     
     # Admin APIs - Survey Response Management
     path('admin/responses/', 

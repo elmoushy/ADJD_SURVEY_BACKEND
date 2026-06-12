@@ -468,3 +468,194 @@ def notify_followup_decision(thread):
         _send_followup_email_async(respondent.email, subject, html_body, plain_body)
     except Exception as e:
         logger.error(f"Error sending follow-up decision email: {e}")
+
+
+# ---------------------------------------------------------------------------
+# New-response notification (sent to survey creator on every submission)
+# ---------------------------------------------------------------------------
+
+def _get_responses_url(survey_id: str) -> str:
+    """Build the frontend admin URL for viewing survey responses."""
+    base = FRONTEND_BASE_URL.rstrip('/')
+    return f"{base}/control/surveys/{survey_id}/responses"
+
+
+def _build_response_notification_html(
+    survey_title: str,
+    respondent_label: str,
+    answer_count: int,
+    responses_url: str,
+    creator_name: str,
+) -> str:
+    """
+    RTL HTML email notifying the survey creator that a new response was submitted.
+    Matches the existing gold-header theme used throughout this module.
+    """
+    return f'''<html dir="rtl">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+body {{ direction: rtl; font-family: 'Cairo', 'Noto Kufi Arabic', 'Segoe UI', Tahoma, Arial, sans-serif; margin: 0; padding: 0; background-color: #F5F7FA; }}
+.container {{ max-width: 620px; margin: 30px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(35,31,32,0.12); border: 1px solid #E5E8E1; }}
+.header {{ background: linear-gradient(135deg, #B78A41 0%, #A17D23 100%); padding: 24px; text-align: center; }}
+.header h1 {{ color: #ffffff; margin: 0; font-size: 22px; }}
+.content {{ padding: 32px 24px; text-align: right; }}
+.content p {{ color: #4D4D4F; font-size: 15px; line-height: 1.8; margin: 12px 0; }}
+.survey-title {{ background-color: #F8F6F0; border-right: 4px solid #B78A41; padding: 12px 16px; border-radius: 8px; margin: 20px 0; }}
+.survey-title span {{ font-weight: bold; color: #231F20; font-size: 16px; }}
+.meta-row {{ display: flex; justify-content: space-between; background-color: #F8F6F0; border-radius: 8px; padding: 10px 16px; margin: 8px 0; font-size: 14px; color: #4D4D4F; }}
+.meta-label {{ color: #808285; font-size: 13px; }}
+.meta-value {{ font-weight: 600; color: #231F20; }}
+.btn-container {{ text-align: center; margin: 32px 0; }}
+.btn {{ display: inline-block; background: linear-gradient(135deg, #B78A41 0%, #A17D23 100%); color: #ffffff; text-decoration: none; padding: 14px 40px; border-radius: 8px; font-size: 16px; font-weight: bold; }}
+.footer {{ background-color: #F8F6F0; padding: 16px 24px; text-align: center; border-top: 1px solid #E5E8E1; }}
+.footer p {{ color: #808285; font-size: 12px; margin: 4px 0; }}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>رد جديد على الإيضاح</h1>
+    </div>
+    <div class="content">
+        <p>مرحباً : {creator_name}</p>
+        <p>تم استلام رد جديد على الإيضاح</p>
+        <div class="survey-title">
+            <span>{survey_title}</span>
+        </div>
+        <table width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse: collapse; margin: 16px 0;">
+            <tr>
+                <td style="background-color: #F8F6F0; border-radius: 8px 8px 0 0; padding: 10px 16px; border-bottom: 1px solid #E5E8E1;">
+                    <span class="meta-label">المشارك</span><br>
+                    <span class="meta-value">{respondent_label}</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color: #F8F6F0; border-radius: 0 0 8px 8px; padding: 10px 16px;">
+                    <span class="meta-label">عدد الإجابات</span><br>
+                    <span class="meta-value">{answer_count}</span>
+                </td>
+            </tr>
+        </table>
+        <div class="btn-container">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: 0 auto; border-collapse: separate;">
+                <tr>
+                    <td align="center" bgcolor="#B78A41" style="border-radius: 8px; mso-padding-alt: 0;">
+                        <a href="{responses_url}" class="btn" style="display: inline-block; padding: 14px 40px; font-size: 16px; font-weight: bold; color: #ffffff; text-decoration: none; background: #B78A41; border: 1px solid #A17D23; border-radius: 8px; line-height: 1.2;">
+                            عرض الردود
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="footer">
+        <p>هذه رسالة آلية من نظام الايضاحات - إدارة المالية - دائرة القضاء</p>
+    </div>
+</div>
+</body>
+</html>'''
+
+
+def _build_response_notification_plain(
+    survey_title: str,
+    respondent_label: str,
+    answer_count: int,
+    responses_url: str,
+) -> str:
+    """Plain-text fallback for the new-response notification email."""
+    return (
+        f"مرحباً،\n\n"
+        f"تم استلام رد جديد على الإيضاح: {survey_title}\n\n"
+        f"المشارك: {respondent_label}\n"
+        f"عدد الإجابات: {answer_count}\n\n"
+        f"لعرض الردود: {responses_url}\n\n"
+        f"---\n"
+        f"نظام الايضاحات - إدارة المالية - دائرة القضاء"
+    )
+
+
+def _send_response_notification(
+    creator_email: str,
+    creator_name: str,
+    survey_title: str,
+    respondent_label: str,
+    answer_count: int,
+    responses_url: str,
+) -> None:
+    """Send a single new-response notification email (runs in background thread)."""
+    subject = f"رد جديد على الإيضاح: {survey_title}"
+    html_body = _build_response_notification_html(
+        survey_title, respondent_label, answer_count, responses_url, creator_name
+    )
+    plain_body = _build_response_notification_plain(
+        survey_title, respondent_label, answer_count, responses_url
+    )
+    try:
+        msg = EmailMultiAlternatives(
+            subject=subject,
+            body=plain_body,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[creator_email],
+        )
+        msg.attach_alternative(html_body, "text/html")
+        msg.send()
+        logger.info(f"New-response notification sent to creator {creator_email} for survey '{survey_title}'")
+    except Exception as e:
+        logger.error(f"Failed to send new-response notification to {creator_email}: {e}")
+
+
+def notify_creator_of_new_response(survey, survey_response) -> None:
+    """
+    Fire-and-forget: email the survey creator when a new response is submitted.
+    Runs in a daemon thread so the submission endpoint returns immediately.
+
+    Skipped if:
+    - The survey has no creator or creator has no email address.
+    - The creator submitted their own survey (no self-notification noise).
+    """
+    try:
+        creator = getattr(survey, 'creator', None)
+        if not creator or not getattr(creator, 'email', None):
+            return
+
+        # Skip self-submissions
+        respondent = getattr(survey_response, 'respondent', None)
+        if respondent and respondent.pk == creator.pk:
+            return
+
+        survey_title = survey.title or 'ايضاح'
+        survey_id = str(survey.id)
+        creator_name = getattr(creator, 'full_name', '') or creator.email
+
+        # Build a human-readable respondent label
+        if survey_response.is_group_submission:
+            group = getattr(survey_response, 'submitted_via_group', None)
+            group_name = group.name if group else ''
+            respondent_label = f"مستخدم مسجل{' - ' + group_name if group_name else ''}"
+        elif respondent:
+            full_name = getattr(respondent, 'full_name', '') or ''
+            respondent_label = full_name if full_name and full_name != respondent.email else respondent.email
+        else:
+            respondent_label = (
+                getattr(survey_response, 'respondent_email', None)
+                or getattr(survey_response, 'respondent_phone', None)
+                or 'مستخدم مجهول'
+            )
+
+        answer_count = survey_response.answers.count()
+        responses_url = _get_responses_url(survey_id)
+
+        thread = threading.Thread(
+            target=_send_response_notification,
+            args=(creator.email, creator_name, survey_title, respondent_label, answer_count, responses_url),
+            daemon=True,
+        )
+        thread.start()
+
+        logger.info(
+            f"Queued new-response notification to creator {creator.email} "
+            f"for survey {survey_id}"
+        )
+    except Exception as e:
+        logger.error(f"Error queuing new-response notification: {e}")

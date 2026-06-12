@@ -3564,6 +3564,88 @@ class SurveyViewSet(ModelViewSet):
         return insights
 
 
+class MyResponseView(APIView):
+    """
+    Return the authenticated user's own response (with answers) for a specific survey.
+
+    GET /api/surveys/surveys/<survey_id>/my-response/
+
+    Security: only the requesting user's response is ever returned — the queryset
+    filters on respondent=request.user so no other user's data leaks.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, survey_id):
+        try:
+            survey = get_object_or_404(Survey, id=survey_id, deleted_at__isnull=True)
+
+            response_obj = (
+                SurveyResponse.objects
+                .filter(survey=survey, respondent=request.user)
+                .prefetch_related('answers__question')
+                .first()
+            )
+
+            if not response_obj:
+                return uniform_response(
+                    success=False,
+                    message="لم يتم العثور على إجابة لهذا المستخدم في هذا الإيضاح",
+                    status_code=status.HTTP_404_NOT_FOUND
+                )
+
+            # Build answers dict keyed by question_id
+            answers = {}
+            for answer in response_obj.answers.all():
+                answers[str(answer.question_id)] = answer.answer_text
+
+            # Serialize questions (all fields the frontend needs)
+            questions_data = []
+            for q in survey.questions.prefetch_related('conditional_on').order_by('order'):
+                questions_data.append({
+                    'id': str(q.id),
+                    'text': q.text,
+                    'question_type': q.question_type,
+                    'options': q.options,
+                    'is_required': q.is_required,
+                    'order': q.order,
+                    'validation_type': q.validation_type,
+                    'conditional_on': [
+                        {
+                            'trigger_question_id': str(c.trigger_question_id),
+                            'trigger_answer_value': c.trigger_answer_value,
+                        }
+                        for c in q.conditional_on.all()
+                    ],
+                })
+
+            return uniform_response(
+                success=True,
+                message="تم استرداد الإجابة بنجاح",
+                data={
+                    'survey': {
+                        'id': str(survey.id),
+                        'title': survey.title,
+                        'description': survey.description,
+                        'questions': questions_data,
+                    },
+                    'response': {
+                        'id': str(response_obj.id),
+                        'submitted_at': response_obj.submitted_at.isoformat(),
+                        'answers': answers,
+                    }
+                }
+            )
+
+        except Exception as e:
+            logger.error(f"Error retrieving user response: {e}")
+            return uniform_response(
+                success=False,
+                message="فشل في استرداد الإجابة",
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
 class MySharedSurveysView(generics.ListAPIView):
     """
     Get all submitted surveys accessible to the authenticated user based on sharing rules.
@@ -3742,8 +3824,16 @@ class MySharedSurveysView(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
         """List shared surveys with uniform response format"""
         try:
+            from rest_framework.exceptions import NotFound as DRFNotFound
             queryset = self.filter_queryset(self.get_queryset())
-            page = self.paginate_queryset(queryset)
+            try:
+                page = self.paginate_queryset(queryset)
+            except DRFNotFound:
+                return uniform_response(
+                    success=True,
+                    message="Shared surveys retrieved successfully",
+                    data={'surveys': [], 'total_count': queryset.count(), 'access_summary': {}}
+                )
             
             # Prepare enhanced response data
             surveys_data = []
@@ -4140,7 +4230,11 @@ class AuthenticatedSurveyResponseView(APIView):
             
             # Log the submission
             logger.info(f"Authenticated survey response submitted: {survey_response.id} for survey {survey.id} by {user.email}")
-            
+
+            # Notify creator in background (non-blocking)
+            from .email_service import notify_creator_of_new_response
+            notify_creator_of_new_response(survey, survey_response)
+
             return uniform_response(
                 success=True,
                 message="Response submitted successfully",
@@ -4153,7 +4247,7 @@ class AuthenticatedSurveyResponseView(APIView):
                 },
                 status_code=status.HTTP_201_CREATED
             )
-            
+
         except Exception as e:
             logger.error(f"Error submitting authenticated survey response: {e}")
             return uniform_response(
@@ -4493,7 +4587,11 @@ class SurveyResponseSubmissionView(APIView):
             # Log the submission
             user_info = f"user {respondent.email}" if respondent else f"email {respondent_email}"
             logger.info(f"Survey response submitted: {survey_response.id} for survey {survey.id} by {user_info}")
-            
+
+            # Notify creator in background (non-blocking)
+            from .email_service import notify_creator_of_new_response
+            notify_creator_of_new_response(survey, survey_response)
+
             return uniform_response(
                 success=True,
                 message="Response submitted successfully",
@@ -7908,7 +8006,12 @@ class AdminSurveyResponsesView(generics.ListAPIView):
             return (
                 survey.responses.all()
                       .select_related('respondent', 'submitted_via_group')
-                      .prefetch_related('answers__question', 'follow_ups', 'attachments__uploaded_by')
+                      .prefetch_related(
+                          'answers__question',
+                          'follow_ups',
+                          'attachments__uploaded_by',
+                          'respondent__user_groups__group',
+                      )
                       .annotate(latest_follow_up_status=latest_follow_up_status)
             )
         
@@ -7974,6 +8077,7 @@ class AdminSurveyResponsesView(generics.ListAPIView):
                     # Named authenticated user — show real email/name
                     user_obj = response.respondent
                     full_name = getattr(user_obj, 'full_name', '') or user_obj.email
+                    user_groups = [ug.group.name for ug in user_obj.user_groups.all()]
                     respondent_info = {
                         'type': 'authenticated',
                         'id': user_obj.id,
@@ -7983,6 +8087,7 @@ class AdminSurveyResponsesView(generics.ListAPIView):
                         'role': getattr(user_obj, 'role', None),
                         'department': getattr(user_obj, 'department', None),
                         'joined_at': user_obj.date_joined.isoformat() if user_obj.date_joined else None,
+                        'groups': user_groups,
                     }
                 else:
                     # Truly anonymous
