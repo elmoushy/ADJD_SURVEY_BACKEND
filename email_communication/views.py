@@ -1,13 +1,17 @@
 """
 API Views for Email Communication System
 """
+import math
+import logging
 from rest_framework import viewsets, status, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
 from .models import (
@@ -15,7 +19,8 @@ from .models import (
     EmailTemplate,
     EmailDraft,
     EmailLog,
-    EmailRecipientView
+    EmailRecipientView,
+    EmailAttachment,
 )
 from .serializers import (
     CostCenterListSerializer,
@@ -30,7 +35,10 @@ from .serializers import (
     EmailRecipientViewDetailSerializer,
     SendEmailSerializer,
     SendDraftSerializer,
+    EmailAttachmentUploadSerializer,
+    EmailAttachmentSerializer,
 )
+from .attachment_utils import process_attachment_upload, MAX_ATTACHMENTS_PER_EMAIL
 from .permissions import (
     CanSendEmail,
     CanManageCostCenters,
@@ -41,6 +49,8 @@ from .permissions import (
     IsRecipient
 )
 from .services import EmailService
+
+logger = logging.getLogger(__name__)
 
 
 class CostCenterViewSet(viewsets.ModelViewSet):
@@ -66,7 +76,22 @@ class CostCenterViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             return CostCenterListSerializer
         return CostCenterDetailSerializer
-    
+
+    def list(self, request, *args, **kwargs):  # noqa: ARG002
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            response = self.get_paginated_response(serializer.data)
+            page_size = self.paginator.page_size
+            response.data['page_size'] = page_size
+            response.data['total_pages'] = (
+                math.ceil(response.data['count'] / page_size) if page_size else 1
+            )
+            return response
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
     @action(detail=True, methods=['get'])
     def users(self, request, pk=None):
         """Get users in a cost center"""
@@ -154,13 +179,15 @@ class SendEmailView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+        attachment_ids = serializer.validated_data.get('attachment_ids')
         result = EmailService.send_email(
             user=request.user,
             send_type=serializer.validated_data['send_type'],
             subject=serializer.validated_data['subject'],
             body_html=serializer.validated_data['body_html'],
             cost_center_ids=serializer.validated_data.get('cost_center_ids'),
-            template_id=serializer.validated_data.get('template_id')
+            template_id=serializer.validated_data.get('template_id'),
+            attachment_ids=[str(a) for a in attachment_ids] if attachment_ids else None,
         )
         
         if result['success']:
@@ -420,7 +447,7 @@ class ToggleArchiveView(APIView):
     POST /api/email/inbox/{id}/archive/
     """
     permission_classes = [IsAuthenticated]
-    
+
     def post(self, request, pk):
         recipient_view = get_object_or_404(
             EmailRecipientView,
@@ -432,3 +459,105 @@ class ToggleArchiveView(APIView):
             'success': True,
             'is_archived': recipient_view.is_archived
         })
+
+
+# =============================================================================
+# Email Attachments (BLOB storage)
+# =============================================================================
+
+
+class EmailAttachmentUploadView(APIView):
+    """
+    Upload an email attachment (document only — PDF/CSV/Excel/Word, max 15MB).
+    POST /api/email/attachments/upload/
+
+    The attachment is created unattached (orphan). Its returned id is later
+    associated with a template/draft (via attachment_ids) or sent with an email.
+    Gating happens at the association/send step; an orphan upload is harmless.
+    """
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request):
+        serializer = EmailAttachmentUploadSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        file_obj = serializer.validated_data['file']
+        description = serializer.validated_data.get('description', '')
+
+        processed = process_attachment_upload(file_obj)
+
+        attachment = EmailAttachment.objects.create(
+            file_data=processed['file_data'],
+            original_filename=processed['original_filename'],
+            file_size=processed['file_size'],
+            mime_type=processed['mime_type'],
+            description=description,
+            uploaded_by=request.user,
+        )
+
+        out = EmailAttachmentSerializer(attachment, context={'request': request})
+        logger.info(
+            "Email attachment uploaded: %s (%s) by %s",
+            attachment.id, attachment.original_filename, request.user.email,
+        )
+        return Response(out.data, status=status.HTTP_201_CREATED)
+
+
+class EmailAttachmentDownloadView(APIView):
+    """
+    Download an email attachment (binary stream).
+    GET /api/email/attachments/{pk}/download/
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        attachment = get_object_or_404(EmailAttachment, pk=pk)
+
+        # Oracle returns BinaryField as LOB/memoryview — convert to bytes explicitly
+        raw = attachment.file_data
+        file_bytes = raw.read() if hasattr(raw, 'read') else bytes(raw)
+
+        response = HttpResponse(file_bytes, content_type=attachment.mime_type)
+        response['Content-Disposition'] = (
+            f'attachment; filename="{attachment.original_filename}"'
+        )
+        response['Content-Length'] = attachment.file_size
+        return response
+
+
+class EmailAttachmentDeleteView(APIView):
+    """
+    Delete an email attachment.
+    DELETE /api/email/attachments/{pk}/
+
+    Only the uploader (or a staff/super admin) may delete. Sent copies
+    (owned by an email log) cannot be deleted to preserve sent history.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, pk):
+        attachment = get_object_or_404(EmailAttachment, pk=pk)
+
+        if attachment.sent_log_id is not None:
+            return Response(
+                {'detail': 'لا يمكن حذف مرفق تم إرساله بالفعل'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        is_owner = attachment.uploaded_by_id == request.user.id
+        is_admin = (
+            request.user.is_superuser
+            or getattr(request.user, 'role', None) in ('admin', 'super_admin')
+        )
+        if not (is_owner or is_admin):
+            return Response(
+                {'detail': 'ليس لديك صلاحية حذف هذا المرفق'},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        attachment_id = str(attachment.id)
+        attachment.delete()
+        logger.info("Email attachment deleted: %s by %s", attachment_id, request.user.email)
+        return Response({'success': True}, status=status.HTTP_200_OK)

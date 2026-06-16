@@ -30,6 +30,11 @@ urlpatterns = [
     # Outbox
     path('outbox/', views.OutboxView.as_view(), name='outbox-list'),
     path('outbox/<int:pk>/', views.OutboxDetailView.as_view(), name='outbox-detail'),
+
+    # Attachments (BLOB storage)
+    path('attachments/upload/', views.EmailAttachmentUploadView.as_view(), name='email-attachment-upload'),
+    path('attachments/<uuid:pk>/download/', views.EmailAttachmentDownloadView.as_view(), name='email-attachment-download'),
+    path('attachments/<uuid:pk>/', views.EmailAttachmentDeleteView.as_view(), name='email-attachment-delete'),
     
     # Transactions log
     path('transactions/', views.TransactionsView.as_view(), name='transactions-list'),

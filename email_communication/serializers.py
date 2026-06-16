@@ -9,7 +9,8 @@ from .models import (
     EmailTemplate,
     EmailDraft,
     EmailLog,
-    EmailRecipientView
+    EmailRecipientView,
+    EmailAttachment,
 )
 
 User = get_user_model()
@@ -20,6 +21,53 @@ class UserMinimalSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'first_name', 'last_name']
+
+
+class EmailAttachmentUploadSerializer(serializers.Serializer):
+    """Serializer for uploading an email attachment file."""
+
+    file = serializers.FileField(required=True)
+    description = serializers.CharField(max_length=500, required=False, allow_blank=True)
+
+    def validate_file(self, value):
+        """Validate attachment file (type, size, extension)."""
+        from .attachment_utils import validate_attachment_file
+        validate_attachment_file(value)
+        return value
+
+
+class EmailAttachmentSerializer(serializers.ModelSerializer):
+    """Read serializer for email attachments."""
+
+    download_url = serializers.SerializerMethodField()
+    format_name = serializers.SerializerMethodField()
+    uploaded_by_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = EmailAttachment
+        fields = [
+            'id', 'original_filename', 'file_size', 'mime_type',
+            'format_name', 'description',
+            'uploaded_by', 'uploaded_by_name', 'uploaded_at',
+            'download_url',
+        ]
+        read_only_fields = fields
+
+    def get_download_url(self, obj):
+        request = self.context.get('request')
+        from django.urls import reverse
+        url = reverse('email_communication:email-attachment-download', kwargs={'pk': str(obj.pk)})
+        return request.build_absolute_uri(url) if request else url
+
+    def get_format_name(self, obj):
+        from .attachment_utils import MIME_TO_FORMAT
+        return MIME_TO_FORMAT.get(obj.mime_type, obj.mime_type)
+
+    def get_uploaded_by_name(self, obj):
+        if obj.uploaded_by:
+            name = f"{obj.uploaded_by.first_name} {obj.uploaded_by.last_name}".strip()
+            return name or obj.uploaded_by.email
+        return None
 
 
 class CostCenterEmailSerializer(serializers.ModelSerializer):
@@ -191,7 +239,14 @@ class EmailTemplateListSerializer(serializers.ModelSerializer):
 class EmailTemplateDetailSerializer(serializers.ModelSerializer):
     """Detail serializer for email templates"""
     created_by = UserMinimalSerializer(read_only=True)
-    
+    attachments = EmailAttachmentSerializer(many=True, read_only=True)
+    attachment_ids = serializers.ListField(
+        child=serializers.UUIDField(),
+        write_only=True,
+        required=False,
+        help_text="List of uploaded attachment ids to associate with this template"
+    )
+
     class Meta:
         model = EmailTemplate
         fields = [
@@ -205,15 +260,32 @@ class EmailTemplateDetailSerializer(serializers.ModelSerializer):
             'body_text',
             'is_active',
             'category',
+            'attachments',
+            'attachment_ids',
             'created_by',
             'created_at',
             'updated_at'
         ]
         read_only_fields = ['created_at', 'updated_at']
-    
+
     def create(self, validated_data):
+        from .attachment_utils import sync_parent_attachments
+        attachment_ids = validated_data.pop('attachment_ids', None)
         validated_data['created_by'] = self.context['request'].user
-        return EmailTemplate.objects.create(**validated_data)
+        template = EmailTemplate.objects.create(**validated_data)
+        if attachment_ids is not None:
+            sync_parent_attachments(template, 'template', attachment_ids)
+        return template
+
+    def update(self, instance, validated_data):
+        from .attachment_utils import sync_parent_attachments
+        attachment_ids = validated_data.pop('attachment_ids', None)
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        if attachment_ids is not None:
+            sync_parent_attachments(instance, 'template', attachment_ids)
+        return instance
 
 
 class EmailDraftListSerializer(serializers.ModelSerializer):
@@ -240,7 +312,14 @@ class EmailDraftDetailSerializer(serializers.ModelSerializer):
         required=False,
         allow_null=True
     )
-    
+    attachments = EmailAttachmentSerializer(many=True, read_only=True)
+    attachment_ids = serializers.ListField(
+        child=serializers.UUIDField(),
+        write_only=True,
+        required=False,
+        help_text="List of uploaded attachment ids to associate with this draft"
+    )
+
     class Meta:
         model = EmailDraft
         fields = [
@@ -252,48 +331,60 @@ class EmailDraftDetailSerializer(serializers.ModelSerializer):
             'draft_name',
             'template',
             'template_id',
+            'attachments',
+            'attachment_ids',
             'created_at',
             'updated_at'
         ]
         read_only_fields = ['created_at', 'updated_at']
-    
+
     def create(self, validated_data):
+        from .attachment_utils import sync_parent_attachments
         cost_center_ids = validated_data.pop('cost_center_ids', None)
         template_id = validated_data.pop('template_id', None)
-        
+        attachment_ids = validated_data.pop('attachment_ids', None)
+
         validated_data['user'] = self.context['request'].user
         if template_id:
             try:
                 validated_data['template'] = EmailTemplate.objects.get(id=template_id)
             except EmailTemplate.DoesNotExist:
                 pass
-        
+
         draft = EmailDraft.objects.create(**validated_data)
         if cost_center_ids:
             draft.set_cost_center_list(cost_center_ids)
             draft.save()
-        
+        if attachment_ids is not None:
+            sync_parent_attachments(draft, 'draft', attachment_ids)
+
         return draft
-    
+
     def update(self, instance, validated_data):
+        from .attachment_utils import sync_parent_attachments
         cost_center_ids = validated_data.pop('cost_center_ids', None)
         template_id = validated_data.pop('template_id', None)
-        
+        attachment_ids = validated_data.pop('attachment_ids', None)
+
         if template_id:
             try:
                 instance.template = EmailTemplate.objects.get(id=template_id)
             except EmailTemplate.DoesNotExist:
                 instance.template = None
-        
+
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-        
+
         if cost_center_ids is not None:
             instance.set_cost_center_list(cost_center_ids)
-        
+
         instance.save()
+
+        if attachment_ids is not None:
+            sync_parent_attachments(instance, 'draft', attachment_ids)
+
         return instance
-    
+
     def to_representation(self, instance):
         data = super().to_representation(instance)
         # Convert cost_center_ids from string to list
@@ -333,7 +424,8 @@ class EmailLogDetailSerializer(serializers.ModelSerializer):
     recipient_emails = serializers.SerializerMethodField()
     cc_emails = serializers.SerializerMethodField()
     metadata = serializers.SerializerMethodField()
-    
+    attachments = serializers.SerializerMethodField()
+
     class Meta:
         model = EmailLog
         fields = [
@@ -350,17 +442,23 @@ class EmailLogDetailSerializer(serializers.ModelSerializer):
             'email_status',
             'email_error',
             'sent_at',
-            'metadata'
+            'metadata',
+            'attachments'
         ]
-    
+
     def get_recipient_emails(self, obj):
         return obj.get_recipient_list()
-    
+
     def get_cc_emails(self, obj):
         return obj.get_cc_list()
-    
+
     def get_metadata(self, obj):
         return obj.get_metadata()
+
+    def get_attachments(self, obj):
+        links = obj.attachment_links.select_related('attachment').all()
+        attachments = [link.attachment for link in links]
+        return EmailAttachmentSerializer(attachments, many=True, context=self.context).data
 
 
 class EmailRecipientViewListSerializer(serializers.ModelSerializer):
@@ -422,7 +520,12 @@ class SendEmailSerializer(serializers.Serializer):
     template_id = serializers.IntegerField(required=False, allow_null=True)
     subject = serializers.CharField(max_length=500)
     body_html = serializers.CharField()
-    
+    attachment_ids = serializers.ListField(
+        child=serializers.UUIDField(),
+        required=False,
+        allow_null=True
+    )
+
     def validate(self, data):
         if data['send_type'] == 'SPECIFIC' and not data.get('cost_center_ids'):
             raise serializers.ValidationError({

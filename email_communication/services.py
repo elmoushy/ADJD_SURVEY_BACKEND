@@ -4,18 +4,21 @@ Handles email sending, draft management, and recipient tracking
 """
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.conf import settings
-from django.db import transaction
+from django.db import transaction, connections
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from typing import List, Dict, Optional
 import logging
+import threading
 
 from .models import (
     CostCenter,
     EmailTemplate,
     EmailDraft,
     EmailLog,
-    EmailRecipientView
+    EmailRecipientView,
+    EmailAttachment,
+    EmailLogAttachment,
 )
 
 User = get_user_model()
@@ -67,6 +70,61 @@ class EmailService:
     """
     
     @staticmethod
+    def _load_attachment_payloads(attachment_ids) -> List[Dict]:
+        """
+        Read attachment blobs once into memory so they can be attached to every
+        outgoing message and copied into the immutable sent record.
+
+        Returns a list of dicts: {'id', 'filename', 'content', 'mime_type'}.
+        Oracle returns BinaryField as a LOB/memoryview, so convert to bytes.
+        """
+        if not attachment_ids:
+            return []
+        payloads = []
+        for att in EmailAttachment.objects.filter(id__in=attachment_ids):
+            raw = att.file_data
+            file_bytes = raw.read() if hasattr(raw, 'read') else bytes(raw)
+            payloads.append({
+                'id': str(att.id),
+                'filename': att.original_filename,
+                'content': file_bytes,
+                'mime_type': att.mime_type,
+            })
+        return payloads
+
+    @staticmethod
+    def _persist_sent_attachments(sent_log, received_logs, att_payloads):
+        """
+        Create one immutable EmailAttachment copy per file owned by the SENT log,
+        then link it to the SENT log and every RECEIVED log so the same blob is
+        shared (not duplicated per recipient) across outbox/inbox views.
+        """
+        for p in att_payloads:
+            copy = EmailAttachment.objects.create(
+                file_data=p['content'],
+                original_filename=p['filename'],
+                file_size=len(p['content']),
+                mime_type=p['mime_type'],
+                sent_log=sent_log,
+                uploaded_by=sent_log.user,
+            )
+            EmailLogAttachment.objects.create(email_log=sent_log, attachment=copy)
+            for received_log in received_logs:
+                EmailLogAttachment.objects.create(email_log=received_log, attachment=copy)
+
+    @staticmethod
+    def _cleanup_orphan_attachments(attachment_ids):
+        """Delete source attachments that were never owned by a template/draft."""
+        if not attachment_ids:
+            return
+        EmailAttachment.objects.filter(
+            id__in=attachment_ids,
+            template__isnull=True,
+            draft__isnull=True,
+            sent_log__isnull=True,
+        ).delete()
+
+    @staticmethod
     def send_email(
         user,
         send_type: str,
@@ -74,11 +132,12 @@ class EmailService:
         body_html: str,
         cost_center_ids: Optional[List[int]] = None,
         template_id: Optional[int] = None,
-        draft_id: Optional[int] = None
+        draft_id: Optional[int] = None,
+        attachment_ids: Optional[List[str]] = None
     ) -> Dict:
         """
         Send email to cost centers.
-        
+
         Args:
             user: Sender user
             send_type: 'ANNOUNCEMENT' or 'SPECIFIC'
@@ -87,12 +146,17 @@ class EmailService:
             cost_center_ids: List of cost center IDs (for SPECIFIC)
             template_id: Template reference (optional)
             draft_id: Draft reference (optional)
-            
+            attachment_ids: List of EmailAttachment ids to attach (optional)
+
         Returns:
-            Dict with success status and details
+            Dict with success status and details. Email delivery (SMTP) runs in a
+            background thread; records are persisted as PENDING and flipped to
+            SUCCESS/FAILED once the thread finishes, so the API responds instantly.
         """
         try:
             with transaction.atomic():
+                # Read attachment blobs once (shared across all recipients)
+                att_payloads = EmailService._load_attachment_payloads(attachment_ids)
                 # Determine target cost centers
                 if send_type == 'ANNOUNCEMENT':
                     cost_centers = CostCenter.objects.active()
@@ -111,13 +175,14 @@ class EmailService:
                         'success': False,
                         'error': 'Invalid send type'
                     }
-                
-                if not cost_centers.exists():
+
+                cost_centers = list(cost_centers)
+                if not cost_centers:
                     return {
                         'success': False,
                         'error': 'No active cost centers found'
                     }
-                
+
                 # Get template and draft references
                 template = None
                 draft = None
@@ -126,154 +191,201 @@ class EmailService:
                         template = EmailTemplate.objects.get(id=template_id)
                     except EmailTemplate.DoesNotExist:
                         pass
-                
+
                 if draft_id:
                     try:
                         draft = EmailDraft.objects.get(id=draft_id, user=user)
                     except EmailDraft.DoesNotExist:
                         pass
-                
-                # Send to each cost center
+
+                # Sender's outbox entry (PENDING until the background send finishes)
+                sent_log = EmailService._create_sent_log(
+                    user=user,
+                    send_type=send_type,
+                    subject=subject,
+                    body_html=body_html,
+                    cost_centers=cost_centers,
+                    template=template,
+                    draft=draft,
+                    status='PENDING',
+                    error=None
+                )
+
+                # Create per-cost-center records synchronously (fast), and build the
+                # list of SMTP jobs to run in the background.
                 results = []
-                sent_log = None  # For sender's outbox
-                
+                received_logs = []   # for attachment linking
+                send_jobs = []       # [{received_log_id, to_emails, cc_emails}]
+                queued = 0
+                failed = 0
+
                 for cost_center in cost_centers:
-                    result = EmailService._send_to_cost_center(
+                    to_emails = cost_center.get_recipient_emails()
+                    cc_emails = cost_center.get_cc_emails()
+
+                    if not to_emails:
+                        results.append({
+                            'success': False,
+                            'cost_center': cost_center.cost_center_code,
+                            'error': 'No users in cost center'
+                        })
+                        failed += 1
+                        continue
+
+                    received_log = EmailLog.objects.create(
                         user=user,
                         cost_center=cost_center,
+                        template=template,
+                        draft=draft,
                         send_type=send_type,
+                        email_type='RECEIVED',
                         subject=subject,
                         body_html=body_html,
-                        template=template,
-                        draft=draft
+                        recipient_emails=','.join(to_emails),
+                        cc_emails=','.join(cc_emails) if cc_emails else None,
+                        email_status='PENDING',
+                        email_error=None
                     )
-                    results.append(result)
-                    
-                    # Create sender's outbox entry (once)
-                    if sent_log is None:
-                        sent_log = EmailService._create_sent_log(
-                            user=user,
-                            send_type=send_type,
-                            subject=subject,
-                            body_html=body_html,
-                            cost_centers=list(cost_centers),
-                            template=template,
-                            draft=draft,
-                            status='SUCCESS' if result['success'] else 'FAILED',
-                            error=result.get('error')
+                    received_logs.append(received_log)
+
+                    # Populate recipients' inbox immediately (status follows the log)
+                    EmailService._create_recipient_tracking(
+                        email_log=received_log,
+                        to_emails=to_emails,
+                        cc_emails=cc_emails
+                    )
+
+                    send_jobs.append({
+                        'received_log_id': received_log.id,
+                        'to_emails': to_emails,
+                        'cc_emails': cc_emails,
+                    })
+                    results.append({
+                        'success': True,
+                        'cost_center': cost_center.cost_center_code,
+                        'recipients_count': len(to_emails),
+                        'log_id': received_log.id,
+                        'queued': True
+                    })
+                    queued += 1
+
+                # Persist immutable sent copies and link to outbox + inboxes
+                if att_payloads:
+                    EmailService._persist_sent_attachments(
+                        sent_log, received_logs, att_payloads
+                    )
+                # Remove leftover orphan uploads (not owned by a template/draft)
+                EmailService._cleanup_orphan_attachments(attachment_ids)
+
+                sent_log_id = sent_log.id
+
+                if send_jobs:
+                    # Start the SMTP send only after the DB transaction commits, so
+                    # the background thread sees the freshly created rows.
+                    transaction.on_commit(
+                        lambda: EmailService._dispatch_send_jobs(
+                            send_jobs, att_payloads, subject, body_html, sent_log_id
                         )
-                
-                # Summary
-                successful = sum(1 for r in results if r['success'])
-                failed = len(results) - successful
-                
+                    )
+                else:
+                    # Nothing deliverable — mark the outbox entry failed now
+                    sent_log.email_status = 'FAILED'
+                    sent_log.email_error = 'No recipients in selected cost centers'
+                    sent_log.save(update_fields=['email_status', 'email_error'])
+
                 return {
-                    'success': successful > 0,
-                    'sent_count': successful,
+                    'success': queued > 0,
+                    'queued': True,
+                    'sent_count': queued,
                     'failed_count': failed,
-                    'total_cost_centers': len(results),
+                    'total_cost_centers': len(cost_centers),
                     'details': results,
-                    'sent_log_id': sent_log.id if sent_log else None
+                    'sent_log_id': sent_log_id
                 }
-                
+
         except Exception as e:
             logger.error(f"Error sending email: {str(e)}", exc_info=True)
             return {
                 'success': False,
                 'error': str(e)
             }
-    
+
     @staticmethod
-    def _send_to_cost_center(
-        user,
-        cost_center: CostCenter,
-        send_type: str,
-        subject: str,
-        body_html: str,
-        template: Optional[EmailTemplate] = None,
-        draft: Optional[EmailDraft] = None
-    ) -> Dict:
-        """Send email to a single cost center and create logs"""
+    def _dispatch_send_jobs(send_jobs, att_payloads, subject, body_html, sent_log_id):
+        """Spawn a daemon thread that performs the actual SMTP delivery."""
+        thread = threading.Thread(
+            target=EmailService._process_send_jobs,
+            args=(send_jobs, att_payloads, subject, body_html, sent_log_id),
+            daemon=True
+        )
+        thread.start()
+        logger.info(
+            "Started background email send: %s job(s), outbox log %s",
+            len(send_jobs), sent_log_id
+        )
+
+    @staticmethod
+    def _process_send_jobs(send_jobs, att_payloads, subject, body_html, sent_log_id):
+        """
+        Background worker: send each cost center's email over SMTP and update the
+        corresponding log status. Runs in its own thread, so it manages (and closes)
+        its own database connection.
+        """
+        from_email = settings.DEFAULT_FROM_EMAIL
+        any_success = False
         try:
-            # Get recipients
-            to_emails = cost_center.get_recipient_emails()
-            cc_emails = cost_center.get_cc_emails()
-            
-            if not to_emails:
-                return {
-                    'success': False,
-                    'cost_center': cost_center.cost_center_code,
-                    'error': 'No users in cost center'
-                }
-            
-            # Send actual email
-            email_sent = EmailService._send_actual_email(
-                subject=subject,
-                body_html=body_html,
-                to_emails=to_emails,
-                cc_emails=cc_emails,
-                from_email=settings.DEFAULT_FROM_EMAIL
-            )
-            
-            # Create received log (for recipients' inbox)
-            received_log = EmailLog.objects.create(
-                user=user,
-                cost_center=cost_center,
-                template=template,
-                draft=draft,
-                send_type=send_type,
-                email_type='RECEIVED',
-                subject=subject,
-                body_html=body_html,
-                recipient_emails=','.join(to_emails),
-                cc_emails=','.join(cc_emails) if cc_emails else None,
-                email_status='SUCCESS' if email_sent else 'FAILED',
-                email_error=None if email_sent else 'Email sending failed'
-            )
-            
-            # Create recipient tracking records
-            if email_sent:
-                EmailService._create_recipient_tracking(
-                    email_log=received_log,
-                    to_emails=to_emails,
-                    cc_emails=cc_emails
+            for job in send_jobs:
+                sent = EmailService._send_actual_email(
+                    subject=subject,
+                    body_html=body_html,
+                    to_emails=job['to_emails'],
+                    cc_emails=job['cc_emails'],
+                    from_email=from_email,
+                    attachments=att_payloads
                 )
-            
-            return {
-                'success': email_sent,
-                'cost_center': cost_center.cost_center_code,
-                'recipients_count': len(to_emails),
-                'log_id': received_log.id
-            }
-            
-        except Exception as e:
-            logger.error(
-                f"Error sending to cost center {cost_center.cost_center_code}: {str(e)}",
-                exc_info=True
+                EmailLog.objects.filter(id=job['received_log_id']).update(
+                    email_status='SUCCESS' if sent else 'FAILED',
+                    email_error=None if sent else 'Email sending failed'
+                )
+                if sent:
+                    any_success = True
+
+            EmailLog.objects.filter(id=sent_log_id).update(
+                email_status='SUCCESS' if any_success else 'FAILED',
+                email_error=None if any_success else 'Email sending failed'
             )
-            return {
-                'success': False,
-                'cost_center': cost_center.cost_center_code,
-                'error': str(e)
-            }
-    
+            logger.info(
+                "Background email send finished: outbox log %s (success=%s)",
+                sent_log_id, any_success
+            )
+        except Exception as e:
+            logger.error(f"Background email send failed: {str(e)}", exc_info=True)
+            EmailLog.objects.filter(id=sent_log_id).update(
+                email_status='FAILED',
+                email_error=str(e)
+            )
+        finally:
+            # Release the thread-local DB connection
+            connections.close_all()
+
     @staticmethod
     def _send_actual_email(
         subject: str,
         body_html: str,
         to_emails: List[str],
         cc_emails: List[str],
-        from_email: str
+        from_email: str,
+        attachments: Optional[List[Dict]] = None
     ) -> bool:
         """
         Send actual email via Django email backend.
-        Wraps content in RTL format before sending.
+        Wraps content in RTL format before sending and attaches any files.
         Returns True if successful, False otherwise.
         """
         try:
             # Wrap HTML content with RTL formatting for proper Arabic display
             rtl_body_html = wrap_html_with_rtl(body_html)
-            
+
             msg = EmailMultiAlternatives(
                 subject=subject,
                 body=body_html,  # Plain text fallback (without RTL wrapper)
@@ -282,6 +394,11 @@ class EmailService:
                 cc=cc_emails if cc_emails else None
             )
             msg.attach_alternative(rtl_body_html, "text/html")
+
+            # Attach files (documents only)
+            for att in (attachments or []):
+                msg.attach(att['filename'], att['content'], att['mime_type'])
+
             msg.send()
             return True
         except Exception as e:
@@ -454,7 +571,10 @@ class EmailService:
             # Use overrides if provided
             subject = overrides.get('subject', draft.subject) if overrides else draft.subject
             body_html = overrides.get('body_html', draft.body_html) if overrides else draft.body_html
-            
+
+            # Carry the draft's own attachments into the send
+            draft_attachment_ids = [str(a.id) for a in draft.attachments.all()]
+
             # Send email
             result = EmailService.send_email(
                 user=user,
@@ -463,7 +583,8 @@ class EmailService:
                 body_html=body_html,
                 cost_center_ids=draft.get_cost_center_list() if draft.send_type == 'SPECIFIC' else None,
                 template_id=draft.template_id,
-                draft_id=draft.id
+                draft_id=draft.id,
+                attachment_ids=draft_attachment_ids or None
             )
             
             return result

@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.core.validators import EmailValidator
 import hashlib
 import json
+import uuid
 
 from .managers import (
     CostCenterManager,
@@ -616,3 +617,126 @@ class EmailRecipientView(models.Model):
         """Toggle archived status"""
         self.is_archived = not self.is_archived
         self.save(update_fields=['is_archived'])
+
+
+class EmailAttachment(models.Model):
+    """
+    BLOB-based storage for email attachments (documents only).
+
+    Supports: PDF, CSV, Excel (xls/xlsx), Word (doc/docx) — max 15MB each.
+    Files are stored as binary data directly in the database (Oracle-compatible).
+
+    Ownership (at most one of these is set; all null = freshly uploaded orphan):
+    - template: attachment belongs to an email template
+    - draft:    attachment belongs to a saved draft
+    - sent_log: immutable copy attached to a sent email (outbox)
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    file_data = models.BinaryField(
+        help_text=_("File content stored as BLOB (max 15MB)"),
+    )
+    original_filename = models.CharField(
+        max_length=255,
+        help_text=_("Sanitized original filename"),
+    )
+    file_size = models.IntegerField(
+        help_text=_("File size in bytes"),
+    )
+    mime_type = models.CharField(
+        max_length=150,
+        help_text=_("Validated MIME type"),
+    )
+    description = models.CharField(
+        max_length=500,
+        blank=True,
+        help_text=_("Optional description of the attachment"),
+    )
+
+    template = models.ForeignKey(
+        EmailTemplate,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='attachments',
+        help_text=_("Owning template (if attached to a template)"),
+    )
+    draft = models.ForeignKey(
+        EmailDraft,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='attachments',
+        help_text=_("Owning draft (if attached to a draft)"),
+    )
+    sent_log = models.ForeignKey(
+        EmailLog,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='sent_attachments',
+        help_text=_("Owning sent email log (immutable sent copy)"),
+    )
+
+    uploaded_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='uploaded_email_attachments',
+        help_text=_("User who uploaded this attachment"),
+    )
+    uploaded_at = models.DateTimeField(
+        auto_now_add=True,
+        help_text=_("Upload timestamp"),
+    )
+
+    class Meta:
+        db_table = 'email_attachment'
+        ordering = ['uploaded_at']
+        verbose_name = _("Email Attachment")
+        verbose_name_plural = _("Email Attachments")
+        indexes = [
+            models.Index(fields=['template'], name='idx_email_att_tmpl'),
+            models.Index(fields=['draft'], name='idx_email_att_draft'),
+            models.Index(fields=['sent_log'], name='idx_email_att_log'),
+        ]
+
+    def __str__(self):
+        return f"{self.original_filename} ({self.file_size} bytes)"
+
+
+class EmailLogAttachment(models.Model):
+    """
+    Link table connecting a sent EmailAttachment copy to the email logs that
+    reference it (one SENT log + one RECEIVED log per cost center), so the same
+    blob is shared across inbox/outbox views without duplicating it per recipient.
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    email_log = models.ForeignKey(
+        EmailLog,
+        on_delete=models.CASCADE,
+        related_name='attachment_links',
+        verbose_name=_("Email Log"),
+    )
+    attachment = models.ForeignKey(
+        EmailAttachment,
+        on_delete=models.CASCADE,
+        related_name='log_links',
+        verbose_name=_("Attachment"),
+    )
+
+    class Meta:
+        db_table = 'email_log_attachment'
+        verbose_name = _("Email Log Attachment")
+        verbose_name_plural = _("Email Log Attachments")
+        unique_together = [('email_log', 'attachment')]
+        indexes = [
+            models.Index(fields=['email_log'], name='idx_logatt_log'),
+        ]
+
+    def __str__(self):
+        return f"{self.email_log_id} → {self.attachment_id}"
