@@ -239,7 +239,7 @@ class EmailTemplateListSerializer(serializers.ModelSerializer):
 class EmailTemplateDetailSerializer(serializers.ModelSerializer):
     """Detail serializer for email templates"""
     created_by = UserMinimalSerializer(read_only=True)
-    attachments = EmailAttachmentSerializer(many=True, read_only=True)
+    attachments = serializers.SerializerMethodField()
     attachment_ids = serializers.ListField(
         child=serializers.UUIDField(),
         write_only=True,
@@ -267,6 +267,11 @@ class EmailTemplateDetailSerializer(serializers.ModelSerializer):
             'updated_at'
         ]
         read_only_fields = ['created_at', 'updated_at']
+
+    def get_attachments(self, obj):
+        # Defer file_data so Oracle never reads BLOB bytes when listing metadata.
+        qs = obj.attachments.defer('file_data').select_related('uploaded_by')
+        return EmailAttachmentSerializer(qs, many=True, context=self.context).data
 
     def create(self, validated_data):
         from .attachment_utils import sync_parent_attachments
@@ -312,7 +317,7 @@ class EmailDraftDetailSerializer(serializers.ModelSerializer):
         required=False,
         allow_null=True
     )
-    attachments = EmailAttachmentSerializer(many=True, read_only=True)
+    attachments = serializers.SerializerMethodField()
     attachment_ids = serializers.ListField(
         child=serializers.UUIDField(),
         write_only=True,
@@ -337,6 +342,10 @@ class EmailDraftDetailSerializer(serializers.ModelSerializer):
             'updated_at'
         ]
         read_only_fields = ['created_at', 'updated_at']
+
+    def get_attachments(self, obj):
+        qs = obj.attachments.defer('file_data').select_related('uploaded_by')
+        return EmailAttachmentSerializer(qs, many=True, context=self.context).data
 
     def create(self, validated_data):
         from .attachment_utils import sync_parent_attachments
@@ -456,9 +465,11 @@ class EmailLogDetailSerializer(serializers.ModelSerializer):
         return obj.get_metadata()
 
     def get_attachments(self, obj):
-        links = obj.attachment_links.select_related('attachment').all()
-        attachments = [link.attachment for link in links]
-        return EmailAttachmentSerializer(attachments, many=True, context=self.context).data
+        # Query through the link table but defer file_data — only metadata needed here.
+        qs = EmailAttachment.objects.filter(
+            log_links__email_log=obj
+        ).defer('file_data').select_related('uploaded_by')
+        return EmailAttachmentSerializer(qs, many=True, context=self.context).data
 
 
 class EmailRecipientViewListSerializer(serializers.ModelSerializer):
