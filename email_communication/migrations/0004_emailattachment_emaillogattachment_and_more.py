@@ -6,7 +6,104 @@ from django.conf import settings
 from django.db import migrations, models
 
 
+# ── Oracle "already exists" error codes ──────────────────────────────────────
+# ORA-00955  name already used by an existing object  (table / index / sequence)
+# ORA-01408  such column list already indexed
+# ORA-02261  such unique or primary key already exists in the table
+_ORA_ALREADY_EXISTS = frozenset(['00955', '01408', '02261'])
+
+
+def _already_exists(exc):
+    """Return True if the DatabaseError signals that the object already exists."""
+    s = str(exc)
+    return any(code in s for code in _ORA_ALREADY_EXISTS)
+
+
+# ── Forward migration ─────────────────────────────────────────────────────────
+
+def _create_tables_idempotent(apps, schema_editor):
+    """
+    Create EmailAttachment and EmailLogAttachment tables, skipping gracefully
+    if they (or their indexes / unique constraints) already exist in Oracle.
+    """
+    from django.db.utils import DatabaseError
+
+    EmailAttachment = apps.get_model('email_communication', 'EmailAttachment')
+    EmailLogAttachment = apps.get_model('email_communication', 'EmailLogAttachment')
+
+    # ── EmailAttachment ───────────────────────────────────────────────────────
+    created_fresh = False
+    try:
+        schema_editor.create_model(EmailAttachment)
+        created_fresh = True
+    except DatabaseError as exc:
+        if not _already_exists(exc):
+            raise
+
+    if not created_fresh:
+        # Table was already present — make sure each defined index exists.
+        for idx in EmailAttachment._meta.indexes:
+            try:
+                schema_editor.add_index(EmailAttachment, idx)
+            except DatabaseError as exc:
+                if not _already_exists(exc):
+                    raise
+
+    # ── EmailLogAttachment ────────────────────────────────────────────────────
+    created_fresh = False
+    try:
+        schema_editor.create_model(EmailLogAttachment)
+        created_fresh = True
+    except DatabaseError as exc:
+        if not _already_exists(exc):
+            raise
+
+    if not created_fresh:
+        # Ensure indexes.
+        for idx in EmailLogAttachment._meta.indexes:
+            try:
+                schema_editor.add_index(EmailLogAttachment, idx)
+            except DatabaseError as exc:
+                if not _already_exists(exc):
+                    raise
+        # Ensure unique_together (email_log, attachment).
+        try:
+            schema_editor.alter_unique_together(
+                EmailLogAttachment,
+                old_unique_together=set(),
+                new_unique_together={('email_log', 'attachment')},
+            )
+        except DatabaseError as exc:
+            if not _already_exists(exc):
+                raise
+
+
+# ── Reverse migration ─────────────────────────────────────────────────────────
+
+def _drop_tables(apps, schema_editor):
+    """Drop both tables, ignoring ORA-00942 if they don't exist."""
+    from django.db.utils import DatabaseError
+
+    EmailLogAttachment = apps.get_model('email_communication', 'EmailLogAttachment')
+    EmailAttachment = apps.get_model('email_communication', 'EmailAttachment')
+
+    for model in (EmailLogAttachment, EmailAttachment):
+        try:
+            schema_editor.delete_model(model)
+        except DatabaseError as exc:
+            # ORA-00942: table or view does not exist
+            if 'ORA-00942' not in str(exc) and '00942' not in str(exc):
+                raise
+
+
+# ── Migration class ───────────────────────────────────────────────────────────
+
 class Migration(migrations.Migration):
+
+    # Oracle DDL statements (CREATE TABLE, CREATE INDEX, …) always auto-commit
+    # regardless of any surrounding transaction, so wrapping them in an atomic
+    # block only creates confusion. Setting atomic=False is the correct posture.
+    atomic = False
 
     dependencies = [
         ('email_communication', '0003_alter_emailtemplate_category'),
@@ -14,59 +111,112 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='EmailAttachment',
-            fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('file_data', models.BinaryField(help_text='File content stored as BLOB (max 15MB)')),
-                ('original_filename', models.CharField(help_text='Sanitized original filename', max_length=255)),
-                ('file_size', models.IntegerField(help_text='File size in bytes')),
-                ('mime_type', models.CharField(help_text='Validated MIME type', max_length=150)),
-                ('description', models.CharField(blank=True, help_text='Optional description of the attachment', max_length=500)),
-                ('uploaded_at', models.DateTimeField(auto_now_add=True, help_text='Upload timestamp')),
-                ('draft', models.ForeignKey(blank=True, help_text='Owning draft (if attached to a draft)', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='attachments', to='email_communication.emaildraft')),
-                ('sent_log', models.ForeignKey(blank=True, help_text='Owning sent email log (immutable sent copy)', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='sent_attachments', to='email_communication.emaillog')),
-                ('template', models.ForeignKey(blank=True, help_text='Owning template (if attached to a template)', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='attachments', to='email_communication.emailtemplate')),
-                ('uploaded_by', models.ForeignKey(blank=True, help_text='User who uploaded this attachment', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='uploaded_email_attachments', to=settings.AUTH_USER_MODEL)),
+        migrations.SeparateDatabaseAndState(
+            # state_operations: update Django's in-memory model registry ONLY.
+            # These never touch the database — they just make Django aware of the
+            # new models so that subsequent migrations / serializers work correctly.
+            state_operations=[
+                migrations.CreateModel(
+                    name='EmailAttachment',
+                    fields=[
+                        ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
+                        ('file_data', models.BinaryField(help_text='File content stored as BLOB (max 15MB)')),
+                        ('original_filename', models.CharField(help_text='Sanitized original filename', max_length=255)),
+                        ('file_size', models.IntegerField(help_text='File size in bytes')),
+                        ('mime_type', models.CharField(help_text='Validated MIME type', max_length=150)),
+                        ('description', models.CharField(blank=True, help_text='Optional description of the attachment', max_length=500)),
+                        ('uploaded_at', models.DateTimeField(auto_now_add=True, help_text='Upload timestamp')),
+                        ('draft', models.ForeignKey(
+                            blank=True,
+                            help_text='Owning draft (if attached to a draft)',
+                            null=True,
+                            on_delete=django.db.models.deletion.CASCADE,
+                            related_name='attachments',
+                            to='email_communication.emaildraft',
+                        )),
+                        ('sent_log', models.ForeignKey(
+                            blank=True,
+                            help_text='Owning sent email log (immutable sent copy)',
+                            null=True,
+                            on_delete=django.db.models.deletion.CASCADE,
+                            related_name='sent_attachments',
+                            to='email_communication.emaillog',
+                        )),
+                        ('template', models.ForeignKey(
+                            blank=True,
+                            help_text='Owning template (if attached to a template)',
+                            null=True,
+                            on_delete=django.db.models.deletion.CASCADE,
+                            related_name='attachments',
+                            to='email_communication.emailtemplate',
+                        )),
+                        ('uploaded_by', models.ForeignKey(
+                            blank=True,
+                            help_text='User who uploaded this attachment',
+                            null=True,
+                            on_delete=django.db.models.deletion.SET_NULL,
+                            related_name='uploaded_email_attachments',
+                            to=settings.AUTH_USER_MODEL,
+                        )),
+                    ],
+                    options={
+                        'verbose_name': 'Email Attachment',
+                        'verbose_name_plural': 'Email Attachments',
+                        'db_table': 'email_attachment',
+                        'ordering': ['uploaded_at'],
+                    },
+                ),
+                migrations.CreateModel(
+                    name='EmailLogAttachment',
+                    fields=[
+                        ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
+                        ('attachment', models.ForeignKey(
+                            on_delete=django.db.models.deletion.CASCADE,
+                            related_name='log_links',
+                            to='email_communication.emailattachment',
+                            verbose_name='Attachment',
+                        )),
+                        ('email_log', models.ForeignKey(
+                            on_delete=django.db.models.deletion.CASCADE,
+                            related_name='attachment_links',
+                            to='email_communication.emaillog',
+                            verbose_name='Email Log',
+                        )),
+                    ],
+                    options={
+                        'verbose_name': 'Email Log Attachment',
+                        'verbose_name_plural': 'Email Log Attachments',
+                        'db_table': 'email_log_attachment',
+                    },
+                ),
+                migrations.AddIndex(
+                    model_name='emailattachment',
+                    index=models.Index(fields=['template'], name='idx_email_att_tmpl'),
+                ),
+                migrations.AddIndex(
+                    model_name='emailattachment',
+                    index=models.Index(fields=['draft'], name='idx_email_att_draft'),
+                ),
+                migrations.AddIndex(
+                    model_name='emailattachment',
+                    index=models.Index(fields=['sent_log'], name='idx_email_att_log'),
+                ),
+                migrations.AddIndex(
+                    model_name='emaillogattachment',
+                    index=models.Index(fields=['email_log'], name='idx_logatt_log'),
+                ),
+                migrations.AlterUniqueTogether(
+                    name='emaillogattachment',
+                    unique_together={('email_log', 'attachment')},
+                ),
             ],
-            options={
-                'verbose_name': 'Email Attachment',
-                'verbose_name_plural': 'Email Attachments',
-                'db_table': 'email_attachment',
-                'ordering': ['uploaded_at'],
-            },
-        ),
-        migrations.CreateModel(
-            name='EmailLogAttachment',
-            fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('attachment', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='log_links', to='email_communication.emailattachment', verbose_name='Attachment')),
-                ('email_log', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='attachment_links', to='email_communication.emaillog', verbose_name='Email Log')),
+            # database_operations: actual DDL — idempotent via RunPython.
+            database_operations=[
+                migrations.RunPython(
+                    _create_tables_idempotent,
+                    reverse_code=_drop_tables,
+                    atomic=False,
+                ),
             ],
-            options={
-                'verbose_name': 'Email Log Attachment',
-                'verbose_name_plural': 'Email Log Attachments',
-                'db_table': 'email_log_attachment',
-            },
-        ),
-        migrations.AddIndex(
-            model_name='emailattachment',
-            index=models.Index(fields=['template'], name='idx_email_att_tmpl'),
-        ),
-        migrations.AddIndex(
-            model_name='emailattachment',
-            index=models.Index(fields=['draft'], name='idx_email_att_draft'),
-        ),
-        migrations.AddIndex(
-            model_name='emailattachment',
-            index=models.Index(fields=['sent_log'], name='idx_email_att_log'),
-        ),
-        migrations.AddIndex(
-            model_name='emaillogattachment',
-            index=models.Index(fields=['email_log'], name='idx_logatt_log'),
-        ),
-        migrations.AlterUniqueTogether(
-            name='emaillogattachment',
-            unique_together={('email_log', 'attachment')},
         ),
     ]
