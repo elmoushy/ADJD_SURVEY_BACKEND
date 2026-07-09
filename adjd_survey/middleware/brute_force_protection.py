@@ -104,15 +104,21 @@ class BruteForceProtectionMiddleware:
         """Handle failed login attempt."""
         ip_key, email_key = self.get_cache_keys(request)
         ip = self.get_client_ip(request)
-        
+
+        timeout_seconds = RATE_LIMIT_DURATION * 60
+
         # Increment IP-based counter
         ip_attempts = cache.get(ip_key, 0) + 1
-        cache.set(ip_key, ip_attempts, timeout=RATE_LIMIT_DURATION * 60)
-        
+        cache.set(ip_key, ip_attempts, timeout=timeout_seconds)
+        # Store an explicit expiry timestamp so we can report remaining time on
+        # any cache backend (LocMemCache has no .ttl(); only django-redis does).
+        cache.set(f"{ip_key}_expiry", time.time() + timeout_seconds, timeout=timeout_seconds)
+
         # Increment email-based counter if email is available
         if email_key:
             email_attempts = cache.get(email_key, 0) + 1
-            cache.set(email_key, email_attempts, timeout=RATE_LIMIT_DURATION * 60)
+            cache.set(email_key, email_attempts, timeout=timeout_seconds)
+            cache.set(f"{email_key}_expiry", time.time() + timeout_seconds, timeout=timeout_seconds)
         
         # Log security event
         log_security_event(
@@ -136,13 +142,41 @@ class BruteForceProtectionMiddleware:
                 }
             )
 
+    def _get_ttl(self, key):
+        """
+        Return the remaining time-to-live (seconds) for a cache key in a way
+        that works across cache backends.
+
+        - django-redis exposes cache.ttl(); use it when present.
+        - Otherwise fall back to the explicit expiry timestamp we stored, and
+          finally to the configured rate-limit duration.
+        """
+        if not key:
+            return 0
+
+        # Preferred: native ttl (django-redis)
+        ttl_method = getattr(cache, 'ttl', None)
+        if callable(ttl_method):
+            try:
+                return ttl_method(key) or 0
+            except Exception:
+                pass
+
+        # Fallback: expiry timestamp stored alongside the counter
+        expiry = cache.get(f"{key}_expiry")
+        if expiry:
+            return max(0, int(expiry - time.time()))
+
+        # Last resort: assume the full configured window
+        return RATE_LIMIT_DURATION * 60
+
     def rate_limit_response(self, request):
         """Return rate limit exceeded response."""
         ip_key, email_key = self.get_cache_keys(request)
-        
-        # Get remaining time
-        ip_ttl = cache.ttl(ip_key) or 0
-        email_ttl = cache.ttl(email_key) or 0 if email_key else 0
+
+        # Get remaining time (backend-agnostic)
+        ip_ttl = self._get_ttl(ip_key)
+        email_ttl = self._get_ttl(email_key) if email_key else 0
         remaining_time = max(ip_ttl, email_ttl)
         
         log_security_event(
@@ -169,10 +203,12 @@ def clear_login_attempts(email=None, ip=None):
     if email:
         email_key = f"login_attempts_email_{email}"
         cache.delete(email_key)
-    
+        cache.delete(f"{email_key}_expiry")
+
     if ip:
         ip_key = f"login_attempts_ip_{ip}"
         cache.delete(ip_key)
+        cache.delete(f"{ip_key}_expiry")
 
 
 def get_remaining_attempts(email=None, ip=None):

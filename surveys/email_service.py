@@ -194,6 +194,209 @@ def notify_survey_shared(survey, sender_user, user_ids=None, group_ids=None):
 
 
 # ---------------------------------------------------------------------------
+# Reminder notifications (sent to assigned users who have NOT responded)
+# ---------------------------------------------------------------------------
+
+def get_survey_non_responder_emails(survey, exclude_user=None):
+    """
+    Resolve the set of *assigned* users who have NOT yet responded to a survey.
+
+    Assignment rules per visibility:
+      - AUTH   : every active authenticated user is considered assigned.
+      - PRIVATE: users in shared_with  ∪  members of shared_with_groups.
+      - GROUPS : members of shared_with_groups.
+      - PUBLIC : not applicable (anonymous respondents) → empty set.
+
+    A user is a "non-responder" if they have no Response row (respondent FK)
+    for this survey. Anonymous/email-only responses are not mapped back to
+    assigned users (there is no reliable identity link), so only authenticated
+    respondents are treated as having responded.
+
+   
+    The survey creator and the acting user (exclude_user) are always excluded,
+    and users without a usable email address are dropped.
+
+    Returns:
+        list[str]: de-duplicated recipient email addresses.
+    """
+    from .models import Response  # local import to avoid circular imports
+
+    visibility = getattr(survey, 'visibility', None)
+    if visibility == 'PUBLIC':
+        return []
+
+    if visibility == 'AUTH':
+        assigned_qs = User.objects.filter(is_active=True)
+    elif visibility in ('PRIVATE', 'GROUPS'):
+        assigned_user_ids = set(survey.shared_with.values_list('id', flat=True))
+        group_member_ids = set(
+            User.objects.filter(
+                user_groups__group__in=survey.shared_with_groups.all(),
+                is_active=True,
+            ).values_list('id', flat=True)
+        )
+        all_ids = assigned_user_ids | group_member_ids
+        assigned_qs = User.objects.filter(id__in=all_ids, is_active=True)
+    else:
+        return []
+
+    # Users who already submitted an (authenticated) response
+    responded_ids = set(
+        Response.objects.filter(
+            survey=survey, respondent__isnull=False
+        ).values_list('respondent_id', flat=True)
+    )
+
+    # Exclude responders, the creator, and the acting user
+    exclude_ids = set(responded_ids)
+    creator_id = getattr(survey, 'creator_id', None)
+    if creator_id:
+        exclude_ids.add(creator_id)
+    if exclude_user is not None and getattr(exclude_user, 'id', None):
+        exclude_ids.add(exclude_user.id)
+
+    non_responders = (
+        assigned_qs.exclude(id__in=exclude_ids)
+        # .exclude(role__in=['admin', 'super_admin'])  # never remind staff accounts
+        .exclude(email__isnull=True)
+        .exclude(email='')
+    )
+
+    # De-duplicate while preserving valid emails
+    emails = {e for e in non_responders.values_list('email', flat=True) if e}
+    return list(emails)
+
+
+def _build_reminder_email_html(survey_title: str, survey_url: str) -> str:
+    """RTL HTML reminder email — matches the gold-header theme of this module."""
+    return f'''<html dir="rtl">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+body {{ direction: rtl; font-family: 'Cairo', 'Noto Kufi Arabic', 'Segoe UI', Tahoma, Arial, sans-serif; margin: 0; padding: 0; background-color: #F5F7FA; }}
+.container {{ max-width: 620px; margin: 30px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(35,31,32,0.12); border: 1px solid #E5E8E1; }}
+.header {{ background: linear-gradient(135deg, #B78A41 0%, #A17D23 100%); padding: 24px; text-align: center; }}
+.header h1 {{ color: #ffffff; margin: 0; font-size: 22px; }}
+.content {{ padding: 32px 24px; text-align: right; }}
+.content p {{ color: #4D4D4F; font-size: 15px; line-height: 1.8; margin: 12px 0; }}
+.survey-title {{ background-color: #F8F6F0; border-right: 4px solid #B78A41; padding: 12px 16px; border-radius: 8px; margin: 20px 0; }}
+.survey-title span {{ font-weight: bold; color: #231F20; font-size: 16px; }}
+.btn-container {{ text-align: center; margin: 32px 0; }}
+.btn {{ display: inline-block; background: linear-gradient(135deg, #B78A41 0%, #A17D23 100%); color: #ffffff; text-decoration: none; padding: 14px 40px; border-radius: 8px; font-size: 16px; font-weight: bold; }}
+.footer {{ background-color: #F8F6F0; padding: 16px 24px; text-align: center; border-top: 1px solid #E5E8E1; }}
+.footer p {{ color: #808285; font-size: 12px; margin: 4px 0; }}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>تذكير بالرد على الإيضاح</h1>
+    </div>
+    <div class="content">
+        <p>مرحباً،</p>
+        <p>نودّ تذكيرك بأنه لم يتم تسجيل ردك على الإيضاح التالي بعد. نأمل أن تخصص بعض الوقت لإكماله.</p>
+        <div class="survey-title">
+            <span>{survey_title}</span>
+        </div>
+        <p>يرجى الضغط على الزر أدناه للبدء:</p>
+        <div class="btn-container">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: 0 auto; border-collapse: separate;">
+                <tr>
+                    <td align="center" bgcolor="#B78A41" style="border-radius: 8px; mso-padding-alt: 0;">
+                        <a href="{survey_url}" class="btn" style="display: inline-block; padding: 14px 40px; font-size: 16px; font-weight: bold; color: #ffffff; text-decoration: none; background: #B78A41; border: 1px solid #A17D23; border-radius: 8px; line-height: 1.2;">
+                            بدء الإيضاح
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="footer">
+        <p>هذه رسالة آلية من نظام الايضاحات - إدارة المالية - دائرة القضاء</p>
+    </div>
+</div>
+</body>
+</html>'''
+
+
+def _build_reminder_email_plain(survey_title: str, survey_url: str) -> str:
+    """Plain-text fallback for the reminder email."""
+    return (
+        f"مرحباً،\n\n"
+        f"نودّ تذكيرك بأنه لم يتم تسجيل ردك على الإيضاح التالي بعد.\n\n"
+        f"عنوان الإيضاح: {survey_title}\n\n"
+        f"للبدء، يرجى زيارة الرابط التالي:\n{survey_url}\n\n"
+        f"---\n"
+        f"نظام الايضاحات - إدارة المالية - دائرة القضاء"
+    )
+
+
+def _send_reminder_emails(user_emails: list, survey_title: str, survey_id: str):
+    """Send reminder emails to non-responders (runs in a background thread)."""
+    survey_url = _get_survey_url(survey_id)
+    subject = f"تذكير: لم تقم بالرد على الإيضاح بعد - {survey_title}"
+    html_body = _build_reminder_email_html(survey_title, survey_url)
+    plain_body = _build_reminder_email_plain(survey_title, survey_url)
+    from_email = settings.DEFAULT_FROM_EMAIL
+
+    success_count = 0
+    fail_count = 0
+
+    for email in user_emails:
+        try:
+            msg = EmailMultiAlternatives(
+                subject=subject,
+                body=plain_body,
+                from_email=from_email,
+                to=[email],
+            )
+            msg.attach_alternative(html_body, "text/html")
+            msg.send()
+            success_count += 1
+        except Exception as e:
+            fail_count += 1
+            logger.error(f"Failed to send survey reminder to {email}: {e}")
+
+    logger.info(
+        f"Survey reminder for '{survey_title}' (ID: {survey_id}): "
+        f"sent={success_count}, failed={fail_count}, total={len(user_emails)}"
+    )
+
+
+def notify_survey_reminder(survey, recipient_emails):
+    """
+    Fire-and-forget: email a reminder to the provided non-responder addresses.
+    Runs in a daemon thread so the API endpoint returns immediately.
+
+    Args:
+        survey: Survey model instance.
+        recipient_emails: iterable of email addresses to remind.
+
+    Returns:
+        int: number of recipients the reminder was queued for.
+    """
+    emails_list = [e for e in (recipient_emails or []) if e]
+    if not emails_list:
+        logger.info(f"No non-responders to remind for survey {getattr(survey, 'id', '?')}")
+        return 0
+
+    survey_title = survey.title or "ايضاح"
+    survey_id = str(survey.id)
+
+    thread = threading.Thread(
+        target=_send_reminder_emails,
+        args=(emails_list, survey_title, survey_id),
+        daemon=True,
+    )
+    thread.start()
+
+    logger.info(
+        f"Queued reminder emails for survey {survey_id} to {len(emails_list)} non-responders"
+    )
+    return len(emails_list)
+
+
+# ---------------------------------------------------------------------------
 # Follow-up email notifications
 # ---------------------------------------------------------------------------
 

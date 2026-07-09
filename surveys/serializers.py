@@ -793,9 +793,9 @@ class SurveySerializer(serializers.ModelSerializer):
         # Creators see everything
         if user == instance.creator:
             return data
-        
-        # Admin/Manager users see most fields
-        if user.role in ['admin', 'manager']:
+
+        # Super admin / Admin / Manager see full data for all surveys
+        if user.role in ['super_admin', 'admin', 'manager']:
             return data
         
         # Regular users see limited fields

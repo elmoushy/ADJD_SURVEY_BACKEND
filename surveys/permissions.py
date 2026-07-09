@@ -66,9 +66,11 @@ class IsCreatorOrReadOnly(BasePermission):
     
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS:
-            # Apply visibility rules via IsCreatorOrVisible
+            # Super admin and admin can read any survey regardless of visibility
+            if request.user.is_authenticated and request.user.role in ('super_admin', 'admin'):
+                return True
             return IsCreatorOrVisible().has_object_permission(request, view, obj)
-        
+
         # Write permissions based on role
         if request.user.role == 'super_admin':
             return True

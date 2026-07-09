@@ -741,16 +741,22 @@ class SurveyViewSet(ModelViewSet):
         Returns:
             dict: Analytics data with trends
         """
-        # Get user's surveys (surveys they created)
-        user_surveys = Survey.objects.filter(creator=user, deleted_at__isnull=True)
-        
+        # Super admin and admin see counts for ALL surveys; others see only their own
+        all_surveys_base = Survey.objects.filter(deleted_at__isnull=True)
+        if user.role in ('super_admin', 'admin'):
+            user_surveys = all_surveys_base
+            responses_filter = {'survey__deleted_at__isnull': True}
+        else:
+            user_surveys = all_surveys_base.filter(creator=user)
+            responses_filter = {'survey__creator': user, 'survey__deleted_at__isnull': True}
+
         # Get date ranges
         date_ranges = self._get_date_ranges()
-        
+
         # Current counts
         total_surveys = user_surveys.count()
         active_surveys = user_surveys.filter(is_active=True, status='submitted').count()
-        total_responses = SurveyResponse.objects.filter(survey__creator=user, survey__deleted_at__isnull=True).count()
+        total_responses = SurveyResponse.objects.filter(**responses_filter).count()
         
         # Calculate average response rate
         surveys_with_responses = user_surveys.filter(status='submitted')
@@ -780,43 +786,40 @@ class SurveyViewSet(ModelViewSet):
         ).count()
         
         current_month_responses = SurveyResponse.objects.filter(
-            survey__creator=user,
-            survey__deleted_at__isnull=True,
+            **responses_filter,
             submitted_at__gte=date_ranges['current_start'],
             submitted_at__lte=date_ranges['current_end']
         ).count()
-        
+
         # Previous month counts for trends
         previous_month_surveys = user_surveys.filter(
             created_at__gte=date_ranges['previous_start'],
             created_at__lte=date_ranges['previous_end']
         ).count()
-        
+
         previous_month_active = user_surveys.filter(
             is_active=True,
             status='submitted',
             created_at__gte=date_ranges['previous_start'],
             created_at__lte=date_ranges['previous_end']
         ).count()
-        
+
         previous_month_responses = SurveyResponse.objects.filter(
-            survey__creator=user,
-            survey__deleted_at__isnull=True,
+            **responses_filter,
             submitted_at__gte=date_ranges['previous_start'],
             submitted_at__lte=date_ranges['previous_end']
         ).count()
-        
+
         # Calculate trends
         total_trend = self._calculate_trend(current_month_surveys, previous_month_surveys)
         active_trend = self._calculate_trend(current_month_active, previous_month_active)
         responses_trend = self._calculate_trend(current_month_responses, previous_month_responses)
-        
+
         # Recent activity (this week)
         week_start = timezone.now() - timedelta(days=7)
         new_surveys_this_week = user_surveys.filter(created_at__gte=week_start).count()
         new_responses_this_week = SurveyResponse.objects.filter(
-            survey__creator=user,
-            survey__deleted_at__isnull=True,
+            **responses_filter,
             submitted_at__gte=week_start
         ).count()
         
@@ -1500,7 +1503,115 @@ class SurveyViewSet(ModelViewSet):
                 message="Failed to update survey audience",
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-    
+
+    def _reminder_is_applicable(self, survey):
+        """
+        A reminder can only target an identifiable set of assigned users.
+        Applicable when the survey is submitted and its visibility is one of
+        AUTH / PRIVATE / GROUPS. PUBLIC (anonymous) and drafts are excluded.
+        """
+        return survey.status == 'submitted' and survey.visibility in ('AUTH', 'PRIVATE', 'GROUPS')
+
+    def _can_send_reminder(self, user, survey):
+        """
+        Only the survey creator or a super_admin may send reminders — regular
+        admins/managers cannot remind on surveys they did not create.
+        """
+        if getattr(user, 'role', None) == 'super_admin':
+            return True
+        return survey.creator_id is not None and survey.creator_id == user.id
+
+    @action(detail=True, methods=['get'], permission_classes=[IsCreatorOrReadOnly], url_path='reminder-preview')
+    def reminder_preview(self, request, pk=None):
+        """
+        Return the number of assigned users who have not yet responded, so the
+        frontend can show a confirmation dialog before sending reminders.
+
+        GET /api/surveys/surveys/{id}/reminder-preview/
+        """
+        try:
+            survey = self.get_object()
+
+            if not self._can_send_reminder(request.user, survey):
+                return uniform_response(
+                    success=False,
+                    message="Only the survey creator or a super admin can send reminders",
+                    status_code=status.HTTP_403_FORBIDDEN,
+                )
+
+            if not self._reminder_is_applicable(survey):
+                return uniform_response(
+                    success=True,
+                    message="Reminder not applicable for this survey",
+                    data={'applicable': False, 'count': 0},
+                )
+
+            from .email_service import get_survey_non_responder_emails
+            emails = get_survey_non_responder_emails(survey, exclude_user=request.user)
+
+            return uniform_response(
+                success=True,
+                message="Reminder preview retrieved successfully",
+                data={'applicable': True, 'count': len(emails)},
+            )
+        except Exception as e:
+            logger.error(f"Error building reminder preview for survey {pk}: {e}")
+            return uniform_response(
+                success=False,
+                message="Failed to build reminder preview",
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+    @action(detail=True, methods=['post'], permission_classes=[IsCreatorOrReadOnly], url_path='send-reminder')
+    def send_reminder(self, request, pk=None):
+        """
+        Send a reminder email (in the background) to every assigned user who has
+        not yet responded to this survey.
+
+        POST /api/surveys/surveys/{id}/send-reminder/
+        """
+        try:
+            survey = self.get_object()
+
+            if not self._can_send_reminder(request.user, survey):
+                return uniform_response(
+                    success=False,
+                    message="Only the survey creator or a super admin can send reminders",
+                    status_code=status.HTTP_403_FORBIDDEN,
+                )
+
+            if not self._reminder_is_applicable(survey):
+                return uniform_response(
+                    success=False,
+                    message="لا يمكن إرسال تذكير لهذا الإيضاح",
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                )
+
+            from .email_service import get_survey_non_responder_emails, notify_survey_reminder
+            emails = get_survey_non_responder_emails(survey, exclude_user=request.user)
+
+            if not emails:
+                return uniform_response(
+                    success=True,
+                    message="لا يوجد مستخدمون لم يستجيبوا لإرسال التذكير إليهم",
+                    data={'count': 0},
+                )
+
+            sent_count = notify_survey_reminder(survey, emails)
+
+            return uniform_response(
+                success=True,
+                message=f"تم إرسال التذكير إلى {sent_count} مستخدم",
+                data={'count': sent_count},
+            )
+        except Exception as e:
+            logger.error(f"Error sending reminders for survey {pk}: {e}")
+            return uniform_response(
+                success=False,
+                message="Failed to send reminders",
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
     @action(detail=True, methods=['post'], permission_classes=[IsCreatorOrReadOnly])
     def clone(self, request, pk=None):
         """Clone/duplicate survey"""

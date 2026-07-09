@@ -1033,30 +1033,26 @@ class DashboardStatsView(APIView):
                 ).order_by('-joined_at')[:10]
                 
             else:
-                # Admin sees stats for their groups only
-                admin_groups = Group.objects.filter(
-                    user_groups__user=user,
-                    user_groups__is_group_admin=True
-                )
-                
-                total_groups = admin_groups.count()
-                
-                # Get users in admin's groups
-                users_in_groups = User.objects.filter(
-                    groups__in=admin_groups
-                ).distinct()
-                
-                total_users = users_in_groups.count()
-                active_users = users_in_groups.filter(is_active=True).count()
-                
-                # Role breakdown for users in admin's groups
-                super_admins = users_in_groups.filter(role='super_admin').count()
-                admins = users_in_groups.filter(role='admin').count()
-                regular_users = users_in_groups.filter(role='user').count()
-                
-                # Recent activity in admin's groups
+                # Admin sees stats scoped to what they can actually access:
+                # - Groups: same scope as GroupListView (groups they're a member of)
+                # - Users: same scope as AllUsersView (everyone except super_admins)
+                member_groups = Group.objects.filter(users=user)
+                total_groups = member_groups.count()
+
+                accessible_users = User.objects.exclude(role='super_admin')
+
+                total_users = accessible_users.count()
+                active_users = accessible_users.filter(is_active=True).count()
+
+                # Role breakdown among accessible users (super_admins is always 0
+                # here since admins can't see super_admin accounts)
+                super_admins = 0
+                admins = accessible_users.filter(role='admin').count()
+                regular_users = accessible_users.filter(role='user').count()
+
+                # Recent activity in the admin's own groups
                 recent_memberships = UserGroup.objects.filter(
-                    group__in=admin_groups
+                    group__in=member_groups
                 ).select_related('user', 'group').order_by('-joined_at')[:10]
             
             # Format recent activity
