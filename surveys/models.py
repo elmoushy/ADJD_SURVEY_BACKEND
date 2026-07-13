@@ -260,7 +260,7 @@ class Survey(models.Model):
     allow_attachments = models.CharField(
         max_length=10,
         choices=ATTACHMENT_CHOICES,
-        default=ATTACHMENT_NONE,
+        default=ATTACHMENT_OPTIONAL,
         help_text='Whether respondents can/must upload attachments: none, optional, required'
     )
     

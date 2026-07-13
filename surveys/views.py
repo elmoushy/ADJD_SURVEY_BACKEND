@@ -8120,6 +8120,9 @@ class AdminSurveyResponsesView(generics.ListAPIView):
                       .prefetch_related(
                           'answers__question',
                           'follow_ups',
+                          'follow_ups__opened_by',
+                          'follow_ups__decided_by',
+                          'follow_ups__messages__sender',
                           'attachments__uploaded_by',
                           'respondent__user_groups__group',
                       )
@@ -8232,6 +8235,41 @@ class AdminSurveyResponsesView(generics.ListAPIView):
                 
                 latest_thread = response.follow_ups.first()
 
+                def _user_name(user_obj):
+                    """Resolve a display name for a follow-up participant."""
+                    if not user_obj:
+                        return None
+                    return getattr(user_obj, 'full_name', '') or user_obj.email
+
+                # Serialize full follow-up thread(s) for the report section
+                follow_ups_data = []
+                for thread in response.follow_ups.all():
+                    thread_messages = []
+                    for msg in thread.messages.all():
+                        thread_messages.append({
+                            'id': str(msg.id),
+                            'sender_role': msg.sender_role,
+                            'sender_email': msg.sender.email if msg.sender else None,
+                            'sender_name': _user_name(msg.sender),
+                            'body': msg.body,
+                            'is_preset': msg.is_preset,
+                            'created_at': msg.created_at.isoformat(),
+                        })
+                    follow_ups_data.append({
+                        'id': str(thread.id),
+                        'status': thread.status,
+                        'opened_by_email': thread.opened_by.email if thread.opened_by else None,
+                        'opened_by_name': _user_name(thread.opened_by),
+                        'created_at': thread.created_at.isoformat(),
+                        'updated_at': thread.updated_at.isoformat(),
+                        'decided_by_email': thread.decided_by.email if thread.decided_by else None,
+                        'decided_by_name': _user_name(thread.decided_by),
+                        'decided_at': thread.decided_at.isoformat() if thread.decided_at else None,
+                        'decision_reason': thread.decision_reason,
+                        'message_count': len(thread_messages),
+                        'messages': thread_messages,
+                    })
+
                 # Build attachments list
                 is_superadmin = request.user.role == 'super_admin'
                 is_survey_creator = survey.creator_id is not None and survey.creator_id == request.user.id
@@ -8261,6 +8299,8 @@ class AdminSurveyResponsesView(generics.ListAPIView):
                     'respondent_info': respondent_info,
                     'latest_follow_up_status': getattr(response, 'latest_follow_up_status', None),
                     'latest_follow_up_id': str(latest_thread.id) if latest_thread else None,
+                    'follow_ups': follow_ups_data,
+                    'follow_up_count': len(follow_ups_data),
                     'answers': answers_with_context,
                     'answer_count': len(answers_with_context),
                     'attachments': attachments_data,
