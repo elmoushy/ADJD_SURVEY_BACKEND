@@ -248,7 +248,7 @@ from datetime import timedelta
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),  # Reduced from 8 hours to 30 minutes
-    'REFRESH_TOKEN_LIFETIME': timedelta(hours=4),  # Reduced from 24 hours to 4 hours
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=365),  # Reduced from 24 hours to 4 hours
     'ROTATE_REFRESH_TOKENS': True,  # Generate new refresh token on refresh
     'BLACKLIST_AFTER_ROTATION': False,  # Disabled for Oracle compatibility (no token_blacklist app)
     'UPDATE_LAST_LOGIN': True,  # Update user's last_login field on token refresh

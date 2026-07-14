@@ -651,6 +651,7 @@ class SurveySerializer(serializers.ModelSerializer):
     
     questions = QuestionSerializer(many=True, required=False)
     creator_email = serializers.SerializerMethodField()
+    creator_name = serializers.SerializerMethodField()
     response_count = serializers.SerializerMethodField()
     shared_with_emails = serializers.SerializerMethodField()
     status_display = serializers.SerializerMethodField()
@@ -667,7 +668,7 @@ class SurveySerializer(serializers.ModelSerializer):
         model = Survey
         fields = [
             'id', 'title', 'description', 'visibility', 'shared_with',
-            'creator', 'creator_email', 'is_locked', 'is_active',
+            'creator', 'creator_email', 'creator_name', 'is_locked', 'is_active',
             'start_date', 'end_date', 'status', 'status_display', 'is_currently_active',
             'can_be_edited', 'public_contact_method', 'per_device_access', 'allow_attachments',
             'questions', 'response_count',
@@ -678,6 +679,16 @@ class SurveySerializer(serializers.ModelSerializer):
     def get_creator_email(self, obj):
         """Get creator email"""
         return obj.creator.email if obj.creator else None
+
+    def get_creator_name(self, obj):
+        """Get creator display name (first+last if either set, else email).
+
+        Matches the Users page logic instead of the model's full_name property
+        (which needs both names and otherwise falls back to email)."""
+        if not obj.creator:
+            return None
+        c = obj.creator
+        return f"{c.first_name or ''} {c.last_name or ''}".strip() or c.email
     
     def get_response_count(self, obj):
         """Get total response count"""

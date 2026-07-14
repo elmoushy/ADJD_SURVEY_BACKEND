@@ -490,6 +490,31 @@ def uniform_response(success=True, message="", data=None, status_code=200):
     }, status=status_code)
 
 
+def filter_survey_ids_by_search(base_queryset, term):
+    """
+    Return the IDs of surveys whose (decrypted) title or description contain `term`.
+
+    Survey.title/description are Encrypted fields, so a SQL `icontains` matches
+    ciphertext and never finds anything. We therefore decrypt in Python and
+    substring-match case-insensitively. Re-fetching by id WITHOUT distinct/only
+    lets the encrypted fields decrypt in a single query (and avoids the Oracle
+    NCLOB+DISTINCT restriction).
+    """
+    term_cf = (term or '').strip().casefold()
+    if not term_cf:
+        return None
+    ids = list(base_queryset.values_list('id', flat=True))
+    if not ids:
+        return []
+    matching = []
+    for s in Survey.objects.filter(id__in=ids).only('id', 'title', 'description'):
+        title = (s.title or '').casefold()
+        desc = (s.description or '').casefold()
+        if term_cf in title or term_cf in desc:
+            matching.append(s.id)
+    return matching
+
+
 class SurveyViewSet(ModelViewSet):
     """
     ViewSet for survey CRUD operations with role-based access.
@@ -499,9 +524,11 @@ class SurveyViewSet(ModelViewSet):
     serializer_class = SurveySerializer
     permission_classes = [IsAuthenticated, IsCreatorOrReadOnly]
     pagination_class = SurveyPagination
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    # NOTE: no SearchFilter — title/description are encrypted, so a SQL search
+    # matches ciphertext and finds nothing. Search is handled in Python in list()
+    # via filter_survey_ids_by_search().
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['visibility', 'is_active', 'creator', 'status']
-    search_fields = ['title', 'description']
     ordering_fields = ['created_at', 'updated_at', 'response_count']
     # NOTE: no default `ordering` attribute here. Sorting is driven by the
     # `sort_by` query param and applied in `_apply_custom_ordering()`.
@@ -671,10 +698,28 @@ class SurveyViewSet(ModelViewSet):
                 # in list() after decryption.
                 queryset = queryset.order_by('-created_at')
             elif sort_by == 'most_responses':
-                # الأكثر رداً - Most responses
-                from django.db.models import Count
+                # الأكثر رداً - Most responses.
+                #
+                # NOTE: do NOT use queryset.annotate(Count('responses')) here.
+                # A JOIN + Count() forces the DB to GROUP BY every selected
+                # column on the outer query. For admin/super_admin the base
+                # queryset is unrestricted (no .only()), so that GROUP BY
+                # includes the NCLOB-backed encrypted `title`/`description`
+                # columns — Oracle rejects GROUP BY on LOB columns
+                # (ORA-00932/ORA-00979), causing a 500 on this sort only.
+                # A correlated Subquery counts responses per-survey without
+                # any GROUP BY on the outer query, so it's safe either way.
+                from django.db.models import OuterRef, Subquery, IntegerField
+                from django.db.models.functions import Coalesce
+
+                response_count_subquery = SurveyResponse.objects.filter(
+                    survey=OuterRef('pk')
+                ).order_by().values('survey').annotate(cnt=Count('id')).values('cnt')
+
                 queryset = queryset.annotate(
-                    response_count=Count('responses')
+                    response_count=Coalesce(
+                        Subquery(response_count_subquery, output_field=IntegerField()), 0
+                    )
                 ).order_by('-response_count', '-created_at')
         else:
             # Default ordering
@@ -848,6 +893,12 @@ class SurveyViewSet(ModelViewSet):
         """List surveys with uniform response and enhanced filtering"""
         try:
             queryset = self.filter_queryset(self.get_queryset())
+
+            # Search (title/description are encrypted → done in Python).
+            search_term = safe_get_query_params(request, 'search', '')
+            if search_term and search_term.strip():
+                matching_ids = filter_survey_ids_by_search(queryset, search_term)
+                queryset = queryset.filter(id__in=(matching_ids or []))
 
             # Title is an EncryptedCharField, so the database can only sort it
             # by ciphertext (not alphabetically). For title sorting we decrypt
@@ -3793,10 +3844,11 @@ class MySharedSurveysView(generics.ListAPIView):
     
     serializer_class = SurveySerializer
     permission_classes = [IsAuthenticated]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    # NOTE: no SearchFilter — title/description are encrypted (SQL search matches
+    # ciphertext). Search is handled in Python in list() via filter_survey_ids_by_search().
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['visibility', 'is_active', 'is_locked']
-    search_fields = ['title', 'description']
-    ordering_fields = ['created_at', 'updated_at', 'title']
+    ordering_fields = ['created_at', 'updated_at']
     ordering = ['-updated_at']
     
     @classmethod
@@ -3955,18 +4007,27 @@ class MySharedSurveysView(generics.ListAPIView):
         try:
             from rest_framework.exceptions import NotFound as DRFNotFound
             queryset = self.filter_queryset(self.get_queryset())
+
+            # Search (title/description are encrypted → matched in Python).
+            # Narrow only the LISTING; trend counts below stay on the full set.
+            list_queryset = queryset
+            search_term = safe_get_query_params(request, 'search', '')
+            if search_term and search_term.strip():
+                matching_ids = filter_survey_ids_by_search(queryset, search_term)
+                list_queryset = queryset.filter(id__in=(matching_ids or []))
+
             try:
-                page = self.paginate_queryset(queryset)
+                page = self.paginate_queryset(list_queryset)
             except DRFNotFound:
                 return uniform_response(
                     success=True,
                     message="Shared surveys retrieved successfully",
-                    data={'surveys': [], 'total_count': queryset.count(), 'access_summary': {}}
+                    data={'surveys': [], 'total_count': list_queryset.count(), 'access_summary': {}}
                 )
-            
+
             # Prepare enhanced response data
             surveys_data = []
-            surveys_to_process = page if page is not None else queryset
+            surveys_to_process = page if page is not None else list_queryset
             
             for survey in surveys_to_process:
                 # Check if user has already submitted a response
