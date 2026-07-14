@@ -502,8 +502,13 @@ class SurveyViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['visibility', 'is_active', 'creator', 'status']
     search_fields = ['title', 'description']
-    ordering_fields = ['created_at', 'updated_at', 'title', 'response_count']
-    ordering = ['-created_at']
+    ordering_fields = ['created_at', 'updated_at', 'response_count']
+    # NOTE: no default `ordering` attribute here. Sorting is driven by the
+    # `sort_by` query param and applied in `_apply_custom_ordering()`.
+    # A default `ordering` would make DRF's OrderingFilter re-order the
+    # queryset in `filter_queryset()` AFTER `_apply_custom_ordering()`,
+    # silently overriding the user's chosen sort (only 'newest' appeared to
+    # work because it matched the old default '-created_at').
     
     @classmethod
     def get_oracle_safe_fields(cls):
@@ -659,12 +664,12 @@ class SurveyViewSet(ModelViewSet):
             elif sort_by == 'oldest':
                 # الأقدم - Oldest first
                 queryset = queryset.order_by('created_at')
-            elif sort_by == 'title_asc':
-                # العنوان أ-ي - Title A-Z
-                queryset = queryset.order_by('title')
-            elif sort_by == 'title_desc':
-                # العنوان ي-أ - Title Z-A
-                queryset = queryset.order_by('-title')
+            elif sort_by in ('title_asc', 'title_desc'):
+                # العنوان - title is an EncryptedCharField, so it cannot be
+                # sorted alphabetically in SQL. Keep a stable base order here
+                # (created_at); the actual alphabetical sort is done in Python
+                # in list() after decryption.
+                queryset = queryset.order_by('-created_at')
             elif sort_by == 'most_responses':
                 # الأكثر رداً - Most responses
                 from django.db.models import Count
@@ -843,7 +848,20 @@ class SurveyViewSet(ModelViewSet):
         """List surveys with uniform response and enhanced filtering"""
         try:
             queryset = self.filter_queryset(self.get_queryset())
-            page = self.paginate_queryset(queryset)
+
+            # Title is an EncryptedCharField, so the database can only sort it
+            # by ciphertext (not alphabetically). For title sorting we decrypt
+            # in Python and sort the materialized list, then paginate that list.
+            sort_by = safe_get_query_params(request, 'sort_by')
+            if sort_by in ('title_asc', 'title_desc'):
+                surveys_list = sorted(
+                    queryset,
+                    key=lambda s: (s.title or '').strip().casefold(),
+                    reverse=(sort_by == 'title_desc'),
+                )
+                page = self.paginate_queryset(surveys_list)
+            else:
+                page = self.paginate_queryset(queryset)
             
             # Get filter information for response
             applied_filters = self._get_applied_filters_info()
@@ -8188,9 +8206,14 @@ class AdminSurveyResponsesView(generics.ListAPIView):
                         'group_name': group_name,
                     }
                 elif response.respondent_id:
-                    # Named authenticated user — show real email/name
+                    # Named authenticated user — show real email/name.
+                    # Build the name the SAME way the Users page does
+                    # (first + last, shown if EITHER is set) instead of the
+                    # model's full_name property (which needs BOTH names and
+                    # otherwise falls back to email). This keeps the respondent
+                    # name consistent between the Users page and responses.
                     user_obj = response.respondent
-                    full_name = getattr(user_obj, 'full_name', '') or user_obj.email
+                    full_name = f"{user_obj.first_name or ''} {user_obj.last_name or ''}".strip() or user_obj.email
                     user_groups = [ug.group.name for ug in user_obj.user_groups.all()]
                     respondent_info = {
                         'type': 'authenticated',
@@ -8236,10 +8259,15 @@ class AdminSurveyResponsesView(generics.ListAPIView):
                 latest_thread = response.follow_ups.first()
 
                 def _user_name(user_obj):
-                    """Resolve a display name for a follow-up participant."""
+                    """Resolve a display name for a follow-up participant.
+
+                    Uses first+last (shown if EITHER is set) to match the Users
+                    page, instead of the model's full_name property which needs
+                    both names and otherwise falls back to email.
+                    """
                     if not user_obj:
                         return None
-                    return getattr(user_obj, 'full_name', '') or user_obj.email
+                    return f"{user_obj.first_name or ''} {user_obj.last_name or ''}".strip() or user_obj.email
 
                 # Serialize full follow-up thread(s) for the report section
                 follow_ups_data = []
