@@ -306,38 +306,35 @@ class GroupListView(APIView):
     
     def get_permissions(self):
         """Set permissions based on request method."""
-        if self.request.method == 'POST':
-            permission_classes = [IsSuperAdmin]
-        else:
-            permission_classes = [IsAdminOrSuperAdmin]
-        
+        # Admins have full parity with super_admins for group management.
+        permission_classes = [IsAdminOrSuperAdmin]
         return [permission() for permission in permission_classes]
-    
+
     def get(self, request):
         """
         List groups based on user role.
-        
-        - super_admin: Can see all groups
-        - admin: Can see their own groups only
+
+        - super_admin / admin: Can see all groups
+        - other roles: Can see their own groups only
         """
         user = request.user
-        
-        if user.role == 'super_admin':
-            # Super admins can see all groups
+
+        if user.role in ('super_admin', 'admin'):
+            # Super admins and admins can see all groups
             groups = Group.objects.all()
         else:
-            # Admins can see only their groups
+            # Other roles can see only their own groups
             groups = Group.objects.filter(users=user)
-        
+
         serializer = GroupSerializer(groups, many=True)
         return Response({
             'groups': serializer.data,
             'count': groups.count()
         }, status=status.HTTP_200_OK)
-    
+
     def post(self, request):
         """
-        Create a new group (super_admin only).
+        Create a new group (admin/super_admin only).
         """
         serializer = CreateGroupSerializer(data=request.data)
         if serializer.is_valid():
@@ -371,40 +368,42 @@ class GroupDetailView(APIView):
         if self.request.method == 'GET':
             permission_classes = [CanViewGroup]
         else:
-            permission_classes = [IsSuperAdmin]
-        
+            # Admins have full parity with super_admins for update/delete.
+            permission_classes = [IsAdminOrSuperAdmin]
+
         return [permission() for permission in permission_classes]
-    
+
     def get_group(self, group_id, user):
         """Get group based on user permissions."""
         try:
             group = Group.objects.get(id=group_id)
-            
+
             # Check permissions
-            if user.role == 'super_admin':
+            if user.role in ('super_admin', 'admin'):
+                # Super admins and admins have full access to any group
                 return group
-            elif user.role == 'admin' and group.users.filter(id=user.id).exists():
+            elif group.users.filter(id=user.id).exists():
                 return group
             else:
                 return None
-                
+
         except Group.DoesNotExist:
             return None
-    
+
     def get(self, request, group_id):
         """Get group details."""
         group = self.get_group(group_id, request.user)
-        
+
         if not group:
             return Response({
                 'detail': 'Group not found or access denied.'
             }, status=status.HTTP_404_NOT_FOUND)
-        
+
         serializer = GroupDetailSerializer(group)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def put(self, request, group_id):
-        """Update group (super_admin only)."""
+        """Update group (admin/super_admin only)."""
         group = self.get_group(group_id, request.user)
         if not group:
             return Response({
@@ -419,7 +418,7 @@ class GroupDetailView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request, group_id):
-        """Delete group (super_admin only)."""
+        """Delete group (admin/super_admin only)."""
         group = self.get_group(group_id, request.user)
         if not group:
             return Response({
@@ -445,17 +444,18 @@ class GroupUsersView(APIView):
         """Get group based on user permissions."""
         try:
             group = Group.objects.get(id=group_id)
-            
-            if user.role == 'super_admin':
+
+            if user.role in ('super_admin', 'admin'):
+                # Super admins and admins have full access to any group
                 return group
-            elif user.role == 'admin' and group.users.filter(id=user.id).exists():
+            elif group.users.filter(id=user.id).exists():
                 return group
             else:
                 return None
-                
+
         except Group.DoesNotExist:
             return None
-    
+
     def post(self, request, group_id):
         """Add user to group."""
         user = request.user
@@ -518,20 +518,20 @@ class GroupUserDetailView(APIView):
         try:
             group = Group.objects.get(id=group_id)
             user_group = UserGroup.objects.get(group=group, user_id=user_id)
-            
-            # Check permissions
-            if request_user.role == 'super_admin':
+
+            # Super admins and admins have full access to manage any group
+            if request_user.role in ('super_admin', 'admin'):
                 return user_group
-            elif request_user.role == 'admin' and group.users.filter(id=request_user.id).exists():
-                # Check if request user is admin of this group
-                is_group_admin = UserGroup.objects.filter(
-                    user=request_user, group=group, is_group_admin=True
-                ).exists()
-                if is_group_admin:
-                    return user_group
-            
+
+            # Otherwise, only a group_admin member of this specific group
+            is_group_admin = UserGroup.objects.filter(
+                user=request_user, group=group, is_group_admin=True
+            ).exists()
+            if is_group_admin:
+                return user_group
+
             return None
-            
+
         except (Group.DoesNotExist, UserGroup.DoesNotExist):
             return None
     
@@ -846,10 +846,11 @@ class BulkAddUsersView(APIView):
                     'detail': 'Group not found.'
                 }, status=status.HTTP_404_NOT_FOUND)
             
-            # Check permissions
+            # Check permissions — super_admins and admins have full parity
+            # and can manage any group; other roles must be a group_admin
+            # member of this specific group.
             user = request.user
-            if user.role != 'super_admin':
-                # Check if user is admin of this group
+            if user.role not in ('super_admin', 'admin'):
                 is_admin = UserGroup.objects.filter(
                     user=user, group=group, is_group_admin=True
                 ).exists()

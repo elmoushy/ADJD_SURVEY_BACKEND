@@ -66,26 +66,27 @@ class IsGroupAdmin(BasePermission):
 class CanViewGroup(BasePermission):
     """
     Permission class that checks if user can view a specific group.
-    Super admins can view all groups, group members can view their groups.
+    Super admins and admins can view all groups (full parity); regular
+    group members can view groups they belong to.
     """
-    
+
     def has_permission(self, request, view):
         if not (request.user and request.user.is_authenticated):
             return False
-        
-        # Super admins can view all groups
-        if request.user.role == 'super_admin':
+
+        # Super admins and admins can view any group
+        if request.user.role in ('super_admin', 'admin'):
             return True
-        
+
         # Regular users have no group access
         if request.user.role == 'user':
             return False
-        
+
         # Get group from view
         group_id = view.kwargs.get('group_id')
         if not group_id:
             return False
-        
+
         # Check if user is a member of this group
         return UserGroup.objects.filter(
             user=request.user,
@@ -96,32 +97,15 @@ class CanViewGroup(BasePermission):
 class CanManageGroupUsers(BasePermission):
     """
     Permission class for managing users within a group.
-    Super admins and group admins can manage users.
+    Super admins and admins can manage users in any group (full parity).
     """
-    
+
     def has_permission(self, request, view):
         if not (request.user and request.user.is_authenticated):
             return False
-        
-        # Super admins can manage users in any group
-        if request.user.role == 'super_admin':
-            return True
-        
-        # Only admins can manage users
-        if request.user.role != 'admin':
-            return False
-        
-        # Get group from view
-        group_id = view.kwargs.get('group_id')
-        if not group_id:
-            return False
-        
-        # Check if user is admin of this specific group
-        return UserGroup.objects.filter(
-            user=request.user,
-            group_id=group_id,
-            is_group_admin=True
-        ).exists()
+
+        # Super admins and admins can manage users in any group
+        return request.user.role in ('super_admin', 'admin')
 
 
 class IsOwnerOrSuperAdmin(BasePermission):
