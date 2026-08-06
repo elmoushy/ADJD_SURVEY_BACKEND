@@ -11,6 +11,10 @@ from . import views
 from .views_followup import FollowUpViewSet
 from .views_access_picker import AccessPickerSearchView
 from .views_attachments import (
+    SurveyAttachmentUploadView,
+    SurveyAttachmentListView,
+    SurveyAttachmentDownloadView,
+    SurveyAttachmentDeleteView,
     ResponseAttachmentUploadView,
     ResponseAttachmentListView,
     ResponseAttachmentDownloadView,
@@ -188,6 +192,19 @@ urlpatterns = [
 
     # Access picker search (users + groups combined, admin only)
     path('access-picker/search/', AccessPickerSearchView.as_view(), name='access-picker-search'),
+
+    # ─── Survey Attachments (creator reference files) ──────────────────────────
+    path('surveys/<uuid:survey_id>/attachments/upload/',
+         SurveyAttachmentUploadView.as_view(), name='survey-attachment-upload'),
+
+    path('surveys/<uuid:survey_id>/attachments/',
+         SurveyAttachmentListView.as_view(), name='survey-attachment-list'),
+
+    path('survey-attachments/<uuid:pk>/download/',
+         SurveyAttachmentDownloadView.as_view(), name='survey-attachment-download'),
+
+    path('survey-attachments/<uuid:pk>/',
+         SurveyAttachmentDeleteView.as_view(), name='survey-attachment-delete'),
 
     # ─── Response Attachments ─────────────────────────────────────────────────
     path('responses/<uuid:response_id>/attachments/upload/',

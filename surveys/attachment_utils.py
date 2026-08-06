@@ -1,8 +1,9 @@
 """
-Attachment utilities for survey responses and follow-up messages.
+Attachment utilities for survey responses, follow-up messages and surveys.
 
 Supports:
 - Documents: PDF, Word (doc/docx), Excel (xls/xlsx)
+- Presentations: PowerPoint (ppt/pptx) — survey attachments only
 - Images: JPEG, PNG, GIF (stored as-is, no optimization)
 
 Uses BLOB storage pattern (same as WHSO_Weapon_Backend activities app).
@@ -22,6 +23,10 @@ logger = logging.getLogger(__name__)
 MAX_FILE_SIZE_MB = 10
 MAX_ATTACHMENTS_PER_SUBMISSION = 5
 
+# Max attachments a creator can pin to a single survey (reference material
+# respondents read while answering).
+MAX_ATTACHMENTS_PER_SURVEY = 5
+
 # Allowed MIME types
 ALLOWED_DOCUMENT_MIMES = {
     'application/pdf',
@@ -29,6 +34,11 @@ ALLOWED_DOCUMENT_MIMES = {
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'application/vnd.ms-excel',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+}
+
+ALLOWED_PRESENTATION_MIMES = {
+    'application/vnd.ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
 }
 
 ALLOWED_IMAGE_MIMES = {
@@ -39,6 +49,10 @@ ALLOWED_IMAGE_MIMES = {
 
 ALLOWED_ATTACHMENT_MIMES = ALLOWED_DOCUMENT_MIMES | ALLOWED_IMAGE_MIMES
 
+# Survey attachments additionally accept PowerPoint decks. Kept as a separate
+# set so widening it never changes what respondents may upload.
+ALLOWED_SURVEY_ATTACHMENT_MIMES = ALLOWED_ATTACHMENT_MIMES | ALLOWED_PRESENTATION_MIMES
+
 # Human-readable format names
 MIME_TO_FORMAT = {
     'application/pdf': 'PDF',
@@ -46,16 +60,25 @@ MIME_TO_FORMAT = {
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Word (DOCX)',
     'application/vnd.ms-excel': 'Excel (XLS)',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'Excel (XLSX)',
+    'application/vnd.ms-powerpoint': 'PowerPoint (PPT)',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'PowerPoint (PPTX)',
     'image/jpeg': 'Image (JPEG)',
     'image/png': 'Image (PNG)',
     'image/gif': 'Image (GIF)',
 }
+
+# MIME types browsers can render in a tab (opened inline instead of downloaded)
+INLINE_VIEWABLE_MIMES = ALLOWED_IMAGE_MIMES | {'application/pdf'}
 
 # Allowed file extensions
 ALLOWED_EXTENSIONS = {
     '.pdf', '.doc', '.docx', '.xls', '.xlsx',
     '.jpg', '.jpeg', '.png', '.gif',
 }
+
+ALLOWED_PRESENTATION_EXTENSIONS = {'.ppt', '.pptx'}
+
+ALLOWED_SURVEY_EXTENSIONS = ALLOWED_EXTENSIONS | ALLOWED_PRESENTATION_EXTENSIONS
 
 # Forbidden extensions (security)
 FORBIDDEN_EXTENSIONS = {
@@ -71,9 +94,26 @@ MIME_EXTENSION_MAP = {
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document': {'.docx'},
     'application/vnd.ms-excel': {'.xls'},
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {'.xlsx'},
+    'application/vnd.ms-powerpoint': {'.ppt'},
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation': {'.pptx'},
     'image/jpeg': {'.jpg', '.jpeg'},
     'image/png': {'.png'},
     'image/gif': {'.gif'},
+}
+
+# Extension → MIME map used when magic-byte detection is unavailable
+EXTENSION_MIME_MAP = {
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.png': 'image/png',
+    '.gif': 'image/gif',
+    '.pdf': 'application/pdf',
+    '.doc': 'application/msword',
+    '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    '.xls': 'application/vnd.ms-excel',
+    '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    '.ppt': 'application/vnd.ms-powerpoint',
+    '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
 }
 
 # Windows reserved filenames
@@ -89,6 +129,23 @@ DANGEROUS_FILENAME_CHARS = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
 
 # ─── Utilities ───────────────────────────────────────────────────────────────
 
+# Generic types libmagic reports for Office containers: OOXML files (docx/xlsx/
+# pptx) are ZIP archives and legacy Office files are OLE2 compound documents,
+# so detection alone cannot tell them apart from a plain archive.
+CONTAINER_MIMES = {
+    'application/zip',
+    'application/x-zip-compressed',
+    'application/octet-stream',
+    'application/CDFV2',
+    'application/x-ole-storage',
+}
+
+# Office extensions whose real type may only be recoverable from the extension
+OFFICE_CONTAINER_EXTENSIONS = {
+    '.docx', '.xlsx', '.pptx', '.doc', '.xls', '.ppt',
+}
+
+
 def is_image_mime(mime_type):
     """Check if MIME type is an image."""
     return mime_type in ALLOWED_IMAGE_MIMES
@@ -97,6 +154,16 @@ def is_image_mime(mime_type):
 def is_document_mime(mime_type):
     """Check if MIME type is a document."""
     return mime_type in ALLOWED_DOCUMENT_MIMES
+
+
+def is_presentation_mime(mime_type):
+    """Check if MIME type is a presentation (PowerPoint)."""
+    return mime_type in ALLOWED_PRESENTATION_MIMES
+
+
+def is_inline_viewable_mime(mime_type):
+    """Check if browsers can render this type in a tab instead of downloading it."""
+    return mime_type in INLINE_VIEWABLE_MIMES
 
 
 def sanitize_filename(filename, max_length=255):
@@ -147,16 +214,45 @@ def sanitize_filename(filename, max_length=255):
     return f"{name}{ext}"
 
 
-def validate_file_type(file):
+def _allowed_formats_text(allowed_mimes):
+    """Human-readable list of the allowed formats, for error messages."""
+    names = {MIME_TO_FORMAT.get(m, m) for m in allowed_mimes}
+    return ', '.join(sorted(names))
+
+
+def _validate_extension(file_ext, allowed_extensions):
+    """Reject forbidden/unknown extensions. Shared by both detection paths."""
+    if file_ext in FORBIDDEN_EXTENSIONS:
+        raise ValidationError(
+            f"امتداد الملف '{file_ext}' غير مسموح به لأسباب أمنية."
+        )
+
+    if file_ext not in allowed_extensions:
+        allowed = ', '.join(sorted(allowed_extensions))
+        raise ValidationError(
+            f"امتداد الملف '{file_ext}' غير مسموح به. "
+            f"الامتدادات المسموحة: {allowed}"
+        )
+
+
+def validate_file_type(file, allowed_mimes=None, allowed_extensions=None):
     """
     Validate file type using magic bytes if available, otherwise by extension.
-    
+
+    Args:
+        file: Django UploadedFile object
+        allowed_mimes: Permitted MIME types (defaults to response/follow-up set)
+        allowed_extensions: Permitted extensions (defaults to response/follow-up set)
+
     Returns:
         str: Detected MIME type
-        
+
     Raises:
         ValidationError: If file type is not allowed
     """
+    allowed_mimes = allowed_mimes or ALLOWED_ATTACHMENT_MIMES
+    allowed_extensions = allowed_extensions or ALLOWED_EXTENSIONS
+
     try:
         import magic
         magic_available = True
@@ -164,34 +260,12 @@ def validate_file_type(file):
         magic_available = False
         logger.warning("python-magic not installed. Using extension-based validation.")
 
+    file_ext = os.path.splitext(file.name)[1].lower()
+
     if not magic_available:
         # Fallback: extension-based validation
-        file_ext = os.path.splitext(file.name)[1].lower()
-
-        if file_ext in FORBIDDEN_EXTENSIONS:
-            raise ValidationError(
-                f"امتداد الملف '{file_ext}' غير مسموح به لأسباب أمنية."
-            )
-
-        if file_ext not in ALLOWED_EXTENSIONS:
-            allowed = ', '.join(sorted(ALLOWED_EXTENSIONS))
-            raise ValidationError(
-                f"امتداد الملف '{file_ext}' غير مسموح به. "
-                f"الامتدادات المسموحة: {allowed}"
-            )
-
-        # Map extension to MIME
-        extension_mime_map = {
-            '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
-            '.png': 'image/png', '.gif': 'image/gif',
-            '.pdf': 'application/pdf',
-            '.doc': 'application/msword',
-            '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            '.xls': 'application/vnd.ms-excel',
-            '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        }
-        mime = extension_mime_map.get(file_ext, 'application/octet-stream')
-        return mime
+        _validate_extension(file_ext, allowed_extensions)
+        return EXTENSION_MIME_MAP.get(file_ext, 'application/octet-stream')
 
     # Use magic bytes detection
     file_start = file.read(2048)
@@ -205,26 +279,26 @@ def validate_file_type(file):
 
     mime = mime.lower().strip()
 
-    if mime not in ALLOWED_ATTACHMENT_MIMES:
-        allowed_formats = ', '.join(sorted(MIME_TO_FORMAT.values()))
+    # Extension is checked before the MIME verdict so a forbidden extension is
+    # always rejected, whatever the detected type says.
+    _validate_extension(file_ext, allowed_extensions)
+
+    # Office files are containers (OOXML = ZIP, legacy Office = OLE2), so
+    # libmagic reports a generic container type for them. In that case fall back
+    # to the extension-derived type — the extension is already whitelisted above.
+    if mime in CONTAINER_MIMES and file_ext in OFFICE_CONTAINER_EXTENSIONS:
+        resolved = EXTENSION_MIME_MAP.get(file_ext)
+        if resolved:
+            logger.info(
+                "Office container detected as '%s'; resolved to '%s' from extension '%s'",
+                mime, resolved, file_ext,
+            )
+            mime = resolved
+
+    if mime not in allowed_mimes:
         raise ValidationError(
             f"نوع الملف '{mime}' غير مسموح به. "
-            f"الأنواع المسموحة: {allowed_formats}"
-        )
-
-    # Validate extension matches detected type
-    file_ext = os.path.splitext(file.name)[1].lower()
-
-    if file_ext in FORBIDDEN_EXTENSIONS:
-        raise ValidationError(
-            f"امتداد الملف '{file_ext}' محظور لأسباب أمنية."
-        )
-
-    if file_ext not in ALLOWED_EXTENSIONS:
-        allowed = ', '.join(sorted(ALLOWED_EXTENSIONS))
-        raise ValidationError(
-            f"امتداد الملف '{file_ext}' غير مسموح به. "
-            f"الامتدادات المسموحة: {allowed}"
+            f"الأنواع المسموحة: {_allowed_formats_text(allowed_mimes)}"
         )
 
     # MIME/extension consistency check
@@ -262,21 +336,23 @@ def validate_file_size(file, max_size_mb=MAX_FILE_SIZE_MB):
     return file.size
 
 
-def validate_attachment_file(file):
+def validate_attachment_file(file, allowed_mimes=None, allowed_extensions=None):
     """
-    Validate uploaded attachment file (document or image).
-    
+    Validate uploaded attachment file (document, presentation or image).
+
     Args:
         file: Django UploadedFile object
-        
+        allowed_mimes: Permitted MIME types (defaults to response/follow-up set)
+        allowed_extensions: Permitted extensions (defaults to response/follow-up set)
+
     Returns:
         tuple: (mime_type, file_size, sanitized_filename)
-        
+
     Raises:
         ValidationError: If file is invalid
     """
     # Validate file type (magic bytes or extension)
-    mime_type = validate_file_type(file)
+    mime_type = validate_file_type(file, allowed_mimes, allowed_extensions)
 
     # Validate file size
     file_size = validate_file_size(file)
@@ -290,16 +366,18 @@ def validate_attachment_file(file):
     return mime_type, file_size, sanitized_name
 
 
-def process_attachment_upload(uploaded_file):
+def process_attachment_upload(uploaded_file, allowed_mimes=None, allowed_extensions=None):
     """
     Process and validate attachment for BLOB storage.
-    
+
     Files (both documents and images) are stored as-is.
     No image optimization or thumbnail generation.
-    
+
     Args:
         uploaded_file: Django UploadedFile object
-        
+        allowed_mimes: Permitted MIME types (defaults to response/follow-up set)
+        allowed_extensions: Permitted extensions (defaults to response/follow-up set)
+
     Returns:
         dict: {
             'file_data': bytes,
@@ -311,7 +389,9 @@ def process_attachment_upload(uploaded_file):
     Raises:
         ValidationError: If processing fails
     """
-    mime_type, original_size, sanitized_name = validate_attachment_file(uploaded_file)
+    mime_type, original_size, sanitized_name = validate_attachment_file(
+        uploaded_file, allowed_mimes, allowed_extensions
+    )
 
     # Reset file pointer after validation
     uploaded_file.seek(0)

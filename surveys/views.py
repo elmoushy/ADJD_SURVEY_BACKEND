@@ -48,14 +48,14 @@ from statistics import median, mean, mode, stdev
 from decimal import Decimal, ROUND_HALF_UP
 from dateutil.parser import parse as parse_datetime
 
-from .models import Survey, Question, Response as SurveyResponse, Answer, PublicAccessToken, SurveyTemplate, TemplateQuestion
+from .models import Survey, Question, Response as SurveyResponse, Answer, PublicAccessToken, SurveyTemplate, TemplateQuestion, SurveyAttachment
 from .pagination import SurveyPagination, ResponsePagination
 from .serializers import (
     SurveySerializer, QuestionSerializer, ResponseSerializer,
     SurveySubmissionSerializer, ResponseSubmissionSerializer,
     SurveyTemplateSerializer, TemplateQuestionSerializer,
     CreateTemplateSerializer, CreateSurveyFromTemplateSerializer,
-    RecentSurveySerializer
+    RecentSurveySerializer, SurveyAttachmentSerializer
 )
 from .permissions import (
     IsCreatorOrVisible, IsCreatorOrReadOnly, 
@@ -488,6 +488,25 @@ def uniform_response(success=True, message="", data=None, status_code=200):
         'message': message,
         'data': data
     }, status=status_code)
+
+
+def _blob_to_bytes(raw):
+    """Oracle returns BinaryField as LOB/memoryview — normalise to bytes."""
+    return raw.read() if hasattr(raw, 'read') else bytes(raw or b'')
+
+
+def serialize_survey_attachments(survey, request=None):
+    """
+    Serialize a survey's creator-supplied reference attachments.
+
+    Used by every respondent-facing survey payload so the files the creator
+    pinned are readable while answering. file_data is deferred — the metadata
+    list must never drag BLOBs out of Oracle.
+    """
+    attachments = SurveyAttachment.objects.filter(survey=survey).defer('file_data')
+    return SurveyAttachmentSerializer(
+        attachments, many=True, context={'request': request}
+    ).data
 
 
 def filter_survey_ids_by_search(base_queryset, term):
@@ -2682,6 +2701,8 @@ class SurveyViewSet(ModelViewSet):
                     'is_currently_active': survey.is_currently_active(),
                     'start_date': survey.start_date.isoformat() if survey.start_date else None,
                     'end_date': survey.end_date.isoformat() if survey.end_date else None,
+                    'allow_attachments': survey.allow_attachments,
+                    'attachments': serialize_survey_attachments(survey, request),
                     'estimated_time': max(len(survey.questions.all()) * 2, 5),  # 2 min per question, min 5 min
                     'questions_count': survey.questions.count(),
                     'questions': question_data
@@ -2797,11 +2818,12 @@ class SurveyViewSet(ModelViewSet):
                     'public_contact_method': survey.public_contact_method,
                     'per_device_access': survey.per_device_access,
                     'allow_attachments': survey.allow_attachments,
+                    'attachments': serialize_survey_attachments(survey, request),
                     'estimated_time': max(survey.questions.count() * 1, 5),  # 1 min per question, min 5 min
                     'questions_count': survey.questions.count(),
                     'questions': question_serializer.data
                 }
-                
+
                 return uniform_response(
                     success=True,
                     message=get_arabic_error_messages()['validation_completed'],
@@ -2900,6 +2922,7 @@ class SurveyViewSet(ModelViewSet):
                 'start_date': serialize_datetime_uae(survey.start_date),
                 'end_date': serialize_datetime_uae(survey.end_date),
                 'allow_attachments': survey.allow_attachments,
+                'attachments': serialize_survey_attachments(survey, request),
                 'estimated_time': max(survey.questions.count() * 1, 5),  # 1 min per question, min 5 min
                 'questions_count': survey.questions.count(),
                 'questions': question_serializer.data
@@ -3808,6 +3831,7 @@ class MyResponseView(APIView):
                         'title': survey.title,
                         'description': survey.description,
                         'questions': questions_data,
+                        'attachments': serialize_survey_attachments(survey, request),
                     },
                     'response': {
                         'id': str(response_obj.id),
@@ -8627,6 +8651,7 @@ class TokenSurveyDetailView(APIView):
                 'updated_at': survey.updated_at.isoformat(),
                 'creator_email': survey.creator.email if survey.creator else 'Deleted User',
                 'questions': question_serializer.data,
+                'attachments': serialize_survey_attachments(survey, request),
                 'access_info': {
                     'access_type': 'token',
                     'token_expires_at': access_token.expires_at.isoformat(),
@@ -8911,6 +8936,7 @@ class PasswordProtectedSurveyView(APIView):
                 'updated_at': survey.updated_at.isoformat(),
                 'creator_email': survey.creator.email if survey.creator else 'Deleted User',
                 'questions': question_serializer.data,
+                'attachments': serialize_survey_attachments(survey, request),
                 'access_info': {
                     'access_type': 'password_token',
                     'token_expires_at': access_token.expires_at.isoformat(),
@@ -9746,9 +9772,10 @@ class CloneSurveyView(APIView):
                 is_active=False,
                 status='draft',
                 public_contact_method=survey.public_contact_method,
-                per_device_access=survey.per_device_access
+                per_device_access=survey.per_device_access,
+                allow_attachments=survey.allow_attachments
             )
-            
+
             # Copy questions
             questions = survey.questions.all().order_by('order')
             for question in questions:
@@ -9760,7 +9787,21 @@ class CloneSurveyView(APIView):
                     is_required=question.is_required,
                     order=question.order
                 )
-            
+
+            # Copy the creator's reference attachments (BLOB copy — a clone is a
+            # working copy, so the respondent-facing files come along with it)
+            for attachment in SurveyAttachment.objects.filter(survey=survey):
+                SurveyAttachment.objects.create(
+                    survey=cloned_survey,
+                    file_data=_blob_to_bytes(attachment.file_data),
+                    original_filename=attachment.original_filename,
+                    file_size=attachment.file_size,
+                    mime_type=attachment.mime_type,
+                    description=attachment.description,
+                    display_order=attachment.display_order,
+                    uploaded_by=request.user
+                )
+
             # Return the cloned survey
             survey_serializer = SurveySerializer(cloned_survey, context={'request': request})
             

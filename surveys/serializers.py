@@ -7,7 +7,7 @@ with comprehensive validation and encryption support.
 
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Survey, Question, Response, Answer, SurveyTemplate, TemplateQuestion, ResponseAttachment, FollowUpMessageAttachment
+from .models import Survey, Question, Response, Answer, SurveyTemplate, TemplateQuestion, SurveyAttachment, ResponseAttachment, FollowUpMessageAttachment
 from .timezone_utils import (
     serialize_datetime_uae, get_status_uae, is_currently_active_uae,
     ensure_gregorian_from_hijri, convert_hijri_string_to_gregorian
@@ -657,7 +657,9 @@ class SurveySerializer(serializers.ModelSerializer):
     status_display = serializers.SerializerMethodField()
     is_currently_active = serializers.SerializerMethodField()
     can_be_edited = serializers.SerializerMethodField()
-    
+    attachments = serializers.SerializerMethodField()
+    attachment_count = serializers.SerializerMethodField()
+
     # Use custom UAE timezone fields for date/time serialization
     start_date = UAEDateTimeField(required=False, allow_null=True)
     end_date = UAEDateTimeField(required=False, allow_null=True)
@@ -671,11 +673,26 @@ class SurveySerializer(serializers.ModelSerializer):
             'creator', 'creator_email', 'creator_name', 'is_locked', 'is_active',
             'start_date', 'end_date', 'status', 'status_display', 'is_currently_active',
             'can_be_edited', 'public_contact_method', 'per_device_access', 'allow_attachments',
-            'questions', 'response_count',
+            'questions', 'response_count', 'attachments', 'attachment_count',
             'shared_with_emails', 'shared_with_groups', 'created_at', 'updated_at'
         ]
-        read_only_fields = ['id', 'creator', 'created_at', 'updated_at', 'status_display', 'is_currently_active', 'can_be_edited']
-    
+        read_only_fields = ['id', 'creator', 'created_at', 'updated_at', 'status_display', 'is_currently_active', 'can_be_edited', 'attachments', 'attachment_count']
+
+    def get_attachments(self, obj):
+        """
+        Survey reference attachments added by the creator.
+
+        file_data is deferred so listing surveys never pulls BLOBs out of Oracle.
+        """
+        attachments = obj.attachments.defer('file_data')
+        return SurveyAttachmentSerializer(
+            attachments, many=True, context=self.context
+        ).data
+
+    def get_attachment_count(self, obj):
+        """Number of reference attachments pinned to this survey."""
+        return obj.attachments.count()
+
     def get_creator_email(self, obj):
         """Get creator email"""
         return obj.creator.email if obj.creator else None
@@ -757,6 +774,8 @@ class SurveySerializer(serializers.ModelSerializer):
                     'is_active': data['is_active'],
                     'questions': data['questions'],
                     'response_count': data['response_count'],
+                    'attachments': data.get('attachments', []),
+                    'attachment_count': data.get('attachment_count', 0),
                     'creator_email': data['creator_email'],
                     'created_at': data['created_at']
                 }
@@ -780,6 +799,8 @@ class SurveySerializer(serializers.ModelSerializer):
                     'is_active': data['is_active'],
                     'questions': data['questions'],
                     'response_count': data['response_count'],
+                    'attachments': data.get('attachments', []),
+                    'attachment_count': data.get('attachment_count', 0),
                     'creator_email': data['creator_email'],
                     'created_at': data['created_at']
                 }
@@ -796,6 +817,8 @@ class SurveySerializer(serializers.ModelSerializer):
                         'is_active': data['is_active'],
                         'questions': data['questions'],
                         'response_count': data['response_count'],
+                        'attachments': data.get('attachments', []),
+                        'attachment_count': data.get('attachment_count', 0),
                         'creator_email': data['creator_email'],
                         'created_at': data['created_at']
                     }
@@ -821,10 +844,12 @@ class SurveySerializer(serializers.ModelSerializer):
                 'is_active': data['is_active'],
                 'questions': data['questions'],
                 'response_count': data['response_count'],
+                'attachments': data.get('attachments', []),
+                'attachment_count': data.get('attachment_count', 0),
                 'creator_email': data['creator_email'],
                 'created_at': data['created_at']
             }
-        
+
         return {}
     
     def to_internal_value(self, data):
@@ -1646,6 +1671,111 @@ class AttachmentUploadSerializer(serializers.Serializer):
         from .attachment_utils import validate_attachment_file
         validate_attachment_file(value)
         return value
+
+
+class SurveyAttachmentUploadSerializer(serializers.Serializer):
+    """
+    Serializer for uploading a survey reference attachment.
+
+    Same rules as response attachments plus PowerPoint decks.
+    """
+
+    file = serializers.FileField(required=True)
+    description = serializers.CharField(max_length=500, required=False, allow_blank=True)
+
+    def validate_file(self, value):
+        """Validate attachment file against the survey-attachment whitelist."""
+        from .attachment_utils import (
+            validate_attachment_file,
+            ALLOWED_SURVEY_ATTACHMENT_MIMES,
+            ALLOWED_SURVEY_EXTENSIONS,
+        )
+        validate_attachment_file(
+            value,
+            allowed_mimes=ALLOWED_SURVEY_ATTACHMENT_MIMES,
+            allowed_extensions=ALLOWED_SURVEY_EXTENSIONS,
+        )
+        return value
+
+    def validate_description(self, value):
+        """Sanitize the creator-supplied note shown to respondents."""
+        if not value:
+            return value
+        return validate_and_sanitize_text_input(
+            value, max_length=500, field_name="Attachment description"
+        )
+
+
+class SurveyAttachmentSerializer(serializers.ModelSerializer):
+    """Read serializer for survey reference attachments (creator-supplied)."""
+
+    download_url = serializers.SerializerMethodField()
+    format_name = serializers.SerializerMethodField()
+    uploaded_by_name = serializers.SerializerMethodField()
+    uploaded_by_email = serializers.SerializerMethodField()
+    is_image = serializers.SerializerMethodField()
+    is_inline_viewable = serializers.SerializerMethodField()
+    can_delete = serializers.SerializerMethodField()
+
+    class Meta:
+        model = SurveyAttachment
+        fields = [
+            'id', 'survey', 'original_filename', 'file_size', 'mime_type',
+            'format_name', 'is_image', 'is_inline_viewable', 'description',
+            'display_order',
+            'uploaded_by', 'uploaded_by_name', 'uploaded_by_email', 'uploaded_at',
+            'download_url', 'can_delete',
+        ]
+        read_only_fields = [
+            'id', 'survey', 'uploaded_at', 'file_size', 'mime_type', 'uploaded_by',
+        ]
+
+    def get_download_url(self, obj):
+        """Generate download URL (absolute when a request is in context)."""
+        from django.urls import reverse
+        url = reverse('surveys:survey-attachment-download', kwargs={'pk': str(obj.pk)})
+        request = self.context.get('request')
+        if request:
+            return request.build_absolute_uri(url)
+        return url
+
+    def get_format_name(self, obj):
+        """Return human-readable format name."""
+        from .attachment_utils import MIME_TO_FORMAT
+        return MIME_TO_FORMAT.get(obj.mime_type, obj.mime_type)
+
+    def get_is_image(self, obj):
+        """Return True if attachment is an image (shown via the eye/preview action)."""
+        return obj.mime_type.startswith('image/')
+
+    def get_is_inline_viewable(self, obj):
+        """Return True if the browser can render the file in a new tab."""
+        from .attachment_utils import is_inline_viewable_mime
+        return is_inline_viewable_mime(obj.mime_type)
+
+    def get_uploaded_by_name(self, obj):
+        """Return uploader's name."""
+        if obj.uploaded_by:
+            name = f"{obj.uploaded_by.first_name} {obj.uploaded_by.last_name}".strip()
+            return name or obj.uploaded_by.email
+        return None
+
+    def get_uploaded_by_email(self, obj):
+        """Return uploader's email."""
+        return obj.uploaded_by.email if obj.uploaded_by else None
+
+    def get_can_delete(self, obj):
+        """Return True if current user can remove this attachment from the survey."""
+        request = self.context.get('request')
+        if not request or not request.user or not request.user.is_authenticated:
+            return False
+        if getattr(request.user, 'role', None) == 'super_admin':
+            return True
+        creator_id = obj.survey.creator_id
+        if creator_id is None:
+            # Orphaned survey (creator deleted) — admins/managers take over
+            return getattr(request.user, 'role', None) in ('admin', 'manager')
+        return creator_id == request.user.id
 
 
 class ResponseAttachmentSerializer(serializers.ModelSerializer):

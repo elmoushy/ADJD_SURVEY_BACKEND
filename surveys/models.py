@@ -1573,8 +1573,86 @@ class FollowUpMessage(models.Model):
 
 
 # =============================================================================
-# Attachments — BLOB Storage for Response and Follow-Up Message Attachments
+# Attachments — BLOB Storage for Survey, Response and Follow-Up Attachments
 # =============================================================================
+
+class SurveyAttachment(models.Model):
+    """
+    BLOB-based storage for survey reference attachments.
+
+    These are files the survey CREATOR pins to the survey (specs, floor plans,
+    policies…) so respondents can read them while answering. They are read-only
+    for respondents — distinct from ResponseAttachment, which is what a
+    respondent uploads with their own submission.
+
+    Supports: PDF, Word, Excel, PowerPoint, JPEG, PNG, GIF
+    (max 10MB each, max 5 per survey).
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    survey = models.ForeignKey(
+        Survey,
+        on_delete=models.CASCADE,
+        related_name='attachments',
+        help_text='Parent survey (CASCADE deletes attachments when survey deleted)',
+    )
+
+    file_data = models.BinaryField(
+        help_text='File content stored as BLOB (max 10MB)',
+    )
+
+    original_filename = models.CharField(
+        max_length=255,
+        help_text='Sanitized original filename',
+    )
+
+    file_size = models.IntegerField(
+        help_text='File size in bytes',
+    )
+
+    mime_type = models.CharField(
+        max_length=150,
+        help_text='Validated MIME type',
+    )
+
+    description = models.CharField(
+        max_length=500,
+        blank=True,
+        help_text='Optional note shown to respondents next to the file',
+    )
+
+    display_order = models.IntegerField(
+        default=0,
+        help_text='Order the attachments are shown to respondents',
+    )
+
+    uploaded_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='uploaded_survey_attachments',
+        help_text='User who uploaded this attachment',
+    )
+
+    uploaded_at = models.DateTimeField(
+        auto_now_add=True,
+        help_text='Upload timestamp',
+    )
+
+    class Meta:
+        db_table = 'surveys_survey_attachment'  # 25 chars — ≤30 for Oracle compat
+        verbose_name = 'Survey Attachment'
+        verbose_name_plural = 'Survey Attachments'
+        ordering = ['display_order', 'uploaded_at']
+        indexes = [
+            models.Index(fields=['survey', 'display_order'], name='survey_att_order_idx'),
+        ]
+
+    def __str__(self):
+        return f"{self.original_filename} ({self.survey_id})"
+
 
 class ResponseAttachment(models.Model):
     """
