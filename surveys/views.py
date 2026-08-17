@@ -28,6 +28,7 @@ import secrets
 import pytz
 import math
 import hashlib
+import uuid
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.db.models import Q, Count, Avg, F, Sum, StdDev, Variance
@@ -48,7 +49,7 @@ from statistics import median, mean, mode, stdev
 from decimal import Decimal, ROUND_HALF_UP
 from dateutil.parser import parse as parse_datetime
 
-from .models import Survey, Question, Response as SurveyResponse, Answer, PublicAccessToken, SurveyTemplate, TemplateQuestion, SurveyAttachment
+from .models import Survey, SurveyTopic, Question, Response as SurveyResponse, Answer, PublicAccessToken, SurveyTemplate, TemplateQuestion, SurveyAttachment
 from .pagination import SurveyPagination, ResponsePagination
 from .serializers import (
     SurveySerializer, QuestionSerializer, ResponseSerializer,
@@ -547,6 +548,10 @@ class SurveyViewSet(ModelViewSet):
     # matches ciphertext and finds nothing. Search is handled in Python in list()
     # via filter_survey_ids_by_search().
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    # NOTE: 'topic' is deliberately NOT a filterset field. DjangoFilterBackend would
+    # coerce it to a UUID and 400 on the sentinel values the UI relies on
+    # (?topic=none for the "ungrouped" tab, ?topic=any). The topic filter — including
+    # include_descendants — is handled in _apply_custom_filters() instead.
     filterset_fields = ['visibility', 'is_active', 'creator', 'status']
     ordering_fields = ['created_at', 'updated_at', 'response_count']
     # NOTE: no default `ordering` attribute here. Sorting is driven by the
@@ -566,7 +571,10 @@ class SurveyViewSet(ModelViewSet):
             'id', 'title_hash', 'creator', 'visibility', 
             'start_date', 'end_date', 'is_locked', 'is_active', 
             'public_contact_method', 'per_device_access', 'status',
-            'created_at', 'updated_at'
+            'created_at', 'updated_at',
+            # 'topic' MUST stay in this list: without it .only() defers the FK and
+            # serializing topic_name costs one extra query per survey (N+1).
+            'topic'
         ]
     
     def get_object(self):
@@ -622,17 +630,21 @@ class SurveyViewSet(ModelViewSet):
     def get_queryset(self):
         """Filter surveys based on user permissions with enhanced filtering"""
         user = self.request.user
-        
-        # Base queryset based on user permissions
+
+        # Base queryset based on user permissions.
+        # select_related('creator', 'topic') keeps creator_email/topic_name off the
+        # N+1 path. It stays safe inside the .distinct() branch below because
+        # neither the user table nor surveys_topic contributes an NCLOB column
+        # (SurveyTopic.description is a CharField for exactly this reason).
         if not user.is_authenticated:
             # Anonymous users only see submitted public surveys
             base_queryset = self.queryset.filter(visibility='PUBLIC', is_active=True, status='submitted')
         elif user.role == 'super_admin':
             # Super admin sees all surveys
-            base_queryset = self.queryset
+            base_queryset = self.queryset.select_related('creator', 'topic')
         elif user.role in ['admin', 'manager']:
             # Admin/Manager can see all surveys
-            base_queryset = self.queryset
+            base_queryset = self.queryset.select_related('creator', 'topic')
         else:
             # Regular users see their own surveys (including drafts), shared surveys (submitted only), public/auth surveys (submitted only), and group-shared surveys (submitted only)
             user_groups = user.user_groups.values_list('group', flat=True)
@@ -643,8 +655,8 @@ class SurveyViewSet(ModelViewSet):
                 (Q(shared_with_groups__in=user_groups) & Q(status='submitted')) |  # Group shared (submitted only)
                 (Q(visibility='PUBLIC') & Q(status='submitted')) |  # Public surveys (submitted only)
                 (Q(visibility='AUTH') & Q(status='submitted'))  # Auth surveys (submitted only)
-            ).distinct().only(*SurveyViewSet.get_oracle_safe_fields())
-        
+            ).distinct().select_related('creator', 'topic').only(*SurveyViewSet.get_oracle_safe_fields())
+
         # Apply additional filters
         queryset = self._apply_custom_filters(base_queryset)
         
@@ -681,6 +693,40 @@ class SurveyViewSet(ModelViewSet):
             user = self.request.user
             if user.is_authenticated and user.role in ('super_admin', 'admin'):
                 queryset = queryset.filter(shared_with_groups__id=shared_group)
+
+        # Filter by topic ("موضوع"):
+        #   topic=none            -> ungrouped surveys (the "غير مجمّعة" tab)
+        #   topic=any             -> surveys that belong to some topic
+        #   topic=<uuid>          -> that topic only
+        #   + include_descendants -> that topic and every sub-topic (indexed LIKE 'path%')
+        #
+        # Applied here, i.e. BEFORE the Python-side search over encrypted titles in
+        # list(), so searching inside a topic only ever decrypts that topic's rows.
+        topic_filter = safe_get_query_params(self.request, 'topic')
+        if topic_filter:
+            if topic_filter == 'none':
+                queryset = queryset.filter(topic__isnull=True)
+            elif topic_filter == 'any':
+                queryset = queryset.filter(topic__isnull=False)
+            else:
+                include_descendants = safe_get_query_params(
+                    self.request, 'include_descendants', ''
+                ) in ('1', 'true', 'True')
+                try:
+                    uuid.UUID(str(topic_filter))
+                except (ValueError, AttributeError, TypeError):
+                    return queryset.none()
+
+                if include_descendants:
+                    topic = SurveyTopic.objects.filter(
+                        pk=topic_filter, deleted_at__isnull=True
+                    ).only('id', 'path').first()
+                    queryset = (
+                        queryset.filter(topic__path__startswith=topic.path)
+                        if topic and topic.path else queryset.none()
+                    )
+                else:
+                    queryset = queryset.filter(topic_id=topic_filter)
 
         # Filter by lifecycle status: draft / submitted / expired (admin/super_admin only)
         lifecycle_status = safe_get_query_params(self.request, 'lifecycle_status')
@@ -800,13 +846,56 @@ class SurveyViewSet(ModelViewSet):
             'previous_end': previous_month_end
         }
     
-    def _calculate_analytics_with_trends(self, user):
+    def _get_topic_scope(self):
+        """
+        Resolve the `topic` query param into a scope descriptor for the KPI block.
+
+        Returns None when no topic filter is active, otherwise one of:
+            {'kind': 'none'}                        ungrouped surveys
+            {'kind': 'any'}                         surveys inside any topic
+            {'kind': 'topic', 'id': <uuid str>}     one topic
+            {'kind': 'subtree', 'path': <path>}     a topic and its sub-topics
+            {'kind': 'empty'}                       unresolvable topic id
+        """
+        topic_filter = safe_get_query_params(self.request, 'topic')
+        if not topic_filter:
+            return None
+
+        if topic_filter == 'none':
+            return {'kind': 'none'}
+        if topic_filter == 'any':
+            return {'kind': 'any'}
+
+        try:
+            uuid.UUID(str(topic_filter))
+        except (ValueError, AttributeError, TypeError):
+            return {'kind': 'empty'}
+
+        include_descendants = safe_get_query_params(
+            self.request, 'include_descendants', ''
+        ) in ('1', 'true', 'True')
+
+        if include_descendants:
+            topic = SurveyTopic.objects.filter(
+                pk=topic_filter, deleted_at__isnull=True
+            ).only('id', 'path').first()
+            if not topic or not topic.path:
+                return {'kind': 'empty'}
+            return {'kind': 'subtree', 'path': topic.path}
+
+        return {'kind': 'topic', 'id': str(topic_filter)}
+
+    def _calculate_analytics_with_trends(self, user, topic_scope=None):
         """
         Calculate analytics including trends for total, active surveys and responses.
-        
+
         Args:
             user: The authenticated user
-            
+            topic_scope: Optional dict describing a topic scope, produced by
+                _get_topic_scope(). When present the KPIs are restricted to that
+                topic (and optionally its sub-topics), which is what makes the
+                topic page show the topic's own numbers instead of the global ones.
+
         Returns:
             dict: Analytics data with trends
         """
@@ -818,6 +907,25 @@ class SurveyViewSet(ModelViewSet):
         else:
             user_surveys = all_surveys_base.filter(creator=user)
             responses_filter = {'survey__creator': user, 'survey__deleted_at__isnull': True}
+
+        # Narrow both sides to the requested topic scope
+        if topic_scope:
+            if topic_scope['kind'] == 'none':
+                user_surveys = user_surveys.filter(topic__isnull=True)
+                responses_filter['survey__topic__isnull'] = True
+            elif topic_scope['kind'] == 'any':
+                user_surveys = user_surveys.filter(topic__isnull=False)
+                responses_filter['survey__topic__isnull'] = False
+            elif topic_scope['kind'] == 'subtree':
+                user_surveys = user_surveys.filter(topic__path__startswith=topic_scope['path'])
+                responses_filter['survey__topic__path__startswith'] = topic_scope['path']
+            elif topic_scope['kind'] == 'topic':
+                user_surveys = user_surveys.filter(topic_id=topic_scope['id'])
+                responses_filter['survey__topic_id'] = topic_scope['id']
+            else:  # 'empty' — an unresolvable topic id
+                user_surveys = user_surveys.none()
+                responses_filter['survey__topic_id'] = None
+                responses_filter['survey__topic__isnull'] = False
 
         # Get date ranges
         date_ranges = self._get_date_ranges()
@@ -936,8 +1044,11 @@ class SurveyViewSet(ModelViewSet):
             # Get filter information for response
             applied_filters = self._get_applied_filters_info()
             
-            # Calculate analytics with trends
-            analytics = self._calculate_analytics_with_trends(request.user)
+            # Calculate analytics with trends. When a topic filter is active the
+            # KPIs describe that topic only (topic page), not the whole corpus.
+            analytics = self._calculate_analytics_with_trends(
+                request.user, topic_scope=self._get_topic_scope()
+            )
             
             if page is not None:
                 serializer = self.get_serializer(page, many=True)
@@ -979,6 +1090,8 @@ class SurveyViewSet(ModelViewSet):
             'status': safe_get_query_params(self.request, 'status', ''),
             'shared_group': safe_get_query_params(self.request, 'shared_group', ''),
             'lifecycle_status': safe_get_query_params(self.request, 'lifecycle_status', ''),
+            'topic': safe_get_query_params(self.request, 'topic', ''),
+            'include_descendants': safe_get_query_params(self.request, 'include_descendants', ''),
         }
         return filters_info
     
@@ -3086,6 +3199,159 @@ class SurveyViewSet(ModelViewSet):
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+    @action(detail=True, methods=['get'], permission_classes=[IsCreatorOrReadOnly],
+            url_path='assigned-users')
+    def assigned_users(self, request, pk=None):
+        """
+        Users this survey is assigned to, with whether each of them already responded.
+
+        Powers the "المستخدمون المعينون" panel at the top of the survey preview.
+
+        GET /api/surveys/surveys/{id}/assigned-users/
+            ?search=&response_status=all|responded|pending&page=1&per_page=10
+
+        The filter param is called `response_status` (not `status`) on purpose:
+        `status` is a Survey filterset field, and DRF resolves the object through
+        filter_queryset(), so a `status=responded` query would be rejected as an
+        invalid Survey status before this action ever ran.
+
+        Notes:
+        - Assignment rules come from surveys.email_service.resolve_survey_assigned_users()
+          so this endpoint and the reminder emails can never disagree.
+        - `responded` is an Exists() subquery, so only a 1/0 lands in the SELECT list
+          (no encrypted/LOB column is touched) and there is no per-user query.
+        - AUTH surveys report mode='all_authenticated'; the list stays paginated
+          server-side so a large tenant transfers one page, not every user.
+        - Only authenticated respondents can be matched back to an identity;
+          anonymous/email-only responses are counted in the survey response count,
+          not here.
+        """
+        try:
+            from django.db.models import Exists, OuterRef, Subquery
+            from .email_service import resolve_survey_assigned_users
+            from .serializers import AssignedUserSerializer
+
+            survey = self.get_object()
+
+            # Audience membership is not public information: creator + staff only
+            user = request.user
+            is_staff_role = getattr(user, 'role', None) in ('super_admin', 'admin', 'manager')
+            if not is_staff_role and survey.creator_id != getattr(user, 'id', None):
+                return uniform_response(
+                    success=False,
+                    message="You are not allowed to view this survey's audience",
+                    status_code=status.HTTP_403_FORBIDDEN,
+                )
+
+            mode, assigned_qs = resolve_survey_assigned_users(survey)
+
+            groups = [
+                {'id': g.id, 'name': g.name, 'member_count': g.user_groups.count()}
+                for g in survey.shared_with_groups.all()
+            ]
+
+            if mode == 'public':
+                return uniform_response(
+                    success=True,
+                    message="Assigned users retrieved successfully",
+                    data={
+                        'visibility': survey.visibility,
+                        'mode': mode,
+                        'total_users': 0,
+                        'responded_count': 0,
+                        'pending_count': 0,
+                        'groups': [],
+                        'results': [],
+                        'count': 0,
+                        'total_pages': 0,
+                        'current_page': 1,
+                        'per_page': 0,
+                    },
+                )
+
+            responded_response = SurveyResponse.objects.filter(
+                survey=survey, respondent=OuterRef('pk')
+            )
+            assigned_qs = assigned_qs.annotate(
+                responded=Exists(responded_response),
+                responded_at=Subquery(
+                    responded_response.order_by('-submitted_at').values('submitted_at')[:1]
+                ),
+            )
+
+            total_users = assigned_qs.count()
+            responded_count = assigned_qs.filter(responded=True).count()
+
+            # Which named users came in through a group (for the `source` badge)
+            direct_ids = set(survey.shared_with.values_list('id', flat=True))
+
+            search = (safe_get_query_params(request, 'search', '') or '').strip()
+            if search:
+                assigned_qs = assigned_qs.filter(
+                    Q(email__icontains=search)
+                    | Q(first_name__icontains=search)
+                    | Q(last_name__icontains=search)
+                )
+
+            status_filter = safe_get_query_params(request, 'response_status', 'all') or 'all'
+            if status_filter == 'responded':
+                assigned_qs = assigned_qs.filter(responded=True)
+            elif status_filter == 'pending':
+                assigned_qs = assigned_qs.filter(responded=False)
+
+            assigned_qs = assigned_qs.order_by('first_name', 'last_name', 'email')
+
+            # Manual pagination (this action returns a richer envelope than the
+            # generic paginator, and the counters above must describe the whole
+            # audience rather than the current page)
+            try:
+                page_number = max(1, int(safe_get_query_params(request, 'page', 1) or 1))
+            except (TypeError, ValueError):
+                page_number = 1
+            try:
+                per_page = int(safe_get_query_params(request, 'per_page', 10) or 10)
+            except (TypeError, ValueError):
+                per_page = 10
+            per_page = max(1, min(per_page, 100))
+
+            filtered_count = assigned_qs.count()
+            total_pages = math.ceil(filtered_count / per_page) if per_page else 0
+            start = (page_number - 1) * per_page
+            page_users = list(assigned_qs[start:start + per_page])
+
+            for page_user in page_users:
+                if mode == 'all_authenticated':
+                    page_user.assignment_source = 'all_authenticated'
+                else:
+                    page_user.assignment_source = 'direct' if page_user.id in direct_ids else 'group'
+
+            serializer = AssignedUserSerializer(page_users, many=True, context={'request': request})
+
+            return uniform_response(
+                success=True,
+                message="Assigned users retrieved successfully",
+                data={
+                    'visibility': survey.visibility,
+                    'mode': mode,
+                    'total_users': total_users,
+                    'responded_count': responded_count,
+                    'pending_count': max(0, total_users - responded_count),
+                    'groups': groups,
+                    'results': serializer.data,
+                    'count': filtered_count,
+                    'total_pages': total_pages,
+                    'current_page': page_number,
+                    'per_page': per_page,
+                },
+            )
+        except Exception as e:
+            logger.error(f"Error retrieving assigned users for survey {pk}: {e}")
+            return uniform_response(
+                success=False,
+                message="Failed to retrieve assigned users",
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
     @action(detail=True, methods=['post'], permission_classes=[IsCreatorOrReadOnly], url_path='send-notifications')
     def send_notifications(self, request, pk=None):
         """
@@ -3885,7 +4151,10 @@ class MySharedSurveysView(generics.ListAPIView):
             'id', 'title_hash', 'creator', 'visibility', 
             'start_date', 'end_date', 'is_locked', 'is_active', 
             'public_contact_method', 'per_device_access', 'status',
-            'created_at', 'updated_at'
+            'created_at', 'updated_at',
+            # 'topic' MUST stay in this list: without it .only() defers the FK and
+            # serializing topic_name costs one extra query per survey (N+1).
+            'topic'
         ]
     
     def get_queryset(self):
@@ -3936,7 +4205,7 @@ class MySharedSurveysView(generics.ListAPIView):
                 deleted_at__isnull=True,
                 is_active=True,  # Only show active surveys
                 status='submitted'  # Only show submitted surveys, exclude drafts
-            ).distinct().select_related('creator').only(*self.get_oracle_safe_fields())
+            ).distinct().select_related('creator', 'topic').only(*self.get_oracle_safe_fields())
             
             # Try to add prefetch_related safely
             try:
@@ -3964,7 +4233,7 @@ class MySharedSurveysView(generics.ListAPIView):
                     Q(visibility='PUBLIC') | Q(visibility='AUTH'),
                     deleted_at__isnull=True,
                     is_active=True
-                ).distinct().select_related('creator').only(*self.get_oracle_safe_fields())
+                ).distinct().select_related('creator', 'topic').only(*self.get_oracle_safe_fields())
             except Exception as fallback_error:
                 logger.error(f"Even fallback query failed for {user.email}: {fallback_error}")
                 # Return empty queryset to prevent 500 errors

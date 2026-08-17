@@ -1,3 +1,26 @@
+# Environment / secrets
 .env
+
+# CI config
 .github
-__pycache__
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Django database - local runtime data, never commit
+db.sqlite3
+db.sqlite3-journal
+*.sqlite3
+*.sqlite3-journal
+*.sqlite3-wal
+*.sqlite3-shm
+
+# Logs - runtime output, never commit.
+# The logs/ directory is recreated automatically on startup by
+# adjd_survey/settings.py (os.makedirs(BASE_DIR / 'logs', exist_ok=True)),
+# so ignoring the whole directory is safe.
+logs/
+*.log

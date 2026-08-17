@@ -6,7 +6,7 @@ responses, and answers with proper encryption handling.
 """
 
 from django.contrib import admin
-from .models import Survey, Question, Response, Answer, PublicAccessToken
+from .models import Survey, SurveyTopic, Question, Response, Answer, PublicAccessToken
 
 
 class OrphanedSurveyFilter(admin.SimpleListFilter):
@@ -35,14 +35,16 @@ class SurveyAdmin(admin.ModelAdmin):
         'title', 'creator_display', 'visibility', 'is_active', 
         'is_locked', 'response_count', 'created_at'
     ]
-    list_filter = ['visibility', 'is_active', 'is_locked', 'created_at', OrphanedSurveyFilter]
+    list_filter = ['visibility', 'is_active', 'is_locked', 'topic', 'created_at', OrphanedSurveyFilter]
     search_fields = ['title', 'description', 'creator__email']
     readonly_fields = ['id', 'title_hash', 'created_at', 'updated_at']
     filter_horizontal = ['shared_with']
+    raw_id_fields = ['topic']
+    list_select_related = ['creator', 'topic']
     
     fieldsets = (
         ('Basic Information', {
-            'fields': ('id', 'title', 'description', 'creator')
+            'fields': ('id', 'title', 'description', 'creator', 'topic')
         }),
         ('Visibility & Sharing', {
             'fields': ('visibility', 'shared_with')
@@ -68,6 +70,43 @@ class SurveyAdmin(admin.ModelAdmin):
         """Get response count for survey"""
         return obj.responses.count()
     response_count.short_description = 'Responses'
+
+
+@admin.register(SurveyTopic)
+class SurveyTopicAdmin(admin.ModelAdmin):
+    """Admin interface for survey topics (grouping folders)"""
+
+    list_display = [
+        'name', 'parent', 'depth', 'survey_count', 'is_pinned',
+        'is_archived', 'created_by', 'created_at'
+    ]
+    list_filter = ['is_archived', 'is_pinned', 'depth', 'created_at']
+    search_fields = ['name', 'description', 'created_by__email']
+    readonly_fields = ['id', 'name_key', 'depth', 'path', 'created_at', 'updated_at']
+    raw_id_fields = ['parent', 'created_by']
+    list_select_related = ['parent', 'created_by']
+    ordering = ['-is_pinned', 'display_order', 'name']
+
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('id', 'name', 'description', 'parent')
+        }),
+        ('Presentation', {
+            'fields': ('color', 'icon', 'is_pinned', 'display_order')
+        }),
+        ('Lifecycle', {
+            'fields': ('is_archived', 'created_by', 'deleted_at')
+        }),
+        ('Derived / Metadata', {
+            'fields': ('name_key', 'depth', 'path', 'created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+    def survey_count(self, obj):
+        """Number of live surveys filed directly under this topic"""
+        return obj.surveys.filter(deleted_at__isnull=True).count()
+    survey_count.short_description = 'Surveys'
 
 
 @admin.register(Question)

@@ -48,6 +48,42 @@ class SurveyPagination(PageNumberPagination):
         })
 
 
+class TopicPagination(PageNumberPagination):
+    """
+    Pagination for the survey topics browser.
+
+    page_size 24 divides evenly into the 2/3/4-column card grid used by the UI.
+    """
+    page_size = 24
+    page_size_query_param = 'per_page'
+    max_page_size = 100
+
+    def get_paginated_response(self, data):
+        return Response({
+            'status': 'success',
+            'message': '',
+            'data': {
+                'count': self.page.paginator.count,
+                'total_pages': self.page.paginator.num_pages,
+                'current_page': self.page.number,
+                'per_page': self.get_page_size(self.request),
+                'next': self.get_next_link(),
+                'previous': self.get_previous_link(),
+                'results': data,
+                'available_filters': {
+                    'sort_options': [
+                        {'value': 'name_asc', 'label': 'الاسم أ-ي', 'label_en': 'Name A-Z'},
+                        {'value': 'name_desc', 'label': 'الاسم ي-أ', 'label_en': 'Name Z-A'},
+                        {'value': 'newest', 'label': 'الأحدث', 'label_en': 'Newest'},
+                        {'value': 'oldest', 'label': 'الأقدم', 'label_en': 'Oldest'},
+                        {'value': 'most_surveys', 'label': 'الأكثر إيضاحات', 'label_en': 'Most Surveys'},
+                        {'value': 'most_responses', 'label': 'الأكثر رداً', 'label_en': 'Most Responses'},
+                    ]
+                }
+            }
+        })
+
+
 class ResponsePagination(PageNumberPagination):
     """
     Custom pagination for survey responses with configurable page size.

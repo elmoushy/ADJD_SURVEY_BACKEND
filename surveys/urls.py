@@ -8,6 +8,7 @@ as the authentication system.
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
+from .views_topics import SurveyTopicViewSet
 from .views_followup import FollowUpViewSet
 from .views_access_picker import AccessPickerSearchView
 from .views_attachments import (
@@ -29,6 +30,7 @@ app_name = 'surveys'
 # Router for ViewSets
 router = DefaultRouter()
 router.register('surveys', views.SurveyViewSet, basename='survey')
+router.register('topics', SurveyTopicViewSet, basename='topic')
 router.register('follow-ups', FollowUpViewSet, basename='follow-ups')
 
 urlpatterns = [

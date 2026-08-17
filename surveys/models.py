@@ -125,6 +125,307 @@ class EncryptedCharField(models.CharField):
             return value
 
 
+class SurveyTopic(models.Model):
+    """
+    Organizational folder ("موضوع" / Topic) that groups related surveys.
+
+    A survey belongs to at most one topic (Survey.topic). Topics nest exactly two
+    levels: a main topic (depth 0) and its sub-topics (depth 1). MAX_DEPTH is the
+    single source of truth for that rule — it is enforced in the serializer and
+    published to the frontend through /api/surveys/topics/palette/.
+
+    Oracle compatibility notes:
+    - db_table 'surveys_topic' is 13 chars (Oracle 11g/12.1 limit is 30)
+    - every index name is <= 30 chars
+    - there is deliberately NO TextField on this model: `description` is a
+      CharField(500) so the table carries no NCLOB column. That is what keeps
+      DISTINCT / GROUP BY / ORDER BY over topic columns legal on Oracle
+      (ORA-00932 / ORA-00979 are raised for LOB columns) and makes
+      select_related('topic') safe inside the survey queryset that already
+      calls .distinct().
+    - no conditional/partial indexes (unsupported on Oracle)
+    - uniqueness is global on `name_key` rather than (parent, name_key): Oracle
+      treats NULL as distinct inside unique constraints, so root topics
+      (parent IS NULL) would escape a composite constraint entirely.
+    """
+
+    # Main topic (depth 0) + sub-topics (depth 1). Deeper nesting is rejected.
+    MAX_DEPTH = 2
+
+    # Accent colours are validated server-side against the brand palette so a
+    # client can never inject arbitrary CSS into a card.
+    ALLOWED_COLORS = [
+        '#A17D23',  # gold-700
+        '#B78A41',  # gold-600
+        '#CEA55B',  # gold-500
+        '#D3B079',  # gold-400
+        '#C2BA98',  # beige-700
+        '#4D4D4F',  # gray-700
+        '#808285',  # gray-500
+        '#00A350',  # success green
+        '#0F766E',  # teal
+        '#1D4ED8',  # blue
+        '#7C3AED',  # violet
+        '#DC3545',  # danger red
+    ]
+
+    # FontAwesome icon names (rendered as `fas fa-<icon>` by the frontend)
+    ALLOWED_ICONS = [
+        'folder', 'folder-open', 'layer-group', 'sitemap', 'tags', 'bookmark',
+        'briefcase', 'building', 'users', 'user-tie', 'chart-pie', 'chart-line',
+        'clipboard-list', 'poll-h', 'star', 'heart', 'shield-alt', 'gavel',
+        'graduation-cap', 'hospital', 'car', 'globe', 'lightbulb', 'cogs',
+    ]
+
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+
+    name = models.CharField(
+        max_length=255,
+        help_text='Topic display name (plaintext organizational label)'
+    )
+    name_key = models.CharField(
+        max_length=255,
+        unique=True,
+        help_text='Normalized (trimmed + casefolded) name used for case-insensitive uniqueness'
+    )
+    description = models.CharField(
+        max_length=500,
+        blank=True,
+        default='',
+        help_text='Short description. CharField (not TextField) to keep this table LOB-free for Oracle'
+    )
+
+    # Presentation
+    color = models.CharField(
+        max_length=7,
+        blank=True,
+        default='',
+        help_text='Accent colour from the brand palette, e.g. #A17D23'
+    )
+    icon = models.CharField(
+        max_length=40,
+        blank=True,
+        default='',
+        help_text='FontAwesome icon name from ALLOWED_ICONS'
+    )
+
+    # Hierarchy
+    parent = models.ForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='children',
+        db_column='parent_id',
+        help_text='Parent topic; NULL for root topics'
+    )
+    depth = models.PositiveSmallIntegerField(
+        default=0,
+        help_text='0 for main topics, 1 for sub-topics (see MAX_DEPTH)'
+    )
+    path = models.CharField(
+        max_length=200,
+        blank=True,
+        default='',
+        help_text=(
+            "Materialized path of hex UUIDs, e.g. 'aaaa.bbbb'. Enables subtree "
+            "queries via path__startswith (an indexable LIKE 'prefix%' on Oracle)"
+        )
+    )
+
+    # Ordering / pinning
+    is_pinned = models.BooleanField(
+        default=False,
+        null=False,
+        blank=True,
+        help_text='Pinned topics are listed first'
+    )
+    display_order = models.IntegerField(
+        default=0,
+        help_text='Manual ordering inside the same pin bucket'
+    )
+
+    # Lifecycle
+    is_archived = models.BooleanField(
+        default=False,
+        null=False,
+        blank=True,
+        help_text='Archived topics keep their surveys but cannot receive new ones'
+    )
+    created_by = models.ForeignKey(
+        User,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='created_survey_topics',
+        help_text='User who created this topic'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = 'surveys_topic'
+        verbose_name = 'Survey Topic'
+        verbose_name_plural = 'Survey Topics'
+        ordering = ['-is_pinned', 'display_order', 'name']
+        indexes = [
+            models.Index(fields=['parent'], name='topic_parent_idx'),
+            models.Index(fields=['path'], name='topic_path_idx'),
+            models.Index(fields=['deleted_at'], name='topic_deleted_idx'),
+            models.Index(fields=['is_pinned', 'display_order'], name='topic_pin_order_idx'),
+        ]
+
+    def __str__(self):
+        return f"Topic: {self.name}"
+
+    # ── Naming helpers ────────────────────────────────────────────────────────
+    @staticmethod
+    def normalize_name(value):
+        """Trim a topic name (display form)."""
+        return (value or '').strip()
+
+    @staticmethod
+    def build_name_key(value):
+        """Build the case-insensitive uniqueness key for a topic name."""
+        return SurveyTopic.normalize_name(value).casefold()
+
+    # ── Hierarchy helpers ─────────────────────────────────────────────────────
+    def build_path(self):
+        """Materialized path for this topic based on its parent."""
+        own = self.id.hex if hasattr(self.id, 'hex') else str(self.id).replace('-', '')
+        if self.parent_id and self.parent and self.parent.path:
+            return f"{self.parent.path}.{own}"
+        return own
+
+    def ancestors(self):
+        """
+        Ancestor topics ordered root -> parent, resolved from `path` with a single
+        indexed query (no recursion, no N+1).
+        """
+        if not self.path or '.' not in self.path:
+            return []
+        ancestor_hexes = self.path.split('.')[:-1]
+        if not ancestor_hexes:
+            return []
+        ancestors = {
+            t.id.hex if hasattr(t.id, 'hex') else str(t.id).replace('-', ''): t
+            for t in SurveyTopic.objects.filter(
+                path__in=[
+                    '.'.join(ancestor_hexes[:i + 1]) for i in range(len(ancestor_hexes))
+                ]
+            ).only('id', 'name', 'path', 'depth', 'color', 'icon')
+        }
+        ordered = []
+        for hex_id in ancestor_hexes:
+            topic = ancestors.get(hex_id)
+            if topic is not None:
+                ordered.append(topic)
+        return ordered
+
+    def breadcrumb(self):
+        """Ancestors + self as a lightweight list of dicts (for the UI breadcrumb)."""
+        return [{'id': str(t.id), 'name': t.name} for t in self.ancestors()] + [
+            {'id': str(self.id), 'name': self.name}
+        ]
+
+    def subtree_queryset(self, include_self=True):
+        """Every live descendant of this topic (and optionally itself)."""
+        qs = SurveyTopic.objects.filter(
+            path__startswith=self.path,
+            deleted_at__isnull=True
+        )
+        if not include_self:
+            qs = qs.exclude(pk=self.pk)
+        return qs
+
+    def is_ancestor_of(self, other):
+        """True when `other` lives inside this topic's subtree."""
+        if not other or not self.path or not other.path:
+            return False
+        return other.path.startswith(f"{self.path}.")
+
+    def _resync_descendants(self, old_path, old_depth):
+        """
+        Rewrite path/depth for every descendant after this topic moved.
+
+        Runs as a bounded number of UPDATEs (one per descendant) inside the
+        caller's transaction; a subtree is one level deep by construction
+        (MAX_DEPTH = 2), so this stays cheap. It also keeps any legacy row that
+        was created before the cap consistent.
+        """
+        if not old_path or old_path == self.path:
+            return
+        descendants = SurveyTopic.objects.filter(
+            path__startswith=f"{old_path}."
+        ).only('id', 'path', 'depth')
+        depth_delta = self.depth - old_depth
+        for descendant in descendants:
+            new_path = self.path + descendant.path[len(old_path):]
+            SurveyTopic.objects.filter(pk=descendant.pk).update(
+                path=new_path,
+                depth=max(0, descendant.depth + depth_delta),
+                updated_at=timezone.now(),
+            )
+
+    # ── Lifecycle ─────────────────────────────────────────────────────────────
+    def soft_delete(self):
+        """
+        Soft delete the topic.
+
+        Surveys are NEVER deleted with a topic: they are detached (topic_id = NULL)
+        and become "ungrouped". Child topics are re-parented to this topic's parent
+        so no subtree is orphaned.
+        """
+        from django.db import transaction
+
+        with transaction.atomic():
+            now = timezone.now()
+
+            # Detach surveys in one UPDATE. Deliberately not survey.save():
+            # save() re-encrypts title/description and recomputes title_hash.
+            self.surveys.update(topic=None, updated_at=now)
+
+            # Re-parent direct children, then fix their subtrees.
+            for child in list(self.children.all()):
+                child.parent = self.parent
+                child.save()
+
+            self.deleted_at = now
+            self.save(update_fields=['deleted_at', 'updated_at'])
+
+    def save(self, *args, **kwargs):
+        """Keep name_key, depth and path consistent, and resync descendants on a move."""
+        self.name = self.normalize_name(self.name)
+        self.name_key = self.build_name_key(self.name)
+
+        old_path, old_depth = None, None
+        if self.pk:
+            previous = SurveyTopic.objects.filter(pk=self.pk).only('path', 'depth').first()
+            if previous:
+                old_path, old_depth = previous.path, previous.depth
+
+        # depth/path always derive from the parent
+        self.depth = (self.parent.depth + 1) if self.parent_id and self.parent else 0
+        self.path = self.build_path()
+
+        update_fields = kwargs.get('update_fields')
+        if update_fields is not None:
+            # Make sure the derived columns are persisted alongside partial saves
+            kwargs['update_fields'] = list(
+                dict.fromkeys(list(update_fields) + ['name', 'name_key', 'depth', 'path', 'updated_at'])
+            )
+
+        super().save(*args, **kwargs)
+
+        if old_path and old_path != self.path:
+            self._resync_descendants(old_path, old_depth if old_depth is not None else 0)
+
+
 class Survey(models.Model):
     """
     Main survey model with four visibility levels:
@@ -188,7 +489,19 @@ class Survey(models.Model):
         related_name="shared_surveys_groups",
         help_text='Groups who can access this survey'
     )
-    
+
+    # Topic grouping ("موضوع"): optional folder used to group related surveys.
+    # SET_NULL is deliberate — deleting/archiving a topic must never delete surveys.
+    topic = models.ForeignKey(
+        'surveys.SurveyTopic',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='surveys',
+        db_column='topic_id',
+        help_text='Optional topic (folder) this survey belongs to'
+    )
+
     # Survey scheduling
     start_date = models.DateTimeField(
         null=True,

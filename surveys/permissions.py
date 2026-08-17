@@ -158,3 +158,38 @@ class IsCreatorOrStaff(BasePermission):
                 return request.user == obj.survey.creator
         
         return False
+
+
+class CanManageTopics(BasePermission):
+    """
+    Permission for survey topics ("مواضيع"):
+    - Read (safe methods): any authenticated user. Topic payloads are aggregates
+      and labels only; the surveys inside a topic are still filtered by the
+      survey queryset's own visibility rules.
+    - Write: admin / super_admin only, matching the gate already used by
+      surveys.views.bulk_operations.
+    """
+
+    def has_permission(self, request, view):
+        if not request.user or not request.user.is_authenticated:
+            return False
+        if request.method in SAFE_METHODS:
+            return True
+        return getattr(request.user, 'role', None) in ('admin', 'super_admin')
+
+    def has_object_permission(self, request, view, obj):
+        return self.has_permission(request, view)
+
+
+class IsSuperAdmin(BasePermission):
+    """Only super admins (used for destructive topic operations)."""
+
+    def has_permission(self, request, view):
+        return bool(
+            request.user
+            and request.user.is_authenticated
+            and getattr(request.user, 'role', None) == 'super_admin'
+        )
+
+    def has_object_permission(self, request, view, obj):
+        return self.has_permission(request, view)

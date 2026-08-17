@@ -7,10 +7,11 @@ with comprehensive validation and encryption support.
 
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Survey, Question, Response, Answer, SurveyTemplate, TemplateQuestion, SurveyAttachment, ResponseAttachment, FollowUpMessageAttachment
+from .models import Survey, SurveyTopic, Question, Response, Answer, SurveyTemplate, TemplateQuestion, SurveyAttachment, ResponseAttachment, FollowUpMessageAttachment
 from .timezone_utils import (
     serialize_datetime_uae, get_status_uae, is_currently_active_uae,
-    ensure_gregorian_from_hijri, convert_hijri_string_to_gregorian
+    ensure_gregorian_from_hijri, convert_hijri_string_to_gregorian,
+    format_uae_date_only
 )
 from adjd_survey.security_utils import validate_and_sanitize_text_input, sanitize_html_input
 import json
@@ -643,12 +644,205 @@ class ResponseSerializer(serializers.ModelSerializer):
             return 0
 
 
+class SurveyTopicSerializer(serializers.ModelSerializer):
+    """
+    Survey topic ("موضوع") serializer used by the topics browser and topic pages.
+
+    Counters are plain read-only IntegerFields fed by the annotations applied in
+    views_topics.annotate_topic_counters(). They are deliberately NOT
+    SerializerMethodFields doing per-row .count() calls — that would be an N+1 on
+    every card in the grid.
+    """
+
+    parent_name = serializers.SerializerMethodField()
+    breadcrumb = serializers.SerializerMethodField()
+    created_by_email = serializers.SerializerMethodField()
+    created_by_name = serializers.SerializerMethodField()
+
+    # Annotated counters (see views_topics.annotate_topic_counters)
+    survey_count = serializers.IntegerField(read_only=True, default=0)
+    active_survey_count = serializers.IntegerField(read_only=True, default=0)
+    response_count = serializers.IntegerField(read_only=True, default=0)
+    total_survey_count = serializers.IntegerField(read_only=True, default=0)
+    total_response_count = serializers.IntegerField(read_only=True, default=0)
+    children_count = serializers.IntegerField(read_only=True, default=0)
+
+    created_at = UAEDateTimeField(read_only=True)
+    updated_at = UAEDateTimeField(read_only=True)
+
+    class Meta:
+        model = SurveyTopic
+        fields = [
+            'id', 'name', 'description', 'color', 'icon',
+            'parent', 'parent_name', 'breadcrumb', 'depth', 'path',
+            'is_pinned', 'display_order', 'is_archived',
+            'created_by_email', 'created_by_name', 'created_at', 'updated_at',
+            'children_count', 'survey_count', 'active_survey_count',
+            'response_count', 'total_survey_count', 'total_response_count',
+        ]
+        read_only_fields = [
+            'id', 'depth', 'path', 'created_at', 'updated_at',
+            'created_by_email', 'created_by_name', 'breadcrumb', 'parent_name',
+        ]
+
+    # ── Read helpers ─────────────────────────────────────────────────────────
+    def get_parent_name(self, obj):
+        return obj.parent.name if obj.parent_id and obj.parent else None
+
+    def get_breadcrumb(self, obj):
+        """Ancestors + self. Skipped for list payloads unless explicitly requested."""
+        if self.context.get('include_breadcrumb', True):
+            return obj.breadcrumb()
+        return [{'id': str(obj.id), 'name': obj.name}]
+
+    def get_created_by_email(self, obj):
+        return obj.created_by.email if obj.created_by_id and obj.created_by else None
+
+    def get_created_by_name(self, obj):
+        if not obj.created_by_id or not obj.created_by:
+            return None
+        creator = obj.created_by
+        return f"{creator.first_name or ''} {creator.last_name or ''}".strip() or creator.email
+
+    # ── Validation ───────────────────────────────────────────────────────────
+    def validate_name(self, value):
+        """Sanitize and enforce case-insensitive uniqueness on the normalized name."""
+        cleaned = validate_and_sanitize_text_input(value, max_length=255, field_name="Topic name")
+        cleaned = SurveyTopic.normalize_name(cleaned)
+        if not cleaned:
+            raise serializers.ValidationError("Topic name is required.")
+
+        name_key = SurveyTopic.build_name_key(cleaned)
+        clash = SurveyTopic.objects.filter(name_key=name_key, deleted_at__isnull=True)
+        if self.instance is not None:
+            clash = clash.exclude(pk=self.instance.pk)
+        if clash.exists():
+            raise serializers.ValidationError("A topic with this name already exists.")
+        return cleaned
+
+    def validate_description(self, value):
+        if not value:
+            return ''
+        return validate_and_sanitize_text_input(value, max_length=500, field_name="Topic description")
+
+    def validate_color(self, value):
+        if not value:
+            return ''
+        if value not in SurveyTopic.ALLOWED_COLORS:
+            raise serializers.ValidationError("Unsupported colour. Pick one from the brand palette.")
+        return value
+
+    def validate_icon(self, value):
+        if not value:
+            return ''
+        if value not in SurveyTopic.ALLOWED_ICONS:
+            raise serializers.ValidationError("Unsupported icon.")
+        return value
+
+    def validate_parent(self, value):
+        """Parent must be live, and must not create a cycle or exceed MAX_DEPTH."""
+        if value is None:
+            return None
+
+        if value.deleted_at is not None:
+            raise serializers.ValidationError("Parent topic no longer exists.")
+
+        if self.instance is not None:
+            if value.pk == self.instance.pk:
+                raise serializers.ValidationError("A topic cannot be its own parent.")
+            if self.instance.is_ancestor_of(value):
+                raise serializers.ValidationError(
+                    "Cannot move a topic inside one of its own sub-topics."
+                )
+
+        if value.depth + 1 >= SurveyTopic.MAX_DEPTH:
+            raise serializers.ValidationError(
+                "Only two levels are allowed: a main topic and its sub-topics. "
+                "This topic is already a sub-topic."
+            )
+
+        # Moving a subtree must keep every descendant within MAX_DEPTH
+        if self.instance is not None and self.instance.path:
+            deepest = self.instance.subtree_queryset().order_by('-depth').values_list('depth', flat=True).first()
+            if deepest is not None:
+                subtree_height = deepest - self.instance.depth
+                if value.depth + 1 + subtree_height >= SurveyTopic.MAX_DEPTH:
+                    raise serializers.ValidationError(
+                        "This topic has sub-topics of its own, so it cannot become a "
+                        "sub-topic itself."
+                    )
+        return value
+
+
+class SurveyTopicTreeSerializer(serializers.ModelSerializer):
+    """
+    Minimal topic payload for the tree / map views.
+
+    Kept intentionally small so a few hundred nodes stay a few tens of KB; the
+    frontend rebuilds the hierarchy from `parent`/`depth`/`path`.
+    """
+
+    survey_count = serializers.IntegerField(read_only=True, default=0)
+    total_survey_count = serializers.IntegerField(read_only=True, default=0)
+    children_count = serializers.IntegerField(read_only=True, default=0)
+
+    class Meta:
+        model = SurveyTopic
+        fields = [
+            'id', 'name', 'parent', 'depth', 'path', 'color', 'icon',
+            'is_archived', 'survey_count', 'total_survey_count', 'children_count',
+        ]
+        read_only_fields = fields
+
+
+class TopicSurveyNodeSerializer(serializers.ModelSerializer):
+    """Light survey node used by the relationship map (no questions, no attachments)."""
+
+    response_count = serializers.IntegerField(read_only=True, default=0)
+    status_display = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Survey
+        fields = [
+            'id', 'title', 'status', 'status_display', 'is_active', 'visibility',
+            'topic', 'response_count',
+        ]
+        read_only_fields = fields
+
+    def get_status_display(self, obj):
+        return get_status_uae(obj)
+
+
+class AssignedUserSerializer(serializers.Serializer):
+    """A user the survey is assigned to, plus whether they already responded."""
+
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.SerializerMethodField()
+    email = serializers.EmailField(read_only=True)
+    responded = serializers.BooleanField(read_only=True)
+    responded_at = serializers.SerializerMethodField()
+    source = serializers.SerializerMethodField()
+
+    def get_name(self, obj):
+        name = f"{obj.first_name or ''} {obj.last_name or ''}".strip()
+        return name or obj.email
+
+    def get_responded_at(self, obj):
+        """Response date in UAE time, date only — the preview shows *when*, not the clock."""
+        submitted_at = getattr(obj, 'responded_at', None)
+        return format_uae_date_only(submitted_at) if submitted_at else None
+
+    def get_source(self, obj):
+        """direct = named in shared_with, group = via a shared group, all_authenticated = AUTH survey."""
+        return getattr(obj, 'assignment_source', 'direct')
+
+
 class SurveySerializer(serializers.ModelSerializer):
     """
     Main survey serializer with role-based field filtering and UAE timezone handling.
     Follows the same patterns as authentication serializers.
     """
-    
+
     questions = QuestionSerializer(many=True, required=False)
     creator_email = serializers.SerializerMethodField()
     creator_name = serializers.SerializerMethodField()
@@ -659,6 +853,13 @@ class SurveySerializer(serializers.ModelSerializer):
     can_be_edited = serializers.SerializerMethodField()
     attachments = serializers.SerializerMethodField()
     attachment_count = serializers.SerializerMethodField()
+
+    # Topic grouping (read-only mirrors so a card can render without extra requests;
+    # populated from the select_related('topic') instance -> zero extra queries)
+    topic_name = serializers.SerializerMethodField()
+    topic_color = serializers.SerializerMethodField()
+    topic_icon = serializers.SerializerMethodField()
+    topic_breadcrumb = serializers.SerializerMethodField()
 
     # Use custom UAE timezone fields for date/time serialization
     start_date = UAEDateTimeField(required=False, allow_null=True)
@@ -674,9 +875,45 @@ class SurveySerializer(serializers.ModelSerializer):
             'start_date', 'end_date', 'status', 'status_display', 'is_currently_active',
             'can_be_edited', 'public_contact_method', 'per_device_access', 'allow_attachments',
             'questions', 'response_count', 'attachments', 'attachment_count',
-            'shared_with_emails', 'shared_with_groups', 'created_at', 'updated_at'
+            'shared_with_emails', 'shared_with_groups', 'created_at', 'updated_at',
+            'topic', 'topic_name', 'topic_color', 'topic_icon', 'topic_breadcrumb'
         ]
-        read_only_fields = ['id', 'creator', 'created_at', 'updated_at', 'status_display', 'is_currently_active', 'can_be_edited', 'attachments', 'attachment_count']
+        read_only_fields = ['id', 'creator', 'created_at', 'updated_at', 'status_display', 'is_currently_active', 'can_be_edited', 'attachments', 'attachment_count', 'topic_name', 'topic_color', 'topic_icon', 'topic_breadcrumb']
+
+    def get_topic_name(self, obj):
+        """Topic display name (None when the survey is ungrouped)."""
+        return obj.topic.name if obj.topic_id and obj.topic else None
+
+    def get_topic_color(self, obj):
+        return (obj.topic.color or None) if obj.topic_id and obj.topic else None
+
+    def get_topic_icon(self, obj):
+        return (obj.topic.icon or None) if obj.topic_id and obj.topic else None
+
+    def get_topic_breadcrumb(self, obj):
+        """
+        Ancestors + topic, so a card can show 'تجربة العميل / ٢٠٢٦'.
+
+        Only resolved on detail requests (context flag) because ancestors() costs one
+        extra query per distinct topic; list payloads get the topic itself.
+        """
+        if not obj.topic_id or not obj.topic:
+            return []
+        if self.context.get('include_topic_breadcrumb', False):
+            return obj.topic.breadcrumb()
+        return [{'id': str(obj.topic.id), 'name': obj.topic.name}]
+
+    def validate_topic(self, value):
+        """A survey can only be filed under a live, non-archived topic."""
+        if value is None:
+            return None
+        if value.deleted_at is not None:
+            raise serializers.ValidationError("This topic no longer exists.")
+        if value.is_archived:
+            raise serializers.ValidationError(
+                "This topic is archived and cannot receive new surveys."
+            )
+        return value
 
     def get_attachments(self, obj):
         """
@@ -762,7 +999,9 @@ class SurveySerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         
         if not request or not request.user:
-            # Anonymous users - minimal data for public surveys only
+            # Anonymous users - minimal data for public surveys only.
+            # Topic is an internal organizational label, so it is deliberately
+            # NOT exposed to anonymous respondents.
             if instance.visibility == 'PUBLIC':
                 return {
                     'id': data['id'],
@@ -801,6 +1040,10 @@ class SurveySerializer(serializers.ModelSerializer):
                     'response_count': data['response_count'],
                     'attachments': data.get('attachments', []),
                     'attachment_count': data.get('attachment_count', 0),
+                    'topic': data.get('topic'),
+                    'topic_name': data.get('topic_name'),
+                    'topic_color': data.get('topic_color'),
+                    'topic_icon': data.get('topic_icon'),
                     'creator_email': data['creator_email'],
                     'created_at': data['created_at']
                 }
@@ -819,6 +1062,10 @@ class SurveySerializer(serializers.ModelSerializer):
                         'response_count': data['response_count'],
                         'attachments': data.get('attachments', []),
                         'attachment_count': data.get('attachment_count', 0),
+                        'topic': data.get('topic'),
+                        'topic_name': data.get('topic_name'),
+                        'topic_color': data.get('topic_color'),
+                        'topic_icon': data.get('topic_icon'),
                         'creator_email': data['creator_email'],
                         'created_at': data['created_at']
                     }
@@ -846,6 +1093,10 @@ class SurveySerializer(serializers.ModelSerializer):
                 'response_count': data['response_count'],
                 'attachments': data.get('attachments', []),
                 'attachment_count': data.get('attachment_count', 0),
+                'topic': data.get('topic'),
+                'topic_name': data.get('topic_name'),
+                'topic_color': data.get('topic_color'),
+                'topic_icon': data.get('topic_icon'),
                 'creator_email': data['creator_email'],
                 'created_at': data['created_at']
             }
@@ -859,7 +1110,17 @@ class SurveySerializer(serializers.ModelSerializer):
             data['per_device_access'] = False
         elif data.get('per_device_access') is None:
             data['per_device_access'] = False
-        
+
+        # An empty topic from the UI ("no topic" / cleared chip) means NULL, not a
+        # validation error. Handles '', 'null' and 'undefined' from query/form data.
+        if 'topic' in data and data.get('topic') in ('', 'null', 'undefined'):
+            try:
+                data['topic'] = None
+            except TypeError:
+                # QueryDict is immutable — copy before mutating
+                data = data.copy()
+                data['topic'] = None
+
         # Preserve and convert options_satisfaction_values + temp IDs in nested questions data
         # Convert from JSON string to list if needed
         if 'questions' in data and isinstance(data['questions'], list):

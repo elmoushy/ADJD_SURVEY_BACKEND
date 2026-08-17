@@ -197,15 +197,53 @@ def notify_survey_shared(survey, sender_user, user_ids=None, group_ids=None):
 # Reminder notifications (sent to assigned users who have NOT responded)
 # ---------------------------------------------------------------------------
 
-def get_survey_non_responder_emails(survey, exclude_user=None):
+def resolve_survey_assigned_users(survey):
     """
-    Resolve the set of *assigned* users who have NOT yet responded to a survey.
+    Resolve the set of users a survey is *assigned* to.
+
+    Single source of truth for "who is supposed to answer this survey", shared by
+    the reminder emails below and by the assigned-users panel in the survey
+    preview (SurveyViewSet.assigned_users).
 
     Assignment rules per visibility:
       - AUTH   : every active authenticated user is considered assigned.
       - PRIVATE: users in shared_with  ∪  members of shared_with_groups.
       - GROUPS : members of shared_with_groups.
       - PUBLIC : not applicable (anonymous respondents) → empty set.
+
+    Returns:
+        tuple[str, QuerySet]: (mode, users) where mode is one of
+        'public' | 'all_authenticated' | 'explicit'. For 'public' the queryset is
+        empty.
+    """
+    visibility = getattr(survey, 'visibility', None)
+
+    if visibility == 'PUBLIC':
+        return 'public', User.objects.none()
+
+    if visibility == 'AUTH':
+        return 'all_authenticated', User.objects.filter(is_active=True)
+
+    if visibility in ('PRIVATE', 'GROUPS'):
+        assigned_user_ids = set(survey.shared_with.values_list('id', flat=True))
+        group_member_ids = set(
+            User.objects.filter(
+                user_groups__group__in=survey.shared_with_groups.all(),
+                is_active=True,
+            ).values_list('id', flat=True)
+        )
+        all_ids = assigned_user_ids | group_member_ids
+        return 'explicit', User.objects.filter(id__in=all_ids, is_active=True)
+
+    return 'explicit', User.objects.none()
+
+
+def get_survey_non_responder_emails(survey, exclude_user=None):
+    """
+    Resolve the set of *assigned* users who have NOT yet responded to a survey.
+
+    Assignment is delegated to resolve_survey_assigned_users() so this function and
+    the preview panel can never disagree about who an audience is.
 
     A user is a "non-responder" if they have no Response row (respondent FK)
     for this survey. Anonymous/email-only responses are not mapped back to
@@ -221,23 +259,8 @@ def get_survey_non_responder_emails(survey, exclude_user=None):
     """
     from .models import Response  # local import to avoid circular imports
 
-    visibility = getattr(survey, 'visibility', None)
-    if visibility == 'PUBLIC':
-        return []
-
-    if visibility == 'AUTH':
-        assigned_qs = User.objects.filter(is_active=True)
-    elif visibility in ('PRIVATE', 'GROUPS'):
-        assigned_user_ids = set(survey.shared_with.values_list('id', flat=True))
-        group_member_ids = set(
-            User.objects.filter(
-                user_groups__group__in=survey.shared_with_groups.all(),
-                is_active=True,
-            ).values_list('id', flat=True)
-        )
-        all_ids = assigned_user_ids | group_member_ids
-        assigned_qs = User.objects.filter(id__in=all_ids, is_active=True)
-    else:
+    mode, assigned_qs = resolve_survey_assigned_users(survey)
+    if mode == 'public':
         return []
 
     # Users who already submitted an (authenticated) response
