@@ -7,9 +7,10 @@ Uses threading for non-blocking execution so the API endpoint responds quickly.
 
 import logging
 import threading
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, get_connection
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.utils.html import escape
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -23,11 +24,38 @@ FRONTEND_BASE_URL = os.environ.get(
 )
 
 
-def _build_survey_email_html(survey_title: str, survey_url: str, sender_name: str) -> str:
+def _build_survey_email_html(
+    survey_title: str,
+    survey_url: str,
+    sender_name: str,
+    group_name: str = None,
+) -> str:
     """
     Build RTL HTML email template for survey sharing notification.
     Contains a 'بدء الايضاح' button linking to the survey.
+
+    When ``group_name`` is given the email is a *group* notification: the
+    group members are in TO and the group managers are in CC, so the body names
+    the group the survey was shared with.
     """
+    safe_title = escape(survey_title)
+
+    if group_name:
+        # <bdi> isolates the group name's own bidi direction (it may be
+        # Arabic, English, or mixed) so it can't reorder the surrounding RTL
+        # sentence — without it, a Latin group name visually scrambles the
+        # Arabic text around it.
+        intro = (
+            f'<p>تمت مشاركة ايضاح جديد مع مجموعة '
+            f'<strong><bdi>{escape(group_name)}</bdi></strong> بواسطة '
+            f'<strong>قسم التخطيط والموازنة - إدارة المالية</strong>.</p>'
+        )
+    else:
+        intro = (
+            '<p>تمت مشاركة ايضاح جديد معك بواسطة '
+            '<strong>قسم التخطيط والموازنة - إدارة المالية</strong>.</p>'
+        )
+
     return f'''<html dir="rtl">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -53,9 +81,9 @@ body {{ direction: rtl; font-family: 'Cairo', 'Noto Kufi Arabic', 'Segoe UI', Ta
     </div>
     <div class="content">
         <p>مرحباً،</p>
-        <p>تمت مشاركة ايضاح جديد معك بواسطة <strong>قسم التخطيط والموازنة - إدارة المالية</strong>.</p>
+        {intro}
         <div class="survey-title">
-            <span>{survey_title}</span>
+            <span>{safe_title}</span>
         </div>
         <p>يرجى الضغط على الزر أدناه للبدء:</p>
         <div class="btn-container">
@@ -78,11 +106,21 @@ body {{ direction: rtl; font-family: 'Cairo', 'Noto Kufi Arabic', 'Segoe UI', Ta
 </html>'''
 
 
-def _build_survey_email_plain(survey_title: str, survey_url: str, sender_name: str) -> str:
+def _build_survey_email_plain(
+    survey_title: str,
+    survey_url: str,
+    sender_name: str,
+    group_name: str = None,
+) -> str:
     """Plain text fallback for email clients that don't support HTML."""
+    if group_name:
+        intro = f"تمت مشاركة ايضاح جديد مع مجموعة {_isolate_bidi(group_name)} بواسطة {sender_name}."
+    else:
+        intro = f"تمت مشاركة ايضاح جديد معك بواسطة {sender_name}."
+
     return (
         f"مرحباً،\n\n"
-        f"تمت مشاركة ايضاح جديد معك بواسطة {sender_name}.\n\n"
+        f"{intro}\n\n"
         f"عنوان الايضاح: {survey_title}\n\n"
         f"للبدء، يرجى زيارة الرابط التالي:\n{survey_url}\n\n"
         f"---\n"
@@ -96,38 +134,185 @@ def _get_survey_url(survey_id: str) -> str:
     return f"{base}/surveys/take/{survey_id}"
 
 
-def _send_emails_to_users(user_emails: list, survey_title: str, survey_id: str, sender_name: str):
+def _normalize_email(email) -> str:
+    """Trim an address; empty string when it is unusable."""
+    return (email or '').strip()
+
+
+def _isolate_bidi(text: str) -> str:
     """
-    Send survey notification emails to a list of user emails.
-    This runs in a background thread.
+    Wrap arbitrary text (e.g. a group name that may be Arabic, English, or
+    mixed) in Unicode bidi isolates so it can't reorder the RTL sentence
+    around it in plain-text emails — the HTML templates get the same
+    protection from <bdi>, which isn't available outside markup.
+    """
+    return f"⁨{text}⁩"
+
+
+def _collect_group_recipients(group_ids, exclude_emails=frozenset()):
+    """
+    Resolve one TO/CC bucket per group in a *single* database query.
+
+    Reads the User↔Group through model directly with ``values_list`` so neither
+    User nor Group instances are built and no per-group query is issued — the
+    ``Group.get_members()`` / ``Group.get_admins()`` helpers would cost one
+    query per group each (the classic N+1).
+
+    Bucketing follows the product rule: a group's members are addressed in TO
+    and its managers (``UserGroup.is_group_admin``) are copied in CC, so a
+    manager who is also a member is listed once, in CC. A group whose only
+    members are managers keeps them in TO — a message must have a real
+    addressee.
+
+    Args:
+        group_ids: iterable of Group PKs.
+        exclude_emails: lower-cased addresses to drop (e.g. the sender's).
+
+    Returns:
+        list[dict]: ``{'group_id', 'group_name', 'to': [...], 'cc': [...]}`` for
+        every group with at least one deliverable address, ordered by group id
+        for a stable send order.
+    """
+    from authentication.models import UserGroup
+
+    group_ids = [gid for gid in (group_ids or []) if gid is not None]
+    if not group_ids:
+        return []
+
+    rows = (
+        UserGroup.objects
+        .filter(group_id__in=group_ids, user__is_active=True)
+        .exclude(user__email__isnull=True)
+        .exclude(user__email='')
+        # UserGroup.Meta orders by group__name/user__email; clearing it drops a
+        # sort we don't need (the group name is already selected below).
+        .order_by()
+        .values_list('group_id', 'group__name', 'user__email', 'is_group_admin')
+    )
+
+    buckets = {}
+    for group_id, group_name, email, is_group_admin in rows.iterator():
+        email = _normalize_email(email)
+        if not email:
+            continue
+        key = email.lower()
+        if key in exclude_emails:
+            continue
+
+        bucket = buckets.get(group_id)
+        if bucket is None:
+            bucket = buckets[group_id] = {
+                'group_id': group_id,
+                'group_name': group_name,
+                'to': [],
+                'cc': [],
+                '_seen': set(),
+            }
+
+        if key in bucket['_seen']:
+            continue
+        bucket['_seen'].add(key)
+        bucket['cc' if is_group_admin else 'to'].append(email)
+
+    result = []
+    for group_id in sorted(buckets):
+        bucket = buckets[group_id]
+        bucket.pop('_seen', None)
+        if not bucket['to']:
+            if not bucket['cc']:
+                continue
+            # Managers-only group: address them directly instead of shipping a
+            # message with an empty To header.
+            bucket['to'], bucket['cc'] = bucket['cc'], []
+        result.append(bucket)
+
+    return result
+
+
+def _send_share_emails(group_buckets: list, direct_emails: list, survey_title: str,
+                       survey_id: str, sender_name: str):
+    """
+    Send every survey-share message over a **single** SMTP connection.
+
+    One connection for the whole batch instead of Django's default
+    connect-per-``send()``, and one rendered body per distinct group (plus one
+    shared body for all direct shares) — the templates are pure functions of
+    (title, url, sender, group_name). Each message is still handed to the server
+    individually so a rejected recipient is logged and skipped without aborting
+    the rest of the batch.
+
+    Runs in a background thread — never call this on the request path.
     """
     survey_url = _get_survey_url(survey_id)
     subject = f"ايضاح جديد: {survey_title}"
-    html_body = _build_survey_email_html(survey_title, survey_url, sender_name)
-    plain_body = _build_survey_email_plain(survey_title, survey_url, sender_name)
     from_email = settings.DEFAULT_FROM_EMAIL
 
-    success_count = 0
-    fail_count = 0
+    messages = []
 
-    for email in user_emails:
-        try:
+    for bucket in group_buckets:
+        group_name = bucket['group_name']
+        msg = EmailMultiAlternatives(
+            subject=subject,
+            body=_build_survey_email_plain(survey_title, survey_url, sender_name, group_name),
+            from_email=from_email,
+            to=list(bucket['to']),
+            cc=list(bucket['cc']),
+        )
+        msg.attach_alternative(
+            _build_survey_email_html(survey_title, survey_url, sender_name, group_name),
+            "text/html",
+        )
+        messages.append((f"group '{group_name}'", msg))
+
+    if direct_emails:
+        plain_body = _build_survey_email_plain(survey_title, survey_url, sender_name)
+        html_body = _build_survey_email_html(survey_title, survey_url, sender_name)
+        for email in direct_emails:
             msg = EmailMultiAlternatives(
                 subject=subject,
                 body=plain_body,
                 from_email=from_email,
-                to=[email]
+                to=[email],
             )
             msg.attach_alternative(html_body, "text/html")
-            msg.send()
-            success_count += 1
-        except Exception as e:
-            fail_count += 1
-            logger.error(f"Failed to send survey notification to {email}: {e}")
+            messages.append((email, msg))
 
+    if not messages:
+        return
+
+    success_count = 0
+    fail_count = 0
+    connection = None
+
+    try:
+        connection = get_connection()
+        connection.open()
+        for label, msg in messages:
+            msg.connection = connection
+            try:
+                msg.send()
+                success_count += 1
+            except Exception as e:
+                fail_count += 1
+                logger.error(f"Failed to send survey notification to {label}: {e}")
+    except Exception as e:
+        fail_count = len(messages) - success_count
+        logger.error(f"SMTP failure while notifying survey {survey_id}: {e}")
+    finally:
+        if connection is not None:
+            try:
+                connection.close()
+            except Exception:
+                pass
+
+    recipient_count = sum(
+        len(b['to']) + len(b['cc']) for b in group_buckets
+    ) + len(direct_emails)
     logger.info(
         f"Survey share notification for '{survey_title}' (ID: {survey_id}): "
-        f"sent={success_count}, failed={fail_count}, total={len(user_emails)}"
+        f"messages_sent={success_count}, messages_failed={fail_count}, "
+        f"groups={len(group_buckets)}, direct={len(direct_emails)}, "
+        f"recipients={recipient_count}"
     )
 
 
@@ -136,61 +321,125 @@ def notify_survey_shared(survey, sender_user, user_ids=None, group_ids=None):
     Send email notifications to users when a survey is shared with them.
     Runs in a background thread to avoid blocking the API response.
 
+    Each group receives **one** message: its members in TO and its managers in
+    CC, so a manager can see that the whole group was assigned the survey.
+    Directly-shared users get an individual message, and anyone already reached
+    by a group message is skipped so nobody is emailed twice.
+
+    Callers must pass only the *newly added* users/groups — re-saving the share
+    dialog must not re-notify an audience that was already notified.
+
     Args:
         survey: Survey model instance
         sender_user: The user who shared the survey
-        user_ids: List of user IDs directly shared with
-        group_ids: List of group IDs shared with
+        user_ids: List of user IDs newly shared with directly
+        group_ids: List of group IDs newly shared with
     """
     try:
-        # Collect all recipient emails
-        recipient_emails = set()
+        # The sender never notifies themselves — neither in TO nor in CC.
+        sender_email = _normalize_email(getattr(sender_user, 'email', None))
+        exclude_emails = {sender_email.lower()} if sender_email else frozenset()
 
-        # Direct user shares
+        # One query for every group, bucketed into TO/CC per group.
+        group_buckets = _collect_group_recipients(group_ids, exclude_emails)
+
+        # Addresses a group message already TO's. Only TO counts as "covered" —
+        # a manager who is CC'd on their group's message (informational: "your
+        # group was assigned this survey") still needs their own personal
+        # invite if they were *also* directly shared, so CC never suppresses
+        # a direct send.
+        covered = {
+            email.lower()
+            for bucket in group_buckets
+            for email in bucket['to']
+        }
+
+        # One query for the direct shares, minus anyone a group message covers.
+        direct_emails = []
         if user_ids:
-            direct_users = User.objects.filter(
-                id__in=user_ids, is_active=True
-            ).values_list('email', flat=True)
-            recipient_emails.update(direct_users)
+            seen = set(covered)
+            direct_rows = (
+                User.objects
+                .filter(id__in=user_ids, is_active=True)
+                .exclude(email__isnull=True)
+                .exclude(email='')
+                .order_by()
+                .values_list('email', flat=True)
+            )
+            for email in direct_rows:
+                email = _normalize_email(email)
+                key = email.lower()
+                if not email or key in seen or key in exclude_emails:
+                    continue
+                seen.add(key)
+                direct_emails.append(email)
 
-        # Group member shares
-        if group_ids:
-            group_member_emails = User.objects.filter(
-                user_groups__group_id__in=group_ids,
-                is_active=True
-            ).values_list('email', flat=True)
-            recipient_emails.update(group_member_emails)
-
-        # Exclude the sender from receiving the notification
-        sender_email = getattr(sender_user, 'email', None)
-        if sender_email:
-            recipient_emails.discard(sender_email)
-
-        if not recipient_emails:
+        if not group_buckets and not direct_emails:
             logger.info(f"No recipients to notify for survey {survey.id}")
             return
 
-        # Prepare data for the thread
         survey_title = survey.title or "ايضاح"
         survey_id = str(survey.id)
-        sender_name = f"{sender_user.first_name} {sender_user.last_name}".strip() or sender_user.email
-        emails_list = list(recipient_emails)
+        sender_name = (
+            f"{sender_user.first_name} {sender_user.last_name}".strip()
+            or sender_user.email
+        )
 
-        # Send in background thread
         thread = threading.Thread(
-            target=_send_emails_to_users,
-            args=(emails_list, survey_title, survey_id, sender_name),
-            daemon=True
+            target=_send_share_emails,
+            args=(group_buckets, direct_emails, survey_title, survey_id, sender_name),
+            daemon=True,
         )
         thread.start()
 
         logger.info(
-            f"Started background email notification for survey {survey_id} "
-            f"to {len(emails_list)} recipients"
+            f"Started background email notification for survey {survey_id}: "
+            f"{len(group_buckets)} group message(s), "
+            f"{len(direct_emails)} direct message(s)"
         )
 
     except Exception as e:
         logger.error(f"Error initiating survey share notification: {e}")
+
+
+def notify_survey_published(survey, sender_user):
+    """
+    Notify a survey's whole explicit audience the moment it goes live.
+
+    Sharing a *draft* deliberately sends no email — nobody should get a live
+    "start the survey" link to an unfinished survey — so the audience attached
+    while the survey was a draft has never heard about it. This is the one
+    notification they get: called on the draft → submitted transition, it emails
+    every group already in ``shared_with_groups`` (members in TO, managers in
+    CC) and every user in ``shared_with``.
+
+    Only meaningful for PRIVATE/GROUPS surveys — PUBLIC/AUTH audiences are not
+    an explicit recipient list and are handled by the broadcast notification
+    service instead.
+
+    Safe to call on any transition: it no-ops when the visibility has no
+    explicit audience or the audience is empty.
+    """
+    try:
+        if getattr(survey, 'visibility', None) not in ('PRIVATE', 'GROUPS'):
+            return
+
+        # Two id-only queries; the recipient resolution itself stays a single
+        # query per side inside notify_survey_shared().
+        group_ids = list(survey.shared_with_groups.values_list('id', flat=True))
+        user_ids = list(survey.shared_with.values_list('id', flat=True))
+
+        if not group_ids and not user_ids:
+            return
+
+        notify_survey_shared(
+            survey=survey,
+            sender_user=sender_user,
+            user_ids=user_ids,
+            group_ids=group_ids,
+        )
+    except Exception as e:
+        logger.error(f"Error notifying audience of published survey {survey.id}: {e}")
 
 
 # ---------------------------------------------------------------------------
@@ -207,9 +456,15 @@ def resolve_survey_assigned_users(survey):
 
     Assignment rules per visibility:
       - AUTH   : every active authenticated user is considered assigned.
-      - PRIVATE: users in shared_with  ∪  members of shared_with_groups.
-      - GROUPS : members of shared_with_groups.
+      - PRIVATE: users in shared_with  ∪  non-manager members of shared_with_groups.
+      - GROUPS : non-manager members of shared_with_groups.
       - PUBLIC : not applicable (anonymous respondents) → empty set.
+
+    A group *manager* (``UserGroup.is_group_admin``) is not expected to answer
+    on behalf of their group — they're informed by email (CC'd) instead — so
+    membership that is admin-only does not make someone assigned. A manager who
+    is *also* directly in ``shared_with`` is assigned like anyone else: direct
+    sharing always means "you must respond," regardless of any manager role.
 
     Returns:
         tuple[str, QuerySet]: (mode, users) where mode is one of
@@ -225,12 +480,15 @@ def resolve_survey_assigned_users(survey):
         return 'all_authenticated', User.objects.filter(is_active=True)
 
     if visibility in ('PRIVATE', 'GROUPS'):
+        from authentication.models import UserGroup
+
         assigned_user_ids = set(survey.shared_with.values_list('id', flat=True))
         group_member_ids = set(
-            User.objects.filter(
-                user_groups__group__in=survey.shared_with_groups.all(),
-                is_active=True,
-            ).values_list('id', flat=True)
+            UserGroup.objects.filter(
+                group__in=survey.shared_with_groups.all(),
+                is_group_admin=False,
+                user__is_active=True,
+            ).values_list('user_id', flat=True)
         )
         all_ids = assigned_user_ids | group_member_ids
         return 'explicit', User.objects.filter(id__in=all_ids, is_active=True)
@@ -290,8 +548,28 @@ def get_survey_non_responder_emails(survey, exclude_user=None):
     return list(emails)
 
 
-def _build_reminder_email_html(survey_title: str, survey_url: str) -> str:
-    """RTL HTML reminder email — matches the gold-header theme of this module."""
+def _build_reminder_email_html(survey_title: str, survey_url: str, group_name: str = None) -> str:
+    """
+    RTL HTML reminder email — matches the gold-header theme of this module.
+
+    When ``group_name`` is given this is a *group* reminder: the late members
+    are in TO and the group's managers are in CC, so the body names the group
+    and tells the managers why they were copied.
+    """
+    safe_title = escape(survey_title)
+
+    if group_name:
+        intro = (
+            f'<p>نودّ تذكيركم بأنه لم يتم تسجيل ردكم بعد على الإيضاح التالي '
+            f'الموجّه لمجموعة <strong><bdi>{escape(group_name)}</bdi></strong>. '
+            f'نأمل أن تخصصوا بعض الوقت لإكماله.</p>'
+        )
+    else:
+        intro = (
+            '<p>نودّ تذكيرك بأنه لم يتم تسجيل ردك على الإيضاح التالي بعد. '
+            'نأمل أن تخصص بعض الوقت لإكماله.</p>'
+        )
+
     return f'''<html dir="rtl">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -317,9 +595,9 @@ body {{ direction: rtl; font-family: 'Cairo', 'Noto Kufi Arabic', 'Segoe UI', Ta
     </div>
     <div class="content">
         <p>مرحباً،</p>
-        <p>نودّ تذكيرك بأنه لم يتم تسجيل ردك على الإيضاح التالي بعد. نأمل أن تخصص بعض الوقت لإكماله.</p>
+        {intro}
         <div class="survey-title">
-            <span>{survey_title}</span>
+            <span>{safe_title}</span>
         </div>
         <p>يرجى الضغط على الزر أدناه للبدء:</p>
         <div class="btn-container">
@@ -342,11 +620,19 @@ body {{ direction: rtl; font-family: 'Cairo', 'Noto Kufi Arabic', 'Segoe UI', Ta
 </html>'''
 
 
-def _build_reminder_email_plain(survey_title: str, survey_url: str) -> str:
+def _build_reminder_email_plain(survey_title: str, survey_url: str, group_name: str = None) -> str:
     """Plain-text fallback for the reminder email."""
+    if group_name:
+        intro = (
+            f"نودّ تذكيركم بأنه لم يتم تسجيل ردكم بعد على الإيضاح التالي "
+            f"الموجّه لمجموعة {_isolate_bidi(group_name)}."
+        )
+    else:
+        intro = "نودّ تذكيرك بأنه لم يتم تسجيل ردك على الإيضاح التالي بعد."
+
     return (
         f"مرحباً،\n\n"
-        f"نودّ تذكيرك بأنه لم يتم تسجيل ردك على الإيضاح التالي بعد.\n\n"
+        f"{intro}\n\n"
         f"عنوان الإيضاح: {survey_title}\n\n"
         f"للبدء، يرجى زيارة الرابط التالي:\n{survey_url}\n\n"
         f"---\n"
@@ -354,19 +640,117 @@ def _build_reminder_email_plain(survey_title: str, survey_url: str) -> str:
     )
 
 
-def _send_reminder_emails(user_emails: list, survey_title: str, survey_id: str):
-    """Send reminder emails to non-responders (runs in a background thread)."""
+def _collect_group_reminder_recipients(survey, to_exclude_ids, cc_exclude_emails=frozenset()):
+    """
+    Resolve one TO/CC reminder bucket per group in a *single* query.
+
+    Mirrors ``_collect_group_recipients`` (the share-email version) but TO is
+    restricted to non-responders: a group's late, non-manager members are the
+    addressees, and its managers are copied so they know their group has
+    stragglers — a manager's own response status never affects whether they're
+    CC'd, since they were never expected to respond.
+
+    A group with no late members produces nothing: no message, and its
+    managers are not bothered.
+
+    Args:
+        survey: Survey instance.
+        to_exclude_ids: user ids to drop from TO (responders, creator, the
+            user triggering the reminder).
+        cc_exclude_emails: lower-cased addresses to drop from CC (just the
+            triggering user's own address, so nobody emails themselves).
+
+    Returns:
+        list[dict]: ``{'group_id', 'group_name', 'to': [...], 'cc': [...]}``
+        for every group with at least one late member, ordered by group id.
+    """
+    from authentication.models import UserGroup
+
+    group_ids = list(survey.shared_with_groups.values_list('id', flat=True))
+    if not group_ids:
+        return []
+
+    rows = (
+        UserGroup.objects
+        .filter(group_id__in=group_ids, user__is_active=True)
+        .exclude(user__email__isnull=True)
+        .exclude(user__email='')
+        .order_by()
+        .values_list('group_id', 'group__name', 'user_id', 'user__email', 'is_group_admin')
+    )
+
+    buckets = {}
+    for group_id, group_name, user_id, email, is_group_admin in rows.iterator():
+        email = _normalize_email(email)
+        if not email:
+            continue
+
+        bucket = buckets.get(group_id)
+        if bucket is None:
+            bucket = buckets[group_id] = {
+                'group_id': group_id,
+                'group_name': group_name,
+                'to': [],
+                'cc': [],
+                '_seen_to': set(),
+                '_seen_cc': set(),
+            }
+
+        key = email.lower()
+        if is_group_admin:
+            if key in cc_exclude_emails or key in bucket['_seen_cc']:
+                continue
+            bucket['_seen_cc'].add(key)
+            bucket['cc'].append(email)
+        else:
+            if user_id in to_exclude_ids or key in bucket['_seen_to']:
+                continue
+            bucket['_seen_to'].add(key)
+            bucket['to'].append(email)
+
+    result = []
+    for group_id in sorted(buckets):
+        bucket = buckets[group_id]
+        bucket.pop('_seen_to', None)
+        bucket.pop('_seen_cc', None)
+        if not bucket['to']:
+            # Nobody late in this group — no message, managers not bothered.
+            continue
+        result.append(bucket)
+
+    return result
+
+
+def _send_reminder_batch(group_buckets: list, direct_emails: list, survey_title: str, survey_id: str):
+    """
+    Send every reminder message over a **single** SMTP connection — mirrors
+    ``_send_share_emails``. Runs in a background thread.
+    """
     survey_url = _get_survey_url(survey_id)
     subject = f"تذكير: لم تقم بالرد على الإيضاح بعد - {survey_title}"
-    html_body = _build_reminder_email_html(survey_title, survey_url)
-    plain_body = _build_reminder_email_plain(survey_title, survey_url)
     from_email = settings.DEFAULT_FROM_EMAIL
 
-    success_count = 0
-    fail_count = 0
+    messages = []
 
-    for email in user_emails:
-        try:
+    for bucket in group_buckets:
+        group_name = bucket['group_name']
+        msg = EmailMultiAlternatives(
+            subject=subject,
+            body=_build_reminder_email_plain(survey_title, survey_url, group_name),
+            from_email=from_email,
+            to=list(bucket['to']),
+            cc=list(bucket['cc']),
+        )
+        msg.attach_alternative(
+            _build_reminder_email_html(survey_title, survey_url, group_name),
+            "text/html",
+        )
+        messages.append((f"group '{group_name}'", msg))
+
+    if direct_emails:
+        plain_body = _build_reminder_email_plain(survey_title, survey_url)
+        html_body = _build_reminder_email_html(survey_title, survey_url)
+        for email in direct_emails:
             msg = EmailMultiAlternatives(
                 subject=subject,
                 body=plain_body,
@@ -374,49 +758,163 @@ def _send_reminder_emails(user_emails: list, survey_title: str, survey_id: str):
                 to=[email],
             )
             msg.attach_alternative(html_body, "text/html")
-            msg.send()
-            success_count += 1
-        except Exception as e:
-            fail_count += 1
-            logger.error(f"Failed to send survey reminder to {email}: {e}")
+            messages.append((email, msg))
 
+    if not messages:
+        return
+
+    success_count = 0
+    fail_count = 0
+    connection = None
+
+    try:
+        connection = get_connection()
+        connection.open()
+        for label, msg in messages:
+            msg.connection = connection
+            try:
+                msg.send()
+                success_count += 1
+            except Exception as e:
+                fail_count += 1
+                logger.error(f"Failed to send survey reminder to {label}: {e}")
+    except Exception as e:
+        fail_count = len(messages) - success_count
+        logger.error(f"SMTP failure while sending reminders for survey {survey_id}: {e}")
+    finally:
+        if connection is not None:
+            try:
+                connection.close()
+            except Exception:
+                pass
+
+    recipient_count = sum(len(b['to']) + len(b['cc']) for b in group_buckets) + len(direct_emails)
     logger.info(
         f"Survey reminder for '{survey_title}' (ID: {survey_id}): "
-        f"sent={success_count}, failed={fail_count}, total={len(user_emails)}"
+        f"messages_sent={success_count}, messages_failed={fail_count}, "
+        f"groups={len(group_buckets)}, direct={len(direct_emails)}, "
+        f"recipients={recipient_count}"
     )
 
 
-def notify_survey_reminder(survey, recipient_emails):
+def notify_survey_reminder(survey, exclude_user=None):
     """
-    Fire-and-forget: email a reminder to the provided non-responder addresses.
-    Runs in a daemon thread so the API endpoint returns immediately.
+    Remind every assigned non-responder — group-manager-only accounts are
+    never included, since resolve_survey_assigned_users() excludes them (they
+    aren't expected to respond).
+
+    Each group with late members gets **one** message: its late, non-manager
+    members in TO and its managers in CC, informing them their group has
+    stragglers. Directly-shared non-responders get an individual reminder,
+    minus anyone already covered by a group message's TO. A manager who is
+    *also* directly shared and late still gets that personal reminder — being
+    CC'd for their managed group never substitutes for it (see the same rule
+    in notify_survey_shared).
+
+    Runs the actual sending in a background thread; returns synchronously so
+    the caller can report a count immediately.
 
     Args:
         survey: Survey model instance.
-        recipient_emails: iterable of email addresses to remind.
+        exclude_user: the user triggering the reminder (e.g. the creator) —
+            never reminded and never CC'd on their own action.
 
     Returns:
-        int: number of recipients the reminder was queued for.
+        int: number of non-responders the reminder was queued for (TO
+        addresses only — CC'd managers aren't counted, matching the
+        assigned-user total, which excludes them too).
     """
-    emails_list = [e for e in (recipient_emails or []) if e]
-    if not emails_list:
-        logger.info(f"No non-responders to remind for survey {getattr(survey, 'id', '?')}")
+    from .models import Response  # local import to avoid circular imports
+
+    try:
+        mode, assigned_qs = resolve_survey_assigned_users(survey)
+        if mode == 'public':
+            return 0
+
+        responded_ids = set(
+            Response.objects.filter(
+                survey=survey, respondent__isnull=False
+            ).values_list('respondent_id', flat=True)
+        )
+        exclude_ids = set(responded_ids)
+        creator_id = getattr(survey, 'creator_id', None)
+        if creator_id:
+            exclude_ids.add(creator_id)
+        if exclude_user is not None and getattr(exclude_user, 'id', None):
+            exclude_ids.add(exclude_user.id)
+
+        if mode == 'all_authenticated':
+            # AUTH has no group structure to bucket by — every non-responder
+            # gets an individual reminder, same as before.
+            group_buckets = []
+            rows = (
+                assigned_qs.exclude(id__in=exclude_ids)
+                .exclude(email__isnull=True)
+                .exclude(email='')
+                .order_by()
+                .values_list('email', flat=True)
+            )
+            seen = set()
+            direct_emails = []
+            for email in rows:
+                email = _normalize_email(email)
+                key = email.lower()
+                if not email or key in seen:
+                    continue
+                seen.add(key)
+                direct_emails.append(email)
+        else:
+            sender_email = _normalize_email(getattr(exclude_user, 'email', None))
+            cc_exclude_emails = {sender_email.lower()} if sender_email else frozenset()
+
+            group_buckets = _collect_group_reminder_recipients(survey, exclude_ids, cc_exclude_emails)
+
+            covered = {email.lower() for bucket in group_buckets for email in bucket['to']}
+
+            direct_rows = (
+                assigned_qs
+                .filter(id__in=survey.shared_with.values_list('id', flat=True))
+                .exclude(id__in=exclude_ids)
+                .exclude(email__isnull=True)
+                .exclude(email='')
+                .order_by()
+                .values_list('email', flat=True)
+            )
+            seen = set(covered)
+            direct_emails = []
+            for email in direct_rows:
+                email = _normalize_email(email)
+                key = email.lower()
+                if not email or key in seen:
+                    continue
+                seen.add(key)
+                direct_emails.append(email)
+
+        if not group_buckets and not direct_emails:
+            logger.info(f"No non-responders to remind for survey {survey.id}")
+            return 0
+
+        survey_title = survey.title or "ايضاح"
+        survey_id = str(survey.id)
+
+        thread = threading.Thread(
+            target=_send_reminder_batch,
+            args=(group_buckets, direct_emails, survey_title, survey_id),
+            daemon=True,
+        )
+        thread.start()
+
+        recipient_count = sum(len(b['to']) for b in group_buckets) + len(direct_emails)
+        logger.info(
+            f"Queued reminder for survey {survey_id}: "
+            f"{len(group_buckets)} group message(s), {len(direct_emails)} direct message(s), "
+            f"{recipient_count} non-responder(s) total"
+        )
+        return recipient_count
+
+    except Exception as e:
+        logger.error(f"Error initiating survey reminder notification: {e}")
         return 0
-
-    survey_title = survey.title or "ايضاح"
-    survey_id = str(survey.id)
-
-    thread = threading.Thread(
-        target=_send_reminder_emails,
-        args=(emails_list, survey_title, survey_id),
-        daemon=True,
-    )
-    thread.start()
-
-    logger.info(
-        f"Queued reminder emails for survey {survey_id} to {len(emails_list)} non-responders"
-    )
-    return len(emails_list)
 
 
 # ---------------------------------------------------------------------------

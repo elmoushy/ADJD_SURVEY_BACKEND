@@ -1249,6 +1249,18 @@ class SurveyViewSet(ModelViewSet):
                 else:
                     logger.info(f"Skipped sending notifications for survey {survey.id} as send_notifications was not requested")
             
+            # A survey going live is the first (and only) time its explicitly
+            # shared audience is emailed — draft shares stay silent. Kept out of
+            # the if/elif chain above so a simultaneous is_active toggle can't
+            # mask it, and independent of `send_notifications`, which guards the
+            # broadcast notifications rather than this targeted audience.
+            if old_status == 'draft' and new_status == 'submitted':
+                try:
+                    from .email_service import notify_survey_published
+                    notify_survey_published(serializer.instance, user)
+                except Exception as e:
+                    logger.error(f"Failed to email shared audience of published survey {survey.id}: {e}")
+            
             # Handle token management based on visibility changes
             
             # Handle visibility changes
@@ -1562,9 +1574,27 @@ class SurveyViewSet(ModelViewSet):
         {"visibility": "GROUPS", "group_ids":[1,2]}   # share with all users in groups
         """
         try:
-            survey = self.get_object()
+            # get_object() runs check_object_permissions() (IsCreatorOrReadOnly
+            # on this action), which raises DRF's PermissionDenied/NotFound for
+            # a non-creator — catch those here so they don't fall through to
+            # the generic 500 handler below.
+            try:
+                survey = self.get_object()
+            except DRFPermissionDenied:
+                return uniform_response(
+                    success=False,
+                    message="You can only modify surveys you created",
+                    status_code=status.HTTP_403_FORBIDDEN
+                )
+            except DRFNotFound:
+                return uniform_response(
+                    success=False,
+                    message="Survey not found",
+                    status_code=status.HTTP_404_NOT_FOUND
+                )
+
             user = request.user
-            
+
             # Check if user can modify the survey audience
             if not can_user_manage_survey(user, survey):
                 return uniform_response(
@@ -1637,12 +1667,29 @@ class SurveyViewSet(ModelViewSet):
             survey.visibility = visibility
             survey.save(update_fields=['visibility', 'updated_at'])
             
+            # Snapshot the audience *before* mutating it so the share emails can
+            # target only the newly added users/groups — re-saving this dialog
+            # must not re-notify an audience that was already notified (a group
+            # notification goes to the whole group at once).
+            previously_shared_user_ids = set(survey.shared_with.values_list('id', flat=True))
+            previously_shared_group_ids = set(survey.shared_with_groups.values_list('id', flat=True))
+            newly_shared_user_ids = []
+            newly_shared_group_ids = []
+            
             # Handle sharing based on visibility
             if visibility == 'PRIVATE':
                 # Mixed sharing: individual users AND/OR groups together
                 from authentication.models import Group as AuthGroup
                 valid_users = User.objects.filter(id__in=user_ids) if user_ids else User.objects.none()
                 valid_groups = AuthGroup.objects.filter(id__in=group_ids) if group_ids else AuthGroup.objects.none()
+                newly_shared_user_ids = [
+                    uid for uid in valid_users.values_list('id', flat=True)
+                    if uid not in previously_shared_user_ids
+                ]
+                newly_shared_group_ids = [
+                    gid for gid in valid_groups.values_list('id', flat=True)
+                    if gid not in previously_shared_group_ids
+                ]
                 survey.shared_with.set(valid_users)
                 survey.shared_with_groups.set(valid_groups)
             elif visibility == 'GROUPS':
@@ -1661,6 +1708,10 @@ class SurveyViewSet(ModelViewSet):
                         message="No valid groups found for the provided group_ids.",
                         status_code=status.HTTP_400_BAD_REQUEST,
                     )
+                newly_shared_group_ids = [
+                    gid for gid in valid_groups.values_list('id', flat=True)
+                    if gid not in previously_shared_group_ids
+                ]
                 survey.shared_with_groups.set(valid_groups)
                 survey.shared_with.clear()
             else:
@@ -1674,14 +1725,27 @@ class SurveyViewSet(ModelViewSet):
             
             logger.info(f"Survey {survey.id} audience updated by {request.user.email}")
             
-            # Send email notifications to shared users (background thread - non-blocking)
-            if visibility in ('PRIVATE', 'GROUPS'):
+            # Send email notifications to the newly added audience only
+            # (background thread - non-blocking). Each group gets a single
+            # message: members in TO, group managers in CC.
+            #
+            # Drafts are never emailed: nobody should get a live "start the
+            # survey" link to an unfinished survey. The audience attached while
+            # the survey was a draft is emailed once, on the draft → submitted
+            # transition — see notify_survey_published(), hooked into both
+            # publish paths (SurveySubmitView and this viewset's update).
+            # NB this is deliberately *better* than the in-app notification
+            # signal at signals.py:99, which skips drafts and never fires again;
+            # do not "align" the two by dropping the publish hook.
+            if survey.status == 'submitted' and visibility in ('PRIVATE', 'GROUPS') and (
+                newly_shared_user_ids or newly_shared_group_ids
+            ):
                 from .email_service import notify_survey_shared
                 notify_survey_shared(
                     survey=survey,
                     sender_user=user,
-                    user_ids=user_ids if visibility == 'PRIVATE' else None,
-                    group_ids=group_ids if visibility in ('PRIVATE', 'GROUPS') else None,
+                    user_ids=newly_shared_user_ids,
+                    group_ids=newly_shared_group_ids,
                 )
             
             response_data = {'visibility': visibility}
@@ -1788,17 +1852,19 @@ class SurveyViewSet(ModelViewSet):
                     status_code=status.HTTP_400_BAD_REQUEST,
                 )
 
-            from .email_service import get_survey_non_responder_emails, notify_survey_reminder
-            emails = get_survey_non_responder_emails(survey, exclude_user=request.user)
+            # notify_survey_reminder resolves non-responders itself (grouping
+            # late group members into one message per group, CC'ing that
+            # group's managers) and returns the count synchronously — no need
+            # to pre-fetch the flat email list here.
+            from .email_service import notify_survey_reminder
+            sent_count = notify_survey_reminder(survey, exclude_user=request.user)
 
-            if not emails:
+            if sent_count == 0:
                 return uniform_response(
                     success=True,
                     message="لا يوجد مستخدمون لم يستجيبوا لإرسال التذكير إليهم",
                     data={'count': 0},
                 )
-
-            sent_count = notify_survey_reminder(survey, emails)
 
             return uniform_response(
                 success=True,
@@ -9566,6 +9632,15 @@ class SurveySubmitView(APIView):
             
             # Submit the survey
             survey.submit()
+            
+            # First and only email to the explicitly shared audience: one
+            # message per group (members in TO, managers in CC) plus the
+            # directly-shared users. Draft shares are silent by design.
+            try:
+                from .email_service import notify_survey_published
+                notify_survey_published(survey, user)
+            except Exception as e:
+                logger.error(f"Failed to email shared audience of submitted survey {survey.id}: {e}")
             
             # Send notifications to eligible users about the new survey
             # Check if notifications should be sent (default: False to prevent spam)
