@@ -4,8 +4,13 @@ and the nullable Survey.topic FK that points at them.
 
 Oracle compatibility notes:
 - db_table 'surveys_topic' is 13 chars (Oracle 11g/12.1 limit is 30)
-- index names: topic_parent_idx (16), topic_path_idx (14), topic_deleted_idx (17),
+- index names: topic_path_idx (14), topic_deleted_idx (17),
   topic_pin_order_idx (19) — all well under the 30-char limit
+- no explicit index on `parent`: it's a ForeignKey, which already gets an
+  implicit index from CreateModel; an explicit AddIndex on the same single
+  column duplicates that column list, and Oracle raises ORA-01408 ("such
+  column list already indexed") for that — SQLite/Postgres/MySQL silently
+  allow the duplicate, which is why this only surfaces on Oracle
 - the new table has NO NCLOB column (description is CharField(500), not TextField),
   which keeps DISTINCT / GROUP BY / ORDER BY over topic columns legal on Oracle and
   makes select_related('topic') safe inside the survey queryset that uses .distinct()
@@ -59,10 +64,6 @@ class Migration(migrations.Migration):
                 'db_table': 'surveys_topic',
                 'ordering': ['-is_pinned', 'display_order', 'name'],
             },
-        ),
-        migrations.AddIndex(
-            model_name='surveytopic',
-            index=models.Index(fields=['parent'], name='topic_parent_idx'),
         ),
         migrations.AddIndex(
             model_name='surveytopic',

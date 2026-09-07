@@ -144,6 +144,10 @@ class SurveyTopic(models.Model):
       select_related('topic') safe inside the survey queryset that already
       calls .distinct().
     - no conditional/partial indexes (unsupported on Oracle)
+    - no explicit index on `parent` — it's a ForeignKey, which already gets an
+      implicit index; adding one explicitly duplicates that column list, and
+      Oracle raises ORA-01408 ("such column list already indexed") for that,
+      unlike SQLite/Postgres/MySQL which silently allow it
     - uniqueness is global on `name_key` rather than (parent, name_key): Oracle
       treats NULL as distinct inside unique constraints, so root topics
       (parent IS NULL) would escape a composite constraint entirely.
@@ -274,7 +278,12 @@ class SurveyTopic(models.Model):
         verbose_name_plural = 'Survey Topics'
         ordering = ['-is_pinned', 'display_order', 'name']
         indexes = [
-            models.Index(fields=['parent'], name='topic_parent_idx'),
+            # No explicit index on 'parent': it's a ForeignKey, and Django
+            # gives every FK column an implicit index by default. An explicit
+            # single-column index here would duplicate that column list —
+            # SQLite/Postgres/MySQL silently tolerate the duplicate, but
+            # Oracle rejects it outright with ORA-01408 ("such column list
+            # already indexed"). See migrations/0028_add_survey_topics.py.
             models.Index(fields=['path'], name='topic_path_idx'),
             models.Index(fields=['deleted_at'], name='topic_deleted_idx'),
             models.Index(fields=['is_pinned', 'display_order'], name='topic_pin_order_idx'),
