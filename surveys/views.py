@@ -7,6 +7,7 @@ with comprehensive error handling and logging.
 
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.db import transaction
 from django.db.models import Q, Count, Avg
 from django.http import HttpResponse, Http404
 from rest_framework import status, generics, filters
@@ -10107,44 +10108,49 @@ class CloneSurveyView(APIView):
             title = request.data.get('title') or f"Copy of {survey.title}"
             description = request.data.get('description') or survey.description
             
-            # Create the cloned survey
-            cloned_survey = Survey.objects.create(
-                title=title,
-                description=description,
-                creator=request.user,
-                visibility=survey.visibility,
-                is_active=False,
-                status='draft',
-                public_contact_method=survey.public_contact_method,
-                per_device_access=survey.per_device_access,
-                allow_attachments=survey.allow_attachments
-            )
-
-            # Copy questions
-            questions = survey.questions.all().order_by('order')
-            for question in questions:
-                Question.objects.create(
-                    survey=cloned_survey,
-                    text=question.text,
-                    question_type=question.question_type,
-                    options=question.options,
-                    is_required=question.is_required,
-                    order=question.order
+            # One transaction: a clone is all-or-nothing. Attachment BLOBs
+            # are written as a second statement on Oracle (see
+            # adjd_survey.oracle_blob), so a failure part-way through must
+            # not leave a half-copied survey behind.
+            with transaction.atomic():
+                # Create the cloned survey
+                cloned_survey = Survey.objects.create(
+                    title=title,
+                    description=description,
+                    creator=request.user,
+                    visibility=survey.visibility,
+                    is_active=False,
+                    status='draft',
+                    public_contact_method=survey.public_contact_method,
+                    per_device_access=survey.per_device_access,
+                    allow_attachments=survey.allow_attachments
                 )
 
-            # Copy the creator's reference attachments (BLOB copy — a clone is a
-            # working copy, so the respondent-facing files come along with it)
-            for attachment in SurveyAttachment.objects.filter(survey=survey):
-                SurveyAttachment.objects.create(
-                    survey=cloned_survey,
-                    file_data=_blob_to_bytes(attachment.file_data),
-                    original_filename=attachment.original_filename,
-                    file_size=attachment.file_size,
-                    mime_type=attachment.mime_type,
-                    description=attachment.description,
-                    display_order=attachment.display_order,
-                    uploaded_by=request.user
-                )
+                # Copy questions
+                questions = survey.questions.all().order_by('order')
+                for question in questions:
+                    Question.objects.create(
+                        survey=cloned_survey,
+                        text=question.text,
+                        question_type=question.question_type,
+                        options=question.options,
+                        is_required=question.is_required,
+                        order=question.order
+                    )
+
+                # Copy the creator's reference attachments (BLOB copy — a clone is a
+                # working copy, so the respondent-facing files come along with it)
+                for attachment in SurveyAttachment.objects.filter(survey=survey):
+                    SurveyAttachment.objects.create(
+                        survey=cloned_survey,
+                        file_data=_blob_to_bytes(attachment.file_data),
+                        original_filename=attachment.original_filename,
+                        file_size=attachment.file_size,
+                        mime_type=attachment.mime_type,
+                        description=attachment.description,
+                        display_order=attachment.display_order,
+                        uploaded_by=request.user
+                    )
 
             # Return the cloned survey
             survey_serializer = SurveySerializer(cloned_survey, context={'request': request})

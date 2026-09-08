@@ -7,6 +7,8 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.core.validators import EmailValidator
+
+from adjd_survey.oracle_blob import OracleBlobSafeMixin
 import hashlib
 import json
 import uuid
@@ -619,7 +621,7 @@ class EmailRecipientView(models.Model):
         self.save(update_fields=['is_archived'])
 
 
-class EmailAttachment(models.Model):
+class EmailAttachment(OracleBlobSafeMixin, models.Model):
     """
     BLOB-based storage for email attachments (documents only).
 
@@ -633,6 +635,10 @@ class EmailAttachment(models.Model):
     """
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    # Written through an explicit Oracle LOB bind, not the ORM's TO_BLOB()
+    # bulk-insert path — see adjd_survey.oracle_blob.
+    blob_fields = ('file_data',)
 
     file_data = models.BinaryField(
         help_text=_("File content stored as BLOB (max 15MB)"),

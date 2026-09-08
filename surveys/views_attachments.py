@@ -11,6 +11,7 @@ Three kinds of attachment live here:
 
 import logging
 from urllib.parse import quote
+from django.db import DatabaseError
 from django.db.models import Max
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -53,6 +54,22 @@ def _uniform(success, message, data=None, status_code=200):
     return DRFResponse(
         {'status': 'success' if success else 'error', 'message': message, 'data': data},
         status=status_code,
+    )
+
+
+def _storage_failed(exc, what):
+    """
+    Turn a database-level failure into the API's normal error envelope.
+
+    Without this the frontend only sees "Request failed with status code 500"
+    (and, with DEBUG on, a full Django traceback page) for what is really one
+    failed file among several.
+    """
+    logger.exception("Attachment storage failed (%s): %s", what, exc)
+    return _uniform(
+        False,
+        'تعذر حفظ المرفق في قاعدة البيانات. يرجى المحاولة مرة أخرى.',
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
     )
 
 
@@ -153,16 +170,19 @@ class SurveyAttachmentUploadView(APIView):
         )
         next_order = 0 if next_order is None else next_order + 1
 
-        attachment = SurveyAttachment.objects.create(
-            survey=survey,
-            file_data=processed['file_data'],
-            original_filename=processed['original_filename'],
-            file_size=processed['file_size'],
-            mime_type=processed['mime_type'],
-            description=description,
-            display_order=next_order,
-            uploaded_by=request.user,
-        )
+        try:
+            attachment = SurveyAttachment.objects.create(
+                survey=survey,
+                file_data=processed['file_data'],
+                original_filename=processed['original_filename'],
+                file_size=processed['file_size'],
+                mime_type=processed['mime_type'],
+                description=description,
+                display_order=next_order,
+                uploaded_by=request.user,
+            )
+        except DatabaseError as exc:
+            return _storage_failed(exc, 'survey attachment')
 
         out_serializer = SurveyAttachmentSerializer(attachment, context={'request': request})
         logger.info(
@@ -316,15 +336,18 @@ class ResponseAttachmentUploadView(APIView):
 
         processed = process_attachment_upload(file_obj)
 
-        attachment = ResponseAttachment.objects.create(
-            response=response_obj,
-            file_data=processed['file_data'],
-            original_filename=processed['original_filename'],
-            file_size=processed['file_size'],
-            mime_type=processed['mime_type'],
-            description=description,
-            uploaded_by=request.user if request.user.is_authenticated else None,
-        )
+        try:
+            attachment = ResponseAttachment.objects.create(
+                response=response_obj,
+                file_data=processed['file_data'],
+                original_filename=processed['original_filename'],
+                file_size=processed['file_size'],
+                mime_type=processed['mime_type'],
+                description=description,
+                uploaded_by=request.user if request.user.is_authenticated else None,
+            )
+        except DatabaseError as exc:
+            return _storage_failed(exc, 'response attachment')
 
         out_serializer = ResponseAttachmentSerializer(attachment, context={'request': request})
         logger.info(
@@ -456,15 +479,18 @@ class FollowUpAttachmentUploadView(APIView):
 
         processed = process_attachment_upload(file_obj)
 
-        attachment = FollowUpMessageAttachment.objects.create(
-            message=message,
-            file_data=processed['file_data'],
-            original_filename=processed['original_filename'],
-            file_size=processed['file_size'],
-            mime_type=processed['mime_type'],
-            description=description,
-            uploaded_by=request.user,
-        )
+        try:
+            attachment = FollowUpMessageAttachment.objects.create(
+                message=message,
+                file_data=processed['file_data'],
+                original_filename=processed['original_filename'],
+                file_size=processed['file_size'],
+                mime_type=processed['mime_type'],
+                description=description,
+                uploaded_by=request.user,
+            )
+        except DatabaseError as exc:
+            return _storage_failed(exc, 'follow-up attachment')
 
         out_serializer = FollowUpMessageAttachmentSerializer(attachment, context={'request': request})
         logger.info(

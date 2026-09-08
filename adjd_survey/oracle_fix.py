@@ -1,4 +1,6 @@
 """
+
+# dead code not used anymore, but kept for reference
 Oracle Database Driver Compatibility Fix for Python 3.12
 
 This module patches the Django Oracle backend to fix compatibility issues
@@ -12,7 +14,7 @@ This patch must be imported BEFORE Django loads the Oracle backend.
 Import this in settings.py or wsgi.py at the very top.
 """
 
-import sys
+import sys#
 import logging
 
 logger = logging.getLogger(__name__)

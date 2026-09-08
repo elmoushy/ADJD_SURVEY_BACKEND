@@ -10,6 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db import DatabaseError
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -488,14 +489,22 @@ class EmailAttachmentUploadView(APIView):
 
         processed = process_attachment_upload(file_obj)
 
-        attachment = EmailAttachment.objects.create(
-            file_data=processed['file_data'],
-            original_filename=processed['original_filename'],
-            file_size=processed['file_size'],
-            mime_type=processed['mime_type'],
-            description=description,
-            uploaded_by=request.user,
-        )
+        try:
+            attachment = EmailAttachment.objects.create(
+                file_data=processed['file_data'],
+                original_filename=processed['original_filename'],
+                file_size=processed['file_size'],
+                mime_type=processed['mime_type'],
+                description=description,
+                uploaded_by=request.user,
+            )
+        except DatabaseError as exc:
+            # Surface a readable error instead of a bare 500 / debug page.
+            logger.exception("Email attachment storage failed: %s", exc)
+            return Response(
+                {'detail': 'تعذر حفظ المرفق في قاعدة البيانات. يرجى المحاولة مرة أخرى.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
         out = EmailAttachmentSerializer(attachment, context={'request': request})
         logger.info(

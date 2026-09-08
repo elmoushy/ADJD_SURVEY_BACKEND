@@ -12,6 +12,7 @@ import uuid
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from adjd_survey.oracle_blob import OracleBlobSafeMixin
 from .encryption import surveys_data_encryption
 
 logger = logging.getLogger(__name__)
@@ -1898,7 +1899,7 @@ class FollowUpMessage(models.Model):
 # Attachments — BLOB Storage for Survey, Response and Follow-Up Attachments
 # =============================================================================
 
-class SurveyAttachment(models.Model):
+class SurveyAttachment(OracleBlobSafeMixin, models.Model):
     """
     BLOB-based storage for survey reference attachments.
 
@@ -1919,6 +1920,10 @@ class SurveyAttachment(models.Model):
         related_name='attachments',
         help_text='Parent survey (CASCADE deletes attachments when survey deleted)',
     )
+
+    # Written through an explicit Oracle LOB bind, not the ORM's TO_BLOB()
+    # bulk-insert path — see adjd_survey.oracle_blob.
+    blob_fields = ('file_data',)
 
     file_data = models.BinaryField(
         help_text='File content stored as BLOB (max 10MB)',
@@ -1976,7 +1981,7 @@ class SurveyAttachment(models.Model):
         return f"{self.original_filename} ({self.survey_id})"
 
 
-class ResponseAttachment(models.Model):
+class ResponseAttachment(OracleBlobSafeMixin, models.Model):
     """
     BLOB-based storage for survey response attachments.
     
@@ -1992,6 +1997,10 @@ class ResponseAttachment(models.Model):
         related_name='attachments',
         help_text='Parent response (CASCADE deletes attachments when response deleted)',
     )
+
+    # Written through an explicit Oracle LOB bind, not the ORM's TO_BLOB()
+    # bulk-insert path — see adjd_survey.oracle_blob.
+    blob_fields = ('file_data',)
 
     file_data = models.BinaryField(
         help_text='File content stored as BLOB (max 10MB)',
@@ -2044,7 +2053,7 @@ class ResponseAttachment(models.Model):
         return f"{self.original_filename} ({self.response_id})"
 
 
-class FollowUpMessageAttachment(models.Model):
+class FollowUpMessageAttachment(OracleBlobSafeMixin, models.Model):
     """
     BLOB-based storage for follow-up message attachments.
     
@@ -2060,6 +2069,10 @@ class FollowUpMessageAttachment(models.Model):
         related_name='attachments',
         help_text='Parent message (CASCADE deletes attachments when message deleted)',
     )
+
+    # Written through an explicit Oracle LOB bind, not the ORM's TO_BLOB()
+    # bulk-insert path — see adjd_survey.oracle_blob.
+    blob_fields = ('file_data',)
 
     file_data = models.BinaryField(
         help_text='File content stored as BLOB (max 10MB)',
