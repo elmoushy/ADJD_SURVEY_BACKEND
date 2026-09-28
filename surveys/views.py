@@ -57,7 +57,7 @@ from .serializers import (
     SurveySubmissionSerializer, ResponseSubmissionSerializer,
     SurveyTemplateSerializer, TemplateQuestionSerializer,
     CreateTemplateSerializer, CreateSurveyFromTemplateSerializer,
-    RecentSurveySerializer, SurveyAttachmentSerializer
+    RecentSurveySerializer, SurveyAttachmentSerializer, UAEDateTimeField
 )
 from .permissions import (
     IsCreatorOrVisible, IsCreatorOrReadOnly, 
@@ -575,7 +575,10 @@ class SurveyViewSet(ModelViewSet):
             'created_at', 'updated_at',
             # 'topic' MUST stay in this list: without it .only() defers the FK and
             # serializing topic_name costs one extra query per survey (N+1).
-            'topic'
+            'topic',
+            # Reminder counters (NUMBER / TIMESTAMP — DISTINCT-safe); listed so the
+            # serializer doesn't trigger a deferred load per survey.
+            'reminder_count', 'last_reminder_at',
         ]
     
     def get_object(self):
@@ -1787,6 +1790,11 @@ class SurveyViewSet(ModelViewSet):
             return True
         return survey.creator_id is not None and survey.creator_id == user.id
 
+    @staticmethod
+    def _format_reminder_time(value):
+        """Serialize last_reminder_at exactly like SurveySerializer does (UAE tz)."""
+        return UAEDateTimeField().to_representation(value) if value else None
+
     @action(detail=True, methods=['get'], permission_classes=[IsCreatorOrReadOnly], url_path='reminder-preview')
     def reminder_preview(self, request, pk=None):
         """
@@ -1861,17 +1869,37 @@ class SurveyViewSet(ModelViewSet):
             sent_count = notify_survey_reminder(survey, exclude_user=request.user)
 
             if sent_count == 0:
+                # Nobody to remind -> not counted as a reminder
                 return uniform_response(
                     success=True,
                     message="لا يوجد مستخدمون لم يستجيبوا لإرسال التذكير إليهم",
-                    data={'count': 0},
+                    data={
+                        'count': 0,
+                        'reminder_count': survey.reminder_count,
+                        'last_reminder_at': self._format_reminder_time(survey.last_reminder_at),
+                    },
                 )
+
+            # Count this reminder. Kept separate so a counter failure can never
+            # turn an already-queued send into an error response (which would
+            # invite a duplicate send from the user).
+            try:
+                survey.record_reminder_sent()
+            except Exception as counter_error:
+                logger.error(f"Failed to record reminder count for survey {pk}: {counter_error}")
 
             return uniform_response(
                 success=True,
                 message=f"تم إرسال التذكير إلى {sent_count} مستخدم",
-                data={'count': sent_count},
+                data={
+                    'count': sent_count,
+                    'reminder_count': survey.reminder_count,
+                    'last_reminder_at': self._format_reminder_time(survey.last_reminder_at),
+                },
             )
+        except (DRFPermissionDenied, DRFNotFound, Http404):
+            # Let DRF render these as 403/404 instead of a generic 500
+            raise
         except Exception as e:
             logger.error(f"Error sending reminders for survey {pk}: {e}")
             return uniform_response(
@@ -4221,7 +4249,10 @@ class MySharedSurveysView(generics.ListAPIView):
             'created_at', 'updated_at',
             # 'topic' MUST stay in this list: without it .only() defers the FK and
             # serializing topic_name costs one extra query per survey (N+1).
-            'topic'
+            'topic',
+            # Reminder counters (NUMBER / TIMESTAMP — DISTINCT-safe); listed so the
+            # serializer doesn't trigger a deferred load per survey.
+            'reminder_count', 'last_reminder_at',
         ]
     
     def get_queryset(self):

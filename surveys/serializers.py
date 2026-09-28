@@ -866,6 +866,7 @@ class SurveySerializer(serializers.ModelSerializer):
     end_date = UAEDateTimeField(required=False, allow_null=True)
     created_at = UAEDateTimeField(read_only=True)
     updated_at = UAEDateTimeField(read_only=True)
+    last_reminder_at = UAEDateTimeField(read_only=True)
     
     class Meta:
         model = Survey
@@ -876,9 +877,10 @@ class SurveySerializer(serializers.ModelSerializer):
             'can_be_edited', 'public_contact_method', 'per_device_access', 'allow_attachments',
             'questions', 'response_count', 'attachments', 'attachment_count',
             'shared_with_emails', 'shared_with_groups', 'created_at', 'updated_at',
-            'topic', 'topic_name', 'topic_color', 'topic_icon', 'topic_breadcrumb'
+            'topic', 'topic_name', 'topic_color', 'topic_icon', 'topic_breadcrumb',
+            'reminder_count', 'last_reminder_at'
         ]
-        read_only_fields = ['id', 'creator', 'created_at', 'updated_at', 'status_display', 'is_currently_active', 'can_be_edited', 'attachments', 'attachment_count', 'topic_name', 'topic_color', 'topic_icon', 'topic_breadcrumb']
+        read_only_fields = ['id', 'creator', 'created_at', 'updated_at', 'status_display', 'is_currently_active', 'can_be_edited', 'attachments', 'attachment_count', 'topic_name', 'topic_color', 'topic_icon', 'topic_breadcrumb', 'reminder_count', 'last_reminder_at']
 
     def get_topic_name(self, obj):
         """Topic display name (None when the survey is ungrouped)."""
@@ -1044,6 +1046,8 @@ class SurveySerializer(serializers.ModelSerializer):
                     'topic_name': data.get('topic_name'),
                     'topic_color': data.get('topic_color'),
                     'topic_icon': data.get('topic_icon'),
+                    'reminder_count': data.get('reminder_count', 0),
+                    'last_reminder_at': data.get('last_reminder_at'),
                     'creator_email': data['creator_email'],
                     'created_at': data['created_at']
                 }
@@ -1066,6 +1070,8 @@ class SurveySerializer(serializers.ModelSerializer):
                         'topic_name': data.get('topic_name'),
                         'topic_color': data.get('topic_color'),
                         'topic_icon': data.get('topic_icon'),
+                        'reminder_count': data.get('reminder_count', 0),
+                        'last_reminder_at': data.get('last_reminder_at'),
                         'creator_email': data['creator_email'],
                         'created_at': data['created_at']
                     }
@@ -1097,6 +1103,8 @@ class SurveySerializer(serializers.ModelSerializer):
                 'topic_name': data.get('topic_name'),
                 'topic_color': data.get('topic_color'),
                 'topic_icon': data.get('topic_icon'),
+                'reminder_count': data.get('reminder_count', 0),
+                'last_reminder_at': data.get('last_reminder_at'),
                 'creator_email': data['creator_email'],
                 'created_at': data['created_at']
             }

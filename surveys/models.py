@@ -586,9 +586,23 @@ class Survey(models.Model):
         default=ATTACHMENT_OPTIONAL,
         help_text='Whether respondents can/must upload attachments: none, optional, required'
     )
+
+    # Manual reminder tracking ("إرسال تذكير"). Written ONLY by
+    reminder_count = models.PositiveIntegerField(
+        default=0,
+        help_text='Number of times a manual reminder was sent for this survey'
+    )
+    last_reminder_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text='When the last manual reminder was sent'
+    )
     
     # Use Oracle-compatible manager
     objects = OracleCompatibleSurveyManager()
+
+    # Owned by record_reminder_sent(); never written by a plain save()
+    REMINDER_COUNTER_FIELDS = ('reminder_count', 'last_reminder_at')
     
     class Meta:
         db_table = 'surveys_survey'
@@ -677,6 +691,21 @@ class Survey(models.Model):
         """Submit the survey - makes it final and non-editable"""
         self.status = 'submitted'
         self.save()
+
+    def record_reminder_sent(self):
+        """
+        Atomically count one manual reminder and stamp its time.
+
+        Uses a single UPDATE with an F() expression so concurrent sends never
+        lose an increment (no read-modify-write), and queryset.update() skips
+        auto_now/updated_at and the pre/post_save signals — a reminder is not
+        an edit of the survey. Refreshes the two fields on this instance.
+        """
+        Survey.objects.filter(pk=self.pk).update(
+            reminder_count=models.F('reminder_count') + 1,
+            last_reminder_at=timezone.now(),
+        )
+        self.refresh_from_db(fields=list(self.REMINDER_COUNTER_FIELDS))
     
     def save(self, *args, **kwargs):
         """Override save to generate title hash and handle date logic with UAE timezone"""
@@ -709,6 +738,25 @@ class Survey(models.Model):
         
         # If no end_date is provided, survey runs indefinitely until deactivated
         # This is handled by the is_currently_active() method which only checks end_date if it exists
+
+        # A full save() of an existing survey must not write the reminder
+        # counters back: the instance may have been loaded before a reminder
+        # was sent and would silently reset the count. Save every other loaded
+        # field instead (mirrors Django's own deferred-field handling).
+        if (
+            not args
+            and not self._state.adding
+            and self.pk is not None  # pk cleared to save a copy -> must INSERT
+            and kwargs.get('update_fields') is None
+            and not kwargs.get('force_insert')
+        ):
+            deferred = self.get_deferred_fields()
+            kwargs['update_fields'] = [
+                f.attname for f in self._meta.concrete_fields
+                if not f.primary_key
+                and f.attname not in deferred
+                and f.name not in self.REMINDER_COUNTER_FIELDS
+            ]
         
         super().save(*args, **kwargs)
 
